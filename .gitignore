@@ -137,3 +137,11 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# AIGit local cache
+.semantic/cache/
