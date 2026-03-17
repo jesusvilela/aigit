@@ -24,6 +24,8 @@ INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
 
+SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'file'}
+
 DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
 DEERFLOW_VENDOR_ENV_FILE = DEERFLOW_VENDOR_DIR / '.env'
 DEERFLOW_VENDOR_CONFIG_FILE = DEERFLOW_VENDOR_DIR / 'config.yaml'
@@ -210,6 +212,52 @@ def _repo_semantic_path(root: Path, path: Path) -> Path:
     return root / path
 
 
+def _parse_simple_yaml(text: str) -> dict[str, Any]:
+    parsed: dict[str, Any] = {}
+    section_stack: list[tuple[int, dict[str, Any]]] = [(-1, parsed)]
+    for raw_line in text.splitlines():
+        if not raw_line.strip() or raw_line.lstrip().startswith('#'):
+            continue
+        indent = len(raw_line) - len(raw_line.lstrip(' '))
+        stripped = raw_line.strip()
+        if ':' not in stripped:
+            raise ValueError(f'unsupported ruleset syntax: {raw_line!r}')
+        key, value = stripped.split(':', 1)
+        key = key.strip()
+        value = value.strip()
+
+        while len(section_stack) > 1 and indent <= section_stack[-1][0]:
+            section_stack.pop()
+        current = section_stack[-1][1]
+
+        if value:
+            current[key] = value
+            continue
+
+        nested: dict[str, Any] = {}
+        current[key] = nested
+        section_stack.append((indent, nested))
+    return parsed
+
+
+def validate_ruleset_file(root: Path | None = None) -> dict[str, Any]:
+    repo_root = root.resolve() if root is not None else Path('.').resolve()
+    ensure_semantic_scaffold(repo_root)
+    ruleset_file = _repo_semantic_path(repo_root, RULESET_FILE)
+    parsed = _parse_simple_yaml(ruleset_file.read_text(encoding='utf-8'))
+    parsers = parsed.get('parsers')
+    if parsers is None:
+        raise ValueError('ruleset must define a parsers mapping')
+    if not isinstance(parsers, dict):
+        raise ValueError('ruleset parsers must be a mapping')
+    for suffix, backend in parsers.items():
+        if not isinstance(backend, str) or backend not in SUPPORTED_PARSER_BACKENDS:
+            raise ValueError(f'unsupported parser backend: {backend}')
+        if suffix != 'default' and not suffix.startswith('.'):
+            raise ValueError(f'invalid ruleset parser key: {suffix}')
+    return parsed
+
+
 def load_previous_index(root: Path) -> dict[str, dict[str, Any]]:
     index_file = _repo_semantic_path(root, INDEX_FILE)
     if not index_file.exists():
@@ -248,7 +296,8 @@ def iter_repo_files(root: Path) -> list[Path]:
     return sorted(files)
 
 
-def ensure_semantic_scaffold(root: Path) -> None:
+def ensure_semantic_scaffold(root: Path | None = None) -> None:
+    root = root.resolve() if root is not None else Path('.').resolve()
     semantic_dir = _repo_semantic_path(root, SEMANTIC_DIR)
     schema_file = _repo_semantic_path(root, SCHEMA_FILE)
     ruleset_file = _repo_semantic_path(root, RULESET_FILE)
