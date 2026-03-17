@@ -1,0 +1,1292 @@
+{
+  "LICENSE::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a",
+    "end_line": 201,
+    "path": "LICENSE",
+    "semantic_id": "sc_840d0a1ddb5bc5d6",
+    "start_line": 1
+  },
+  "README.md::section::AIGit": {
+    "anchor": "AIGit",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "bb372a09e003201a9d713182762bafee1ecb794ed03d2afad3a7b9a6d4cef017",
+    "end_line": 6,
+    "path": "README.md",
+    "semantic_id": "sc_623cb1dcdc05d1d4",
+    "start_line": 1
+  },
+  "README.md::section::Active development epics": {
+    "anchor": "Active development epics",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d164c5589fb8109ee8d7d009f48b46c461a2c4c84b713fc8b6a1ff161d55232b",
+    "end_line": 90,
+    "path": "README.md",
+    "semantic_id": "sc_12d79a2d9ad3f54c",
+    "start_line": 85
+  },
+  "README.md::section::CLI reference": {
+    "anchor": "CLI reference",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "e967456796d7de4388f100a82f1458599fb2d6ccbd028276261cf8ac75c1b8a0",
+    "end_line": 60,
+    "path": "README.md",
+    "semantic_id": "sc_e6d3a934c34e4842",
+    "start_line": 48
+  },
+  "README.md::section::DeerFlow harness bootstrap": {
+    "anchor": "DeerFlow harness bootstrap",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "6309dd104d5cc14bb64ff62c05b9c5159c699e8a800e11b74c877fe21a266da0",
+    "end_line": 68,
+    "path": "README.md",
+    "semantic_id": "sc_dba0f1108ec59f95",
+    "start_line": 61
+  },
+  "README.md::section::Determinism and safety notes": {
+    "anchor": "Determinism and safety notes",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "66601da793895cf094a47dd6153ba40c228ad951e36b38320e85769f8bbe7edc",
+    "end_line": 95,
+    "path": "README.md",
+    "semantic_id": "sc_cf4664df89dcbbd0",
+    "start_line": 91
+  },
+  "README.md::section::MVP capabilities": {
+    "anchor": "MVP capabilities",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c1ce5a364f766b265d97f807cb3bcdbae6183dd41431ca40ed9dac5750f98213",
+    "end_line": 17,
+    "path": "README.md",
+    "semantic_id": "sc_3bbe2e8f8b03856e",
+    "start_line": 7
+  },
+  "README.md::section::Quickstart": {
+    "anchor": "Quickstart",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "074765897730424190b70a236ec2c7137b21142bb2cf89b3619c4c773b90075e",
+    "end_line": 47,
+    "path": "README.md",
+    "semantic_id": "sc_09c3e899a3cbf69e",
+    "start_line": 37
+  },
+  "README.md::section::Repository compatibility": {
+    "anchor": "Repository compatibility",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "55f6e842bdb89ad948ff9dea938fd764d5d09182c4d33513eab1dfdbff15624f",
+    "end_line": 23,
+    "path": "README.md",
+    "semantic_id": "sc_e3a11ffe01e7cfb3",
+    "start_line": 18
+  },
+  "README.md::section::Semantic storage layout": {
+    "anchor": "Semantic storage layout",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c7caa2389a7e2db730019f5ab9b173ae2f325e79fa2b8a014ca8f851271c7a52",
+    "end_line": 36,
+    "path": "README.md",
+    "semantic_id": "sc_031a7b48b85b06bb",
+    "start_line": 24
+  },
+  "README.md::section::Skills and planning docs": {
+    "anchor": "Skills and planning docs",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "7f199ddb5c917a8f0dc064d181c76879807c7b87dacf887a287bb185fa2c14a7",
+    "end_line": 84,
+    "path": "README.md",
+    "semantic_id": "sc_7dff3edd72d469d8",
+    "start_line": 79
+  },
+  "README.md::section::fill API keys in .deerflow/.env": {
+    "anchor": "fill API keys in .deerflow/.env",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "8027d87d7470098e05093b680f761f4d2c4875d9289de562e58a760061b8e0f1",
+    "end_line": 78,
+    "path": "README.md",
+    "semantic_id": "sc_35aa64989bd052e4",
+    "start_line": 69
+  },
+  "aigit.egg-info/PKG-INFO::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "999b6c5a5fa1c673f84c9760d89372a2e6a8b18e7fe557e3d05ba663fd58943a",
+    "end_line": 104,
+    "path": "aigit.egg-info/PKG-INFO",
+    "semantic_id": "sc_34f36d8a3e75d18d",
+    "start_line": 1
+  },
+  "aigit.egg-info/SOURCES.txt::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "f10e2a856a41f87fa9f5903deb0eb2070931ed1b067d1b49555e3f1a82aec88f",
+    "end_line": 14,
+    "path": "aigit.egg-info/SOURCES.txt",
+    "semantic_id": "sc_b818b0fd205a5821",
+    "start_line": 1
+  },
+  "aigit.egg-info/dependency_links.txt::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "end_line": 1,
+    "path": "aigit.egg-info/dependency_links.txt",
+    "semantic_id": "sc_58729e9a46134e79",
+    "start_line": 1
+  },
+  "aigit.egg-info/entry_points.txt::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "b08a2f57edb3d3a9d7bd4b4dc44ea0eab32f299a9c5686ba3db86c50a850c616",
+    "end_line": 2,
+    "path": "aigit.egg-info/entry_points.txt",
+    "semantic_id": "sc_f5ca0fd1a8c8dc40",
+    "start_line": 1
+  },
+  "aigit.egg-info/top_level.txt::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "8a53a6f4a263e49644f0f48e122271533ab465fb7c332cd8403534a92941c353",
+    "end_line": 1,
+    "path": "aigit.egg-info/top_level.txt",
+    "semantic_id": "sc_8115d7c4b90b3969",
+    "start_line": 1
+  },
+  "aigit/__pycache__/__init__.cpython-312.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "2c128b8467d06bb40f9bbeb08024c2506cddc7031a8095547c708ffa3a19340b",
+    "end_line": 6,
+    "path": "aigit/__pycache__/__init__.cpython-312.pyc",
+    "semantic_id": "sc_b129a24721a9795f",
+    "start_line": 1
+  },
+  "aigit/__pycache__/cli.cpython-312.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "7e48c5c15526fdebd8f5015868878fc8e9585b54d147053e965273191f2e62f4",
+    "end_line": 13,
+    "path": "aigit/__pycache__/cli.cpython-312.pyc",
+    "semantic_id": "sc_9820101a77625f26",
+    "start_line": 1
+  },
+  "aigit/__pycache__/core.cpython-312.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "fd14d5b6aba002d469d7d028afb23ff123d6689aba9e8eba54cd98b5b04d1ac3",
+    "end_line": 883,
+    "path": "aigit/__pycache__/core.cpython-312.pyc",
+    "semantic_id": "sc_7f1be88ffc1dec3e",
+    "start_line": 1
+  },
+  "aigit/core.py::class::Chunk": {
+    "anchor": "Chunk",
+    "chunk_type": "class",
+    "confidence": "high",
+    "content_hash": "4e11d25a05923ab9e8761dd78f6580d8570749d4eec9d283ad3d0bb0ceacaf68",
+    "end_line": 42,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_f4cd722c74240d4f",
+    "start_line": 31
+  },
+  "aigit/core.py::function::_chunk_id": {
+    "anchor": "_chunk_id",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "70c9ee2f74727a73da345928e9655a4c7c0d93ed461e5ab2ccba269ce1ad11e9",
+    "end_line": 56,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_7e445919e7911cdc",
+    "start_line": 55
+  },
+  "aigit/core.py::function::_content_hash": {
+    "anchor": "_content_hash",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "1b6968b318cfa65839ff8ac9fd1246ba9152e700352e41ee464105b3779d8a63",
+    "end_line": 60,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_bc7e47d81678a2ba",
+    "start_line": 59
+  },
+  "aigit/core.py::function::_hash": {
+    "anchor": "_hash",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "103aaefe1866ee02535cc2be0f8b5bf0e2c1c258ad5c6090b0850537ce5b3019",
+    "end_line": 52,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_5becbef02f568dff",
+    "start_line": 51
+  },
+  "aigit/core.py::function::_parse_bool": {
+    "anchor": "_parse_bool",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "901b6d09b3669048927d90a7e95c752399aa3e5cc0ddbca10d06dbba0815a06f",
+    "end_line": 229,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_fd9e03e91d49792d",
+    "start_line": 223
+  },
+  "aigit/core.py::function::_parse_simple_yaml": {
+    "anchor": "_parse_simple_yaml",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9b970d670feaa6f16c94346a3e2bb8c247ace132b029f0bcf0535042a02d2824",
+    "end_line": 220,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_d583a25c94fd5522",
+    "start_line": 193
+  },
+  "aigit/core.py::function::_read_manifest_from_ref": {
+    "anchor": "_read_manifest_from_ref",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8f041bfe1d8689f547a1e3a1c1a7dd8bd621019961839a1342179bd5f0167b27",
+    "end_line": 336,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_39879328e6c728f3",
+    "start_line": 328
+  },
+  "aigit/core.py::function::_run_git": {
+    "anchor": "_run_git",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "96e5d63d423648f5d3a92991fe8adaa0a3776f2ba45c300743f4aa21916ae322",
+    "end_line": 325,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_67ae6a14251d8020",
+    "start_line": 323
+  },
+  "aigit/core.py::function::_write_file_if_missing": {
+    "anchor": "_write_file_if_missing",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "41c8f60ec230adf384572e87ed0c2f9d313437c599da98a403c61c9b09f9477d",
+    "end_line": 427,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_b2cc5162e1f78cfe",
+    "start_line": 424
+  },
+  "aigit/core.py::function::bootstrap_deerflow_files": {
+    "anchor": "bootstrap_deerflow_files",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "a14a6d1a81e75ebbb9a119b14ee278fc30ebe480cde3a0f38e7d3e58dea82abe",
+    "end_line": 476,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_423f4845a3d3b03c",
+    "start_line": 430
+  },
+  "aigit/core.py::function::build_manifest": {
+    "anchor": "build_manifest",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "ba386452b55597dca924ea63c2ed9c16459a5b8b5d014d3db01688a0fa0ec42e",
+    "end_line": 299,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_78f95bff76f9e094",
+    "start_line": 286
+  },
+  "aigit/core.py::function::build_parser": {
+    "anchor": "build_parser",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "3849703d3b6a67e9aa172186491d54d8e0ebce6c4c95d51b1cfdc8d8492786fb",
+    "end_line": 583,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_db5f31922552aaeb",
+    "start_line": 535
+  },
+  "aigit/core.py::function::canonicalize_text": {
+    "anchor": "canonicalize_text",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "1c8c96df4dcffb751281cf95a06bde3df1f9d6a7450444ce3c2613fc39935af9",
+    "end_line": 48,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_b2a6c15182f8ed35",
+    "start_line": 45
+  },
+  "aigit/core.py::function::cmd_chunk": {
+    "anchor": "cmd_chunk",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "afc496f3ead46f3e214ce188f201e698a26a7305e4700f390b386206a8e4de38",
+    "end_line": 320,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_ac13bf46fa21c890",
+    "start_line": 314
+  },
+  "aigit/core.py::function::cmd_commit": {
+    "anchor": "cmd_commit",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "126d096d073b0a5f8172cfe8b9718f331a3f318a5035cdf8252354bdafd924ad",
+    "end_line": 421,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_0f3dbf6b2c5cb9fc",
+    "start_line": 417
+  },
+  "aigit/core.py::function::cmd_diff": {
+    "anchor": "cmd_diff",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "ad8e7c856f23458e020d2c5101785aeb101cd0ecdacda8a3fac0e106704c8d93",
+    "end_line": 375,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_7c1dcd5056d4287f",
+    "start_line": 346
+  },
+  "aigit/core.py::function::cmd_init_deerflow": {
+    "anchor": "cmd_init_deerflow",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "660075365f8f905b1b625a18673aa5a7811c2281658da353e7e2945f21866075",
+    "end_line": 504,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_5ec6bfa7e7d522f1",
+    "start_line": 479
+  },
+  "aigit/core.py::function::cmd_merge": {
+    "anchor": "cmd_merge",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "3451e487762bd46f67d72bf8dbe05db176612219a7c99a80143f8c37e11fcb78",
+    "end_line": 397,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_eb2deb5527a15df5",
+    "start_line": 378
+  },
+  "aigit/core.py::function::cmd_record_provenance": {
+    "anchor": "cmd_record_provenance",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "c042c97b74510fe158034379060c40a33f89eaba118cd9c1b135bb1b62078042",
+    "end_line": 414,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_36a8bc1d556f2a2a",
+    "start_line": 400
+  },
+  "aigit/core.py::function::cmd_validate_ruleset": {
+    "anchor": "cmd_validate_ruleset",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5f8ce69a9921ab24be02c749e01fc8dca6e63f168e26981b4f8d756ec4e623a2",
+    "end_line": 344,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_ad1d15a155f78f61",
+    "start_line": 341
+  },
+  "aigit/core.py::function::ensure_semantic_scaffold": {
+    "anchor": "ensure_semantic_scaffold",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "0e0a25eae91688575f0abfc49fd519eabcb28060ebdc2c301bdffc2a7b49bd4b",
+    "end_line": 283,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_1d93e73f62f06f66",
+    "start_line": 274
+  },
+  "aigit/core.py::function::iter_repo_files": {
+    "anchor": "iter_repo_files",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "1941ae1c71628f4337d0776d358a1b5fe950854d3906ebca2a386f153f026933",
+    "end_line": 188,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_ad15c150c036ab1c",
+    "start_line": 177
+  },
+  "aigit/core.py::function::load_previous_index": {
+    "anchor": "load_previous_index",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "dfa585fe6fa03c545b6989b0c73045cb95302451c23adbc39f6505aee9652b6f",
+    "end_line": 160,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_3860c9ab723eea7e",
+    "start_line": 157
+  },
+  "aigit/core.py::function::main": {
+    "anchor": "main",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "637f9187879350cf83535d141681732d53216b64263eeeb9eee18439b35a74e2",
+    "end_line": 589,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_4dede0984ddd4213",
+    "start_line": 586
+  },
+  "aigit/core.py::function::match_previous_id": {
+    "anchor": "match_previous_id",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "70cd041589c22f037c343bda0cf45df81272696a2f4caf639dc74f7a35fc5759",
+    "end_line": 174,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_d385f5d8dccb9797",
+    "start_line": 163
+  },
+  "aigit/core.py::function::parse_file": {
+    "anchor": "parse_file",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "645c16f276ed88150d3922285654be179c1f467494a8495009d2908623503c7f",
+    "end_line": 154,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_a174f27d2578cfce",
+    "start_line": 147
+  },
+  "aigit/core.py::function::parse_markdown": {
+    "anchor": "parse_markdown",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5eed4689df36eada861a94ce92c543a0a57f088624bd996af27b4e1f1cc8fbaf",
+    "end_line": 128,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_471062592cc7f064",
+    "start_line": 92
+  },
+  "aigit/core.py::function::parse_python": {
+    "anchor": "parse_python",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "f86e0b4e1062251d9e76342f6317ba778d093302a176c02726248af3a3c8a92f",
+    "end_line": 89,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_0644bb3ac13ddd8c",
+    "start_line": 63
+  },
+  "aigit/core.py::function::parse_text": {
+    "anchor": "parse_text",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "193393c8bd8a7aa4b57fd732fc886ab8aaeda5fee9499ab9b03fd882a009ce64",
+    "end_line": 144,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_347823bcfe3e8b5a",
+    "start_line": 131
+  },
+  "aigit/core.py::function::serve_api": {
+    "anchor": "serve_api",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "76b4f9448489d55acba5152326aa4c8ff3da9a1cf3db1cc604f2e1620dddc1a6",
+    "end_line": 532,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_b555541820071b71",
+    "start_line": 507
+  },
+  "aigit/core.py::function::validate_ruleset_content": {
+    "anchor": "validate_ruleset_content",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "405d96fca4c5cfbd9ffc5664b0d7ed5efa6da99fe07e98e51d6981f7c30748e8",
+    "end_line": 266,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_dcc663996e61ddcd",
+    "start_line": 232
+  },
+  "aigit/core.py::function::validate_ruleset_file": {
+    "anchor": "validate_ruleset_file",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5eb27770717767b4ed255e981ac6026c10c91c4a7f15a91894b8b83c822d18e4",
+    "end_line": 272,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_4b58bae770541aeb",
+    "start_line": 269
+  },
+  "aigit/core.py::function::write_manifest": {
+    "anchor": "write_manifest",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "1c5734d75b39f8e3e1d3a47fbea9a1509e695a6b661a46fb87e8f0877e14a820",
+    "end_line": 311,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_4521b6be0fb0d0d6",
+    "start_line": 302
+  },
+  "docs/EPICS_ROADMAP.md::section::AIGit Development Roadmap: 10 Active Epics": {
+    "anchor": "AIGit Development Roadmap: 10 Active Epics",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "7318a43149c6590e57c5a9878ecafc09995a9c170ce7f107407a4f7f49a8d786",
+    "end_line": 4,
+    "path": "docs/EPICS_ROADMAP.md",
+    "semantic_id": "sc_2abb75ca09277b82",
+    "start_line": 1
+  },
+  "docs/EPICS_ROADMAP.md::section::Current Environment Launch Status": {
+    "anchor": "Current Environment Launch Status",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "0f8096c6b389435dfe0be87eeccef079f6c7bb870b617f7837219ade98dc4538",
+    "end_line": 37,
+    "path": "docs/EPICS_ROADMAP.md",
+    "semantic_id": "sc_7c9ba398ed462146",
+    "start_line": 24
+  },
+  "docs/EPICS_ROADMAP.md::section::Epic Portfolio": {
+    "anchor": "Epic Portfolio",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "2a718bf0b27e83341b7d16845f9180be5adf6e0fa13fead57eb30b55a6bc39a8",
+    "end_line": 23,
+    "path": "docs/EPICS_ROADMAP.md",
+    "semantic_id": "sc_642f1b100920ccc0",
+    "start_line": 11
+  },
+  "docs/EPICS_ROADMAP.md::section::Execution Cadence": {
+    "anchor": "Execution Cadence",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "39b7f0b7a8cc1830afc6f131a56ebcf718c624ac3075330cace315a7faa8218d",
+    "end_line": 10,
+    "path": "docs/EPICS_ROADMAP.md",
+    "semantic_id": "sc_94c70d67e41513a0",
+    "start_line": 5
+  },
+  "docs/MULTISOTA_CODEX.md::section::Guardrails": {
+    "anchor": "Guardrails",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "676250d02de2cdecec1ddd5fcc9d0786fb3ed88bad9b240194a1f43813068593",
+    "end_line": 30,
+    "path": "docs/MULTISOTA_CODEX.md",
+    "semantic_id": "sc_1b72c88681dda5db",
+    "start_line": 24
+  },
+  "docs/MULTISOTA_CODEX.md::section::KPI targets": {
+    "anchor": "KPI targets",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "4bf265725e8a14d66b8ba39418a42121298e81cc7e66c63b4e620552301f8101",
+    "end_line": 35,
+    "path": "docs/MULTISOTA_CODEX.md",
+    "semantic_id": "sc_abcbf66813f98801",
+    "start_line": 31
+  },
+  "docs/MULTISOTA_CODEX.md::section::MultiSOTA Codex Strategy for AIGit": {
+    "anchor": "MultiSOTA Codex Strategy for AIGit",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "9e876371530ad766bca0308501be8d2232f42b73c004b8628a77ed4d559fbe60",
+    "end_line": 2,
+    "path": "docs/MULTISOTA_CODEX.md",
+    "semantic_id": "sc_f6750d8255e5b1c0",
+    "start_line": 1
+  },
+  "docs/MULTISOTA_CODEX.md::section::Objective": {
+    "anchor": "Objective",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "863b5a28670ed523942761984fcf11f3dcb33d4a3e2b6cb3273dedc451bdabce",
+    "end_line": 6,
+    "path": "docs/MULTISOTA_CODEX.md",
+    "semantic_id": "sc_78191597c4a61cda",
+    "start_line": 3
+  },
+  "docs/MULTISOTA_CODEX.md::section::Operating model": {
+    "anchor": "Operating model",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "66e34084254b3bdb238c6b0cde73d14a148b308bd69ee07c2d12750306c93842",
+    "end_line": 23,
+    "path": "docs/MULTISOTA_CODEX.md",
+    "semantic_id": "sc_e9f9aa8e30c81906",
+    "start_line": 16
+  },
+  "docs/MULTISOTA_CODEX.md::section::Why this stack": {
+    "anchor": "Why this stack",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "616941484a89398055205b9620edcbe85e78c67bc34530329145975c85d46286",
+    "end_line": 15,
+    "path": "docs/MULTISOTA_CODEX.md",
+    "semantic_id": "sc_2f164f8be476a7ae",
+    "start_line": 7
+  },
+  "docs/MULTISOTA_CODEX_TASKS.md::section::Bootstrap": {
+    "anchor": "Bootstrap",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "0bd302800f0a34518b5e5cbbfae994419acaa957eeb8c1e669d30aaab1207159",
+    "end_line": 10,
+    "path": "docs/MULTISOTA_CODEX_TASKS.md",
+    "semantic_id": "sc_717d07f655fbcbca",
+    "start_line": 3
+  },
+  "docs/MULTISOTA_CODEX_TASKS.md::section::MultiSOTA Codex Task Checklist": {
+    "anchor": "MultiSOTA Codex Task Checklist",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "181630c673a60b6b71eab152cd55887225c0aefafd847f3482c55d5c46f7dc3f",
+    "end_line": 2,
+    "path": "docs/MULTISOTA_CODEX_TASKS.md",
+    "semantic_id": "sc_5b6fa2edf4bc98c9",
+    "start_line": 1
+  },
+  "docs/MULTISOTA_CODEX_TASKS.md::section::PR quality gate": {
+    "anchor": "PR quality gate",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "699849e8e2cc149af7665cd544ae018254114cb47c91d63abcbd121c75459e1f",
+    "end_line": 27,
+    "path": "docs/MULTISOTA_CODEX_TASKS.md",
+    "semantic_id": "sc_8d297357d9de2ab6",
+    "start_line": 22
+  },
+  "docs/MULTISOTA_CODEX_TASKS.md::section::Per-objective loop": {
+    "anchor": "Per-objective loop",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "510fc92c619fd15e2dc763d3c1a5eec4687f511be47dab7bdfa262fedf47803e",
+    "end_line": 21,
+    "path": "docs/MULTISOTA_CODEX_TASKS.md",
+    "semantic_id": "sc_363a5fb6ff0adc64",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-01-ruleset-engine-v2.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "160ca12abebfb407eb577487dff0cb979abed2ad1894859978952405d03e6950",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-01-ruleset-engine-v2.md",
+    "semantic_id": "sc_a4fe50884c51b8d2",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-01-ruleset-engine-v2.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "f1c8103210b98947da09e5439be075e5bd1495ecdff89df2f92c4cc37ccc9f23",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-01-ruleset-engine-v2.md",
+    "semantic_id": "sc_bb16fd1d8a01c26a",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-01-ruleset-engine-v2.md::section::EPIC-01: Deterministic Ruleset Engine v2": {
+    "anchor": "EPIC-01: Deterministic Ruleset Engine v2",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "4106abb2b3b5573bd64abf185f394e42b556f5b63dcce6002b766dc8825d092d",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-01-ruleset-engine-v2.md",
+    "semantic_id": "sc_cf3db917bd490007",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-01-ruleset-engine-v2.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "7d13b9f79b2c5ee5069e07e809b379a424cefa85f49828a06ed8e5071c87d601",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-01-ruleset-engine-v2.md",
+    "semantic_id": "sc_258d26bc37009b5a",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-02-identity-lineage-hardening.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "41424c9e2996962c1c1ad0f029635452748b7707b1f49e09c380b516fcff6b40",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-02-identity-lineage-hardening.md",
+    "semantic_id": "sc_806ffc17dc1617c6",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-02-identity-lineage-hardening.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "df75f57289806eabd8462b2d481a76c24c5418a719c1255c84be68175364aa01",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-02-identity-lineage-hardening.md",
+    "semantic_id": "sc_e4b8ec261a5e8ec9",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-02-identity-lineage-hardening.md::section::EPIC-02: Chunk Identity & Lineage Hardening": {
+    "anchor": "EPIC-02: Chunk Identity & Lineage Hardening",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "b71f4b1163f274b62884eab769d959c508eb0462210c4fdde825125f2f93601b",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-02-identity-lineage-hardening.md",
+    "semantic_id": "sc_68766e6f93351ebc",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-02-identity-lineage-hardening.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "aaac06d48d0f2578e04fd9ea50b6ce93120edce8ffa1e92f4341245b0668e36a",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-02-identity-lineage-hardening.md",
+    "semantic_id": "sc_f14d75f19bcae11d",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-03-semantic-diff-ci.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "3619afa2152d339a0ffc7bc35cac8a9c0940cac93b0f4b18c189ed492a802cb0",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-03-semantic-diff-ci.md",
+    "semantic_id": "sc_84443b33186e9ad0",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-03-semantic-diff-ci.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "b68f81a13555ad8f9efaeb21026c01710887a4ddcd1ff882b10c4f8bb3cadc2c",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-03-semantic-diff-ci.md",
+    "semantic_id": "sc_f8779e42109042e2",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-03-semantic-diff-ci.md::section::EPIC-03: Semantic Diff Quality & CI Integration": {
+    "anchor": "EPIC-03: Semantic Diff Quality & CI Integration",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "30d7ee5d10cfa184cfbc8d78129fad9dc56eb356ed9d5969182351f965a64269",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-03-semantic-diff-ci.md",
+    "semantic_id": "sc_2944406ecea60792",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-03-semantic-diff-ci.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "8ea550b05a2ec687a242af6cee870bbcb0a012e74570d37069654962a0336003",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-03-semantic-diff-ci.md",
+    "semantic_id": "sc_8852dbc891e31343",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-04-semantic-merge-ux.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d36094e88b429a295cf087e48fd852b50305c18ff3fb01895f6040c7fbfea2e3",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-04-semantic-merge-ux.md",
+    "semantic_id": "sc_984af4bb5b489ed8",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-04-semantic-merge-ux.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "e20f0c2789ef8bbd23780e806a7d4f8093b347559f0905197e38593f67efa806",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-04-semantic-merge-ux.md",
+    "semantic_id": "sc_9fa30cb2560f155b",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-04-semantic-merge-ux.md::section::EPIC-04: Semantic Merge Conflict Resolution UX": {
+    "anchor": "EPIC-04: Semantic Merge Conflict Resolution UX",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "66eacd6a1fdae7fa11aabc103513f200173df17e071b81008b4f19123191e848",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-04-semantic-merge-ux.md",
+    "semantic_id": "sc_4c53a21826dc55d8",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-04-semantic-merge-ux.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "89aeba17532505066e79d33309776ba2ebae7f0a1d4daffbc898b5072544cede",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-04-semantic-merge-ux.md",
+    "semantic_id": "sc_8b9fd3ab53a71527",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-05-provenance-audit-chain.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "4912685fb93ed501c2d36f52a0a671b00783e232e1313f7df4fd8fa5f40bdd7d",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-05-provenance-audit-chain.md",
+    "semantic_id": "sc_c4a0e3b431b97e57",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-05-provenance-audit-chain.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "46dca41713def4e16b04f6d843e425ad7f640f6dbc0d6557fd15911895a2bcc1",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-05-provenance-audit-chain.md",
+    "semantic_id": "sc_e21786b3f0b35510",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-05-provenance-audit-chain.md::section::EPIC-05: AI Provenance Audit Chain": {
+    "anchor": "EPIC-05: AI Provenance Audit Chain",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "2d1e8100c5fcb4cfee9f4bb4b37c95d8c847d93584dfd8d75123a22cbd8c3c08",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-05-provenance-audit-chain.md",
+    "semantic_id": "sc_3350dc0a4adb91d4",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-05-provenance-audit-chain.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "194e74754211b6af6a155221126e819ea2ecfcc66c21265b4327e6c232eaf82f",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-05-provenance-audit-chain.md",
+    "semantic_id": "sc_ab4a51374b725ac9",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-06-agent-api-stabilization.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "15c0394ffc2a0ff919a4b45d6f4e442504368aaab2d0985702c65ed85c92c3d9",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-06-agent-api-stabilization.md",
+    "semantic_id": "sc_f3ff04b49d6e5bf2",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-06-agent-api-stabilization.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "b85434f67cac82a02dead4c79fdbea07691e5bfd109d53dac07c242c33652e1a",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-06-agent-api-stabilization.md",
+    "semantic_id": "sc_053ae43d8495de26",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-06-agent-api-stabilization.md::section::EPIC-06: Agent API Stabilization": {
+    "anchor": "EPIC-06: Agent API Stabilization",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "54b5ab5ab59379f2275c69728e28a1409ebd378121afa3e926646209af3bf86f",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-06-agent-api-stabilization.md",
+    "semantic_id": "sc_18587e6579757f45",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-06-agent-api-stabilization.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "f10d83828f6a0ef75619ae4a755b2ecd442a2d153d4d390a1b03e8779ce7699a",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-06-agent-api-stabilization.md",
+    "semantic_id": "sc_cd36f754a000d873",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-07-deerflow-delivery-pipeline.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d49b429f1851e8292fbc5e28e7f07d236c6fd1ead0922413ea2686a41c816f75",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-07-deerflow-delivery-pipeline.md",
+    "semantic_id": "sc_e535499333aaa5e8",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-07-deerflow-delivery-pipeline.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "b3bd73ae5885ca88ee56ca8260d8d46c1dfdfadf8480741eef7a9a965326dd7b",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-07-deerflow-delivery-pipeline.md",
+    "semantic_id": "sc_9ba51b529686b332",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-07-deerflow-delivery-pipeline.md::section::EPIC-07: DeerFlow Autonomous Delivery Pipeline": {
+    "anchor": "EPIC-07: DeerFlow Autonomous Delivery Pipeline",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "ca4009451b8a406614e2320b2d836adfeb4c6e0a03886f2b22a48eacd3b667b0",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-07-deerflow-delivery-pipeline.md",
+    "semantic_id": "sc_8268a5489a568f97",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-07-deerflow-delivery-pipeline.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "6e0c767513a66df15a69635b6cb02bb7c5fccd893df22372f8f421993e11834d",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-07-deerflow-delivery-pipeline.md",
+    "semantic_id": "sc_ea8b961a2835fb5a",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-08-language-expansion.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "98c90cde7b411aeab60754ba9e8f785ccfca2b350d9c8141f1ec9c96268e96df",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-08-language-expansion.md",
+    "semantic_id": "sc_c3b7fc5ff602df07",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-08-language-expansion.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "41b8a3f2dbd8599e4b28bed6513f70b68953d7233e27c9cb6ee43f67120fca6c",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-08-language-expansion.md",
+    "semantic_id": "sc_094950939f6a970f",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-08-language-expansion.md::section::EPIC-08: Language Expansion Beyond Python/Markdown": {
+    "anchor": "EPIC-08: Language Expansion Beyond Python/Markdown",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "eaedba8e8a455a24b73c5e4596b2072571a85d5cca375f6fabcf4b9121555409",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-08-language-expansion.md",
+    "semantic_id": "sc_cd38f5aec99bec10",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-08-language-expansion.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "4af1df98ee8ce0faf3ddb437adf639e5f19091933faea467df780e3db329cb9a",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-08-language-expansion.md",
+    "semantic_id": "sc_1c3413b94823f9c9",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-09-performance-scaling.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "a998bb33439eb322c548ddd1934db1e4001e01260675797a853cfe95a3614a12",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-09-performance-scaling.md",
+    "semantic_id": "sc_2d074cff0b5c164c",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-09-performance-scaling.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "f85a27d4cf126f2b70b8f9c85549e53831867e533f0df99aad26e6ed42bcec7e",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-09-performance-scaling.md",
+    "semantic_id": "sc_6d8a650d1fc219db",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-09-performance-scaling.md::section::EPIC-09: Performance & Scaling Baselines": {
+    "anchor": "EPIC-09: Performance & Scaling Baselines",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c36ac28b539a3bb1a5287eb84e174301a784a21c31fa05697f0cff31b5a22199",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-09-performance-scaling.md",
+    "semantic_id": "sc_9b9cdb1f4556f7bd",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-09-performance-scaling.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "65fbe45a2099ab247395fa8d0b2cbbcdad0640a088c776b3c3a24a1cca3f3f32",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-09-performance-scaling.md",
+    "semantic_id": "sc_bfa21a45008f7a79",
+    "start_line": 3
+  },
+  "docs/epics/EPIC-10-release-governance.md::section::Acceptance": {
+    "anchor": "Acceptance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "eaed4de3aef75951396e3b48145a47f4a4423b430dd160412c130f487fcc2f70",
+    "end_line": 12,
+    "path": "docs/epics/EPIC-10-release-governance.md",
+    "semantic_id": "sc_449622e3c4f7960c",
+    "start_line": 11
+  },
+  "docs/epics/EPIC-10-release-governance.md::section::Deliverables": {
+    "anchor": "Deliverables",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "06d9e6db1ce758b75bbc2e241b3005feab4e7442f57f206d99f152a7d7598a87",
+    "end_line": 10,
+    "path": "docs/epics/EPIC-10-release-governance.md",
+    "semantic_id": "sc_8d1cd17465c5c97a",
+    "start_line": 6
+  },
+  "docs/epics/EPIC-10-release-governance.md::section::EPIC-10: Release Governance & Adoption Pack": {
+    "anchor": "EPIC-10: Release Governance & Adoption Pack",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "94bb80a9f4acbda1eeb624292e02b375839463df4baa8cf990fe2d824451bbde",
+    "end_line": 2,
+    "path": "docs/epics/EPIC-10-release-governance.md",
+    "semantic_id": "sc_2350b85941937c9b",
+    "start_line": 1
+  },
+  "docs/epics/EPIC-10-release-governance.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c4ed485d9ceb3a4aab2900a0f7dae7ac9ccc9329cafd75dbcdf136b4ffda4991",
+    "end_line": 5,
+    "path": "docs/epics/EPIC-10-release-governance.md",
+    "semantic_id": "sc_ebde9a4edc4fe723",
+    "start_line": 3
+  },
+  "pyproject.toml::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "073e0a669441d1a977cdd8eb62cc010e8e8c233e847adac2c5460828fccee741",
+    "end_line": 21,
+    "path": "pyproject.toml",
+    "semantic_id": "sc_8c66d52c16b5045b",
+    "start_line": 1
+  },
+  "scripts/run_deerflow.sh::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "d663d4ba41a45976cf413f66177b0361c9da44ebca06fdaa112ca0cc3603e94d",
+    "end_line": 11,
+    "path": "scripts/run_deerflow.sh",
+    "semantic_id": "sc_5ab2371aa4880e82",
+    "start_line": 1
+  },
+  "skills/custom/deerflow-aigit-autopilot/SKILL.md::section::DeerFlow AIGit Autopilot": {
+    "anchor": "DeerFlow AIGit Autopilot",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "62d68718a1e0f30c58e2586cf8aceba3612c091223fa88653bd8ea9d5ddabc06",
+    "end_line": 9,
+    "path": "skills/custom/deerflow-aigit-autopilot/SKILL.md",
+    "semantic_id": "sc_7647e71d5a6b42da",
+    "start_line": 6
+  },
+  "skills/custom/deerflow-aigit-autopilot/SKILL.md::section::Execute bootstrap": {
+    "anchor": "Execute bootstrap",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "578514762773ad49327348bfb57f2ab8c8db8aed7216c984a0571205e729a066",
+    "end_line": 16,
+    "path": "skills/custom/deerflow-aigit-autopilot/SKILL.md",
+    "semantic_id": "sc_6d81f1709636be91",
+    "start_line": 10
+  },
+  "skills/custom/deerflow-aigit-autopilot/SKILL.md::section::Keep AIGit deterministic": {
+    "anchor": "Keep AIGit deterministic",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "873cd5b9d031618b64acf50eccdf5810c374b2bbf8ee34c016102455179ad5bf",
+    "end_line": 24,
+    "path": "skills/custom/deerflow-aigit-autopilot/SKILL.md",
+    "semantic_id": "sc_ed74f1b97b840c4f",
+    "start_line": 17
+  },
+  "skills/custom/deerflow-aigit-autopilot/SKILL.md::section::Produce MultiSOTA Codex planning docs": {
+    "anchor": "Produce MultiSOTA Codex planning docs",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "57a702dc0cdcb2d55f5b058eeb06b539fbb2169dcfbc694ec8ed85704f1dd798",
+    "end_line": 39,
+    "path": "skills/custom/deerflow-aigit-autopilot/SKILL.md",
+    "semantic_id": "sc_88e2d591981838ce",
+    "start_line": 33
+  },
+  "skills/custom/deerflow-aigit-autopilot/SKILL.md::section::Run autonomous iteration loop": {
+    "anchor": "Run autonomous iteration loop",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "0478092c858f22e56b1c535bf01bd033fdbd86a704f92fe8bcd31ff255f5b0fe",
+    "end_line": 32,
+    "path": "skills/custom/deerflow-aigit-autopilot/SKILL.md",
+    "semantic_id": "sc_e6893b31e9ff9db0",
+    "start_line": 25
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::Acceptance checks": {
+    "anchor": "Acceptance checks",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "032e27cd0276c6a27ded07d207d676b69896226806572e89b9f87b3c6a1d164e",
+    "end_line": 37,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_240a059e1ba7a6eb",
+    "start_line": 31
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::Architecture decision": {
+    "anchor": "Architecture decision",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d5801ae4c67c4d5201ae0174e95467fb303dfd156eaff0a844701466f2d15c51",
+    "end_line": 23,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_ecaf6d7d9d0c502c",
+    "start_line": 17
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::Baselines and SOTA comparison set": {
+    "anchor": "Baselines and SOTA comparison set",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "fc3f250074cd6661aa4dc77b9096bdbcd5b49b6ea1c5112bd6b29237a8ff8abf",
+    "end_line": 16,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_536f64c7ba6250bc",
+    "start_line": 7
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::Goal": {
+    "anchor": "Goal",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "21218942943f2931ce4743e938306a8f1bc946f5f6623bb68a8de8ff97c01cfe",
+    "end_line": 6,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_7bd86aa6bab08687",
+    "start_line": 3
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::Implementation plan": {
+    "anchor": "Implementation plan",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "ace3d736a955f57172759bf1ac4947db990637a5395cb6213406fdefad399e8b",
+    "end_line": 30,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_82bc052052f7ee24",
+    "start_line": 24
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::MultiSOTA Codex Template": {
+    "anchor": "MultiSOTA Codex Template",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "cd8931f61a3947fac2d3a9764c805ea40c2a8503fd0d75dee2f75828f8628031",
+    "end_line": 2,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_e3146dae74330772",
+    "start_line": 1
+  },
+  "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md::section::Rollback plan": {
+    "anchor": "Rollback plan",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "4efb95c4243b45d68d40b646fa0ef8bad47183b95e6a0c1febc2ede455367ca8",
+    "end_line": 40,
+    "path": "skills/custom/deerflow-aigit-autopilot/references/multisota-codex-template.md",
+    "semantic_id": "sc_9b781344e992caf8",
+    "start_line": 38
+  },
+  "tests/__pycache__/test_chunking.cpython-312-pytest-9.0.2.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "7f13045c520dddc30585b84e5121b958c09bd393776832f11b85c16acb8d8751",
+    "end_line": 87,
+    "path": "tests/__pycache__/test_chunking.cpython-312-pytest-9.0.2.pyc",
+    "semantic_id": "sc_7c1e50a9b02325e6",
+    "start_line": 1
+  },
+  "tests/__pycache__/test_deerflow_init.cpython-312-pytest-9.0.2.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "8c7d1b95b63a2acb73b56be8dcf578ac22f0cc93a20142eb4d8a038eec796ca5",
+    "end_line": 107,
+    "path": "tests/__pycache__/test_deerflow_init.cpython-312-pytest-9.0.2.pyc",
+    "semantic_id": "sc_0135754dc2dc23e4",
+    "start_line": 1
+  },
+  "tests/__pycache__/test_ruleset_validation.cpython-312-pytest-9.0.2.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "28d552270d21f4a4762884d99bf5763d4107b4b9c0bc5bec345a50ac19ec0d76",
+    "end_line": 69,
+    "path": "tests/__pycache__/test_ruleset_validation.cpython-312-pytest-9.0.2.pyc",
+    "semantic_id": "sc_3821e8b52e2cbc61",
+    "start_line": 1
+  },
+  "tests/test_chunking.py::function::test_chunk_generation_is_deterministic": {
+    "anchor": "test_chunk_generation_is_deterministic",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "6a99827b19592614941df133bd1fc6e2f4afd6911c5c0333e362abd9d5199a89",
+    "end_line": 12,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_4517457defb25232",
+    "start_line": 6
+  },
+  "tests/test_chunking.py::function::test_markdown_chunking": {
+    "anchor": "test_markdown_chunking",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "7f660a89969f6991806020546a241ca55145046964426c5f0f0dad0883379243",
+    "end_line": 19,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_8ff5db7b8cb296cd",
+    "start_line": 15
+  },
+  "tests/test_deerflow_init.py::function::test_bootstrap_deerflow_files": {
+    "anchor": "test_bootstrap_deerflow_files",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "da01e87d5c5ab5d3cd647a9fb7b92ea099a1f934666bf839bbf053fceaf95c00",
+    "end_line": 17,
+    "path": "tests/test_deerflow_init.py",
+    "semantic_id": "sc_7a7c878b8489c604",
+    "start_line": 6
+  },
+  "tests/test_ruleset_validation.py::function::test_validate_ruleset_rejects_unknown_backend": {
+    "anchor": "test_validate_ruleset_rejects_unknown_backend",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "87ce472f66f8d7e1c09e05cc895fd49e880b99f9232a7ceeaee238af10c4f4c7",
+    "end_line": 25,
+    "path": "tests/test_ruleset_validation.py",
+    "semantic_id": "sc_4ff7f0de5c2df57f",
+    "start_line": 16
+  },
+  "tests/test_ruleset_validation.py::function::test_validate_ruleset_success": {
+    "anchor": "test_validate_ruleset_success",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "af2a68921b281f2e62475b095331ba4e76ff44469ddc89ab6cfe14dbaa7cac8d",
+    "end_line": 13,
+    "path": "tests/test_ruleset_validation.py",
+    "semantic_id": "sc_7b2fff7b5f93cef7",
+    "start_line": 8
+  }
+}
