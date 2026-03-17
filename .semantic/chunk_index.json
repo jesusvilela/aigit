@@ -24,10 +24,20 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "00b6b1b6be83811ff3637cb9565e2407b6915fa5c3bc23d374b747c84a6378a4",
-    "end_line": 58,
+    "end_line": 59,
     "path": "README.md",
     "semantic_id": "sc_e6d3a934c34e4842",
     "start_line": 48
+  },
+  "README.md::section::DeerFlow harness bootstrap": {
+    "anchor": "DeerFlow harness bootstrap",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "6309dd104d5cc14bb64ff62c05b9c5159c699e8a800e11b74c877fe21a266da0",
+    "end_line": 67,
+    "path": "README.md",
+    "semantic_id": "sc_dba0f1108ec59f95",
+    "start_line": 60
   },
   "README.md::section::Determinism and safety notes": {
     "anchor": "Determinism and safety notes",
@@ -78,6 +88,16 @@
     "path": "README.md",
     "semantic_id": "sc_031a7b48b85b06bb",
     "start_line": 24
+  },
+  "README.md::section::fill API keys in .deerflow/.env": {
+    "anchor": "fill API keys in .deerflow/.env",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "8027d87d7470098e05093b680f761f4d2c4875d9289de562e58a760061b8e0f1",
+    "end_line": 76,
+    "path": "README.md",
+    "semantic_id": "sc_35aa64989bd052e4",
+    "start_line": 68
   },
   "aigit.egg-info/PKG-INFO::file::file": {
     "anchor": "file",

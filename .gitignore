@@ -145,3 +145,7 @@ __pycache__/
 
 # AIGit local cache
 .semantic/cache/
+
+# DeerFlow local harness checkout and secrets
+.deerflow/vendor/
+.deerflow/.env

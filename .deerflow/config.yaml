@@ -1,0 +1,21 @@
+models:
+  - name: gpt-4o-mini
+    display_name: GPT-4o Mini
+    use: langchain_openai:ChatOpenAI
+    model: gpt-4o-mini
+    api_key: $OPENAI_API_KEY
+    max_tokens: 4096
+    temperature: 0.2
+
+sandbox:
+  use: deerflow.community.docker_sandbox:DockerSandboxProvider
+
+channels:
+  session:
+    assistant_id: lead_agent
+    config:
+      recursion_limit: 120
+    context:
+      thinking_enabled: true
+      is_plan_mode: true
+      subagent_enabled: true
