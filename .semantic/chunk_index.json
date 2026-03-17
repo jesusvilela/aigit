@@ -29,6 +29,206 @@
     "semantic_id": "sc_840d0a1ddb5bc5d6",
     "start_line": 1
   },
+  "README.md::section::AIGit": {
+    "anchor": "AIGit",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "f8c0793d2cbda14f495b69eca533bd434654672818208c42498fad2866ed0340",
+    "end_line": 11,
+    "path": "README.md",
+    "semantic_id": "sc_623cb1dcdc05d1d4",
+    "start_line": 1
+  },
+  "README.md::section::Admin observability UI": {
+    "anchor": "Admin observability UI",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "866416f3d4f9a2b9d6ac4d936af2bff716136486d33f5f669666ad71f53502b0",
+    "end_line": 128,
+    "path": "README.md",
+    "semantic_id": "sc_85d49ef5505b69a2",
+    "start_line": 115
+  },
+  "README.md::section::At A Glance": {
+    "anchor": "At A Glance",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "7599af0a4b16a5291c32d7cc9a95861637bfebefc5d3b97d5d9a85bc3066b693",
+    "end_line": 43,
+    "path": "README.md",
+    "semantic_id": "sc_0134612f51b0309d",
+    "start_line": 34
+  },
+  "README.md::section::CI/CD Safety Rails": {
+    "anchor": "CI/CD Safety Rails",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "27880ead45172fb583333bfc2efec9aff2bf90c0b113fc14fe03b27602c691fc",
+    "end_line": 156,
+    "path": "README.md",
+    "semantic_id": "sc_9c45a381999bbd73",
+    "start_line": 143
+  },
+  "README.md::section::CLI Surface": {
+    "anchor": "CLI Surface",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "b3fcd2a753cf5a4701bb3460dbe4cc3ae170dfecb5d2822eeefa09e82e419df7",
+    "end_line": 88,
+    "path": "README.md",
+    "semantic_id": "sc_60502dfacaf8e129",
+    "start_line": 75
+  },
+  "README.md::section::Cycle 1": {
+    "anchor": "Cycle 1",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c133b00256ae5d49f6cda0395cf331b40e8c3c9f9f0d55ac807968fef3d042cc",
+    "end_line": 167,
+    "path": "README.md",
+    "semantic_id": "sc_b007ec9690cfeba5",
+    "start_line": 159
+  },
+  "README.md::section::Cycle 2: 10x release wave": {
+    "anchor": "Cycle 2: 10x release wave",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "4ed0efb74e04da2ed540f4e83766f53f1153ef464aadd53995faf532909229ca",
+    "end_line": 174,
+    "path": "README.md",
+    "semantic_id": "sc_53702cc6ecda3b7c",
+    "start_line": 168
+  },
+  "README.md::section::DeerFlow Operator Loop": {
+    "anchor": "DeerFlow Operator Loop",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "8d510c34d58b4ae89349a17196e333895c59ddd5f49b2e49d6b724fed82719c5",
+    "end_line": 100,
+    "path": "README.md",
+    "semantic_id": "sc_e0f00e57fde0ca91",
+    "start_line": 89
+  },
+  "README.md::section::DeerFlow entrypoint": {
+    "anchor": "DeerFlow entrypoint",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "5078d3d8f144b66e4cb7ddd320b1a681bf862dd9ecd4db7a7995bfe1a4d37143",
+    "end_line": 142,
+    "path": "README.md",
+    "semantic_id": "sc_799dfbd9a1eff8aa",
+    "start_line": 137
+  },
+  "README.md::section::Default model catalog": {
+    "anchor": "Default model catalog",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "f8cb2c9ad7edf8bb79b37f8408f6b61871ee2c85f78f25b11e6521aa3e8b3116",
+    "end_line": 136,
+    "path": "README.md",
+    "semantic_id": "sc_fd602ce43a1a7f60",
+    "start_line": 129
+  },
+  "README.md::section::Determinism Notes": {
+    "anchor": "Determinism Notes",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "19fca5cc4367b8b94b61ecec172b95416db05b011915fc20005d479664b61d00",
+    "end_line": 190,
+    "path": "README.md",
+    "semantic_id": "sc_302b6b6a317c4716",
+    "start_line": 185
+  },
+  "README.md::section::Docs Index": {
+    "anchor": "Docs Index",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "cf4671a4ce6a42b5c7bf4e80e2565b2a6189f6cb3702680fd7f9d9516a20451c",
+    "end_line": 184,
+    "path": "README.md",
+    "semantic_id": "sc_7d97a383a65dbd44",
+    "start_line": 175
+  },
+  "README.md::section::Fast Start": {
+    "anchor": "Fast Start",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "40e7be26ee2abe74933b53d3e0a7203133e809239cc46098d0b9a57995052555",
+    "end_line": 74,
+    "path": "README.md",
+    "semantic_id": "sc_b9fc101d0bd580c9",
+    "start_line": 64
+  },
+  "README.md::section::Release Status": {
+    "anchor": "Release Status",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "fe6e838f4c4a7fc1ba55a0841733f6a4b2983a16e207ad2c8b2282b25f1be87e",
+    "end_line": 158,
+    "path": "README.md",
+    "semantic_id": "sc_ac40e0601cab3bc3",
+    "start_line": 157
+  },
+  "README.md::section::Repository Contract": {
+    "anchor": "Repository Contract",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d5d7393937e532b712fd41887bdbe0882b316ae59158d387f82574e6d34eb502",
+    "end_line": 50,
+    "path": "README.md",
+    "semantic_id": "sc_77cb55a3eee8788b",
+    "start_line": 44
+  },
+  "README.md::section::Runtime contract": {
+    "anchor": "Runtime contract",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "32f91980538e7eafcbfce3d74327029a5b82cca254643886aecaa0384a597271",
+    "end_line": 107,
+    "path": "README.md",
+    "semantic_id": "sc_71a7720fddd4ca90",
+    "start_line": 101
+  },
+  "README.md::section::Storage Layout": {
+    "anchor": "Storage Layout",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "0edc4d037580b9e47dd29e8dd34f7bd3aed751cf1ce9b05b3838d7cdcda117ae",
+    "end_line": 63,
+    "path": "README.md",
+    "semantic_id": "sc_8db614091b91d654",
+    "start_line": 51
+  },
+  "README.md::section::Thread workspace flow": {
+    "anchor": "Thread workspace flow",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "de7d032a8848131471c351c0fabd7351d574a237960194a32220b6132da2486b",
+    "end_line": 114,
+    "path": "README.md",
+    "semantic_id": "sc_378c0fb7f02a9629",
+    "start_line": 108
+  },
+  "README.md::section::What Ships Today": {
+    "anchor": "What Ships Today",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "175768575f4e7362a120bec1600594927a980adda4ba8956134f6588221f2d02",
+    "end_line": 33,
+    "path": "README.md",
+    "semantic_id": "sc_b71490e8421e96a8",
+    "start_line": 22
+  },
+  "README.md::section::Why AIGit": {
+    "anchor": "Why AIGit",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d78ad1b7d59ab40d92b9c13366ea791d6761f65c018d68ab0b6cab40070ec676",
+    "end_line": 21,
+    "path": "README.md",
+    "semantic_id": "sc_fb2b5fcc872bf21c",
+    "start_line": 12
+  },
   "aigit/admin_ui.py::function::_containers_rows": {
     "anchor": "_containers_rows",
     "chunk_type": "function",
@@ -969,6 +1169,66 @@
     "semantic_id": "sc_4521b6be0fb0d0d6",
     "start_line": 335
   },
+  "docs/CYCLE_02_10X_RELEASE.md::section::AIGit Cycle 2: 10x Release Wave": {
+    "anchor": "AIGit Cycle 2: 10x Release Wave",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "abb800fe519bfb8ab923b1057c04d0c4456b4801a929922450bf03833e632579",
+    "end_line": 6,
+    "path": "docs/CYCLE_02_10X_RELEASE.md",
+    "semantic_id": "sc_688ed161386f7b1d",
+    "start_line": 1
+  },
+  "docs/CYCLE_02_10X_RELEASE.md::section::Acceptance Signals": {
+    "anchor": "Acceptance Signals",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "910932ecc24f2ccc5b60adc96c3c159a396173d1064094f64e4edee8df8d7981",
+    "end_line": 36,
+    "path": "docs/CYCLE_02_10X_RELEASE.md",
+    "semantic_id": "sc_ee6573abbeb285b2",
+    "start_line": 30
+  },
+  "docs/CYCLE_02_10X_RELEASE.md::section::Execution Contract": {
+    "anchor": "Execution Contract",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "59d878028ee8692e91e1cec6ab0cfea55e70199ddf97654dde7194784162e9e4",
+    "end_line": 29,
+    "path": "docs/CYCLE_02_10X_RELEASE.md",
+    "semantic_id": "sc_282dd0fd295629ee",
+    "start_line": 22
+  },
+  "docs/CYCLE_02_10X_RELEASE.md::section::Release Gate": {
+    "anchor": "Release Gate",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "caab4be580b7a600d783162f4d7949b628071bd6703f2578bd56622228ab6bb4",
+    "end_line": 51,
+    "path": "docs/CYCLE_02_10X_RELEASE.md",
+    "semantic_id": "sc_bab125f75aeb6e24",
+    "start_line": 45
+  },
+  "docs/CYCLE_02_10X_RELEASE.md::section::Release Themes": {
+    "anchor": "Release Themes",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "113c54a874ec911b79fbd45fe15f415181a6224573ce5f7664598cc70bb0ec9b",
+    "end_line": 21,
+    "path": "docs/CYCLE_02_10X_RELEASE.md",
+    "semantic_id": "sc_e354cfe53b6f8a35",
+    "start_line": 7
+  },
+  "docs/CYCLE_02_10X_RELEASE.md::section::Suggested Order": {
+    "anchor": "Suggested Order",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "67d4f19958003397e9cab84b253d02ca8f7d0875ad1523cfd965d84dfb0c18a0",
+    "end_line": 44,
+    "path": "docs/CYCLE_02_10X_RELEASE.md",
+    "semantic_id": "sc_079d21780181b6d4",
+    "start_line": 37
+  },
   "docs/DEERFLOW_RECOVERY.md::section::After recovery": {
     "anchor": "After recovery",
     "chunk_type": "section",
@@ -1029,45 +1289,55 @@
     "semantic_id": "sc_4aa7f03335126495",
     "start_line": 3
   },
-  "docs/EPICS_ROADMAP.md::section::AIGit Development Roadmap: 10 Active Epics": {
-    "anchor": "AIGit Development Roadmap: 10 Active Epics",
+  "docs/EPICS_ROADMAP.md::section::AIGit Development Roadmap": {
+    "anchor": "AIGit Development Roadmap",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "7318a43149c6590e57c5a9878ecafc09995a9c170ce7f107407a4f7f49a8d786",
-    "end_line": 4,
+    "content_hash": "dc5754ff3d154cfa37299d78591abb5a64a3b8bef45b46827fb9a7f62f1f3b85",
+    "end_line": 7,
     "path": "docs/EPICS_ROADMAP.md",
-    "semantic_id": "sc_2abb75ca09277b82",
+    "semantic_id": "sc_4772f51266f0bf1e",
     "start_line": 1
   },
-  "docs/EPICS_ROADMAP.md::section::Current Environment Launch Status": {
-    "anchor": "Current Environment Launch Status",
+  "docs/EPICS_ROADMAP.md::section::Cycle 1 Epic Portfolio": {
+    "anchor": "Cycle 1 Epic Portfolio",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "0f8096c6b389435dfe0be87eeccef079f6c7bb870b617f7837219ade98dc4538",
-    "end_line": 37,
+    "content_hash": "385b3e6b36e29aa9de0c703dd6ef8e580fd0580b2e4492f847c3d3e9002545b0",
+    "end_line": 26,
     "path": "docs/EPICS_ROADMAP.md",
-    "semantic_id": "sc_7c9ba398ed462146",
-    "start_line": 24
+    "semantic_id": "sc_01a2f30b1c7de59d",
+    "start_line": 14
   },
-  "docs/EPICS_ROADMAP.md::section::Epic Portfolio": {
-    "anchor": "Epic Portfolio",
+  "docs/EPICS_ROADMAP.md::section::Cycle 1 Launch Status": {
+    "anchor": "Cycle 1 Launch Status",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "2a718bf0b27e83341b7d16845f9180be5adf6e0fa13fead57eb30b55a6bc39a8",
-    "end_line": 23,
+    "content_hash": "219058852f66f99d551a7ffe71507a56c618f7e9c3d7aabfb02d451618558f54",
+    "end_line": 41,
     "path": "docs/EPICS_ROADMAP.md",
-    "semantic_id": "sc_642f1b100920ccc0",
-    "start_line": 11
+    "semantic_id": "sc_dec67dec2457a168",
+    "start_line": 27
+  },
+  "docs/EPICS_ROADMAP.md::section::Cycle 2: 10x Release Wave": {
+    "anchor": "Cycle 2: 10x Release Wave",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "e23c0fb358e2fb4711705f98837623cdee3587849a3d72750734c57dd99766c0",
+    "end_line": 59,
+    "path": "docs/EPICS_ROADMAP.md",
+    "semantic_id": "sc_6fbee523d89180b3",
+    "start_line": 42
   },
   "docs/EPICS_ROADMAP.md::section::Execution Cadence": {
     "anchor": "Execution Cadence",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "39b7f0b7a8cc1830afc6f131a56ebcf718c624ac3075330cace315a7faa8218d",
-    "end_line": 10,
+    "end_line": 13,
     "path": "docs/EPICS_ROADMAP.md",
     "semantic_id": "sc_94c70d67e41513a0",
-    "start_line": 5
+    "start_line": 8
   },
   "docs/MULTISOTA_CODEX.md::section::Guardrails": {
     "anchor": "Guardrails",
