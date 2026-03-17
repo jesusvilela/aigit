@@ -44,10 +44,10 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "66601da793895cf094a47dd6153ba40c228ad951e36b38320e85769f8bbe7edc",
-    "end_line": 87,
+    "end_line": 63,
     "path": "README.md",
     "semantic_id": "sc_cf4664df89dcbbd0",
-    "start_line": 83
+    "start_line": 59
   },
   "README.md::section::MVP capabilities": {
     "anchor": "MVP capabilities",
