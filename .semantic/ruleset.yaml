@@ -1,0 +1,11 @@
+version: 1
+parsers:
+  .py: python-ast
+  .md: markdown-headings
+  default: file
+identity:
+  strategy: path+anchor+type
+  false_positive_policy: prefer-new-node
+canonicalization:
+  line_endings: lf
+  trim_trailing_whitespace: true
