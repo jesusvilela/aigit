@@ -96,3 +96,19 @@ def test_cmd_verify_provenance_prints_json(monkeypatch: pytest.MonkeyPatch, caps
 
     assert result == 0
     assert json.loads(capsys.readouterr().out)['commit'] == 'deadbeef'
+
+
+def test_cmd_verify_provenance_returns_1_on_failure(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(
+        core,
+        'verify_provenance',
+        lambda ref='HEAD', repo_root=Path('.'): (_ for _ in ()).throw(ValueError('bad provenance')),
+    )
+
+    result = core.cmd_verify_provenance(argparse.Namespace(ref='HEAD'))
+
+    captured = capsys.readouterr()
+    assert result == 1
+    assert captured.err.strip() == 'bad provenance'

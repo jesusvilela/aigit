@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -484,7 +485,11 @@ def verify_provenance(ref: str = 'HEAD', repo_root: Path = Path('.')) -> dict[st
 
 
 def cmd_verify_provenance(args: argparse.Namespace) -> int:
-    result = verify_provenance(ref=args.ref, repo_root=Path('.'))
+    try:
+        result = verify_provenance(ref=args.ref, repo_root=Path('.'))
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
     print(json.dumps(result, sort_keys=True))
     return 0
 
