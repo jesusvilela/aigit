@@ -1,12 +1,17 @@
 from pathlib import Path
 
+import pytest
+
+
+VENDOR_ROOT = Path(__file__).resolve().parent.parent / '.deerflow' / 'vendor' / 'deer-flow'
+
 
 def test_vendor_task_tool_keeps_subagent_config_separate_from_runtime_config():
+    if not VENDOR_ROOT.exists():
+        pytest.skip('optional DeerFlow vendor tree is not available in this checkout')
+
     task_tool_path = (
-        Path(__file__).resolve().parent.parent
-        / '.deerflow'
-        / 'vendor'
-        / 'deer-flow'
+        VENDOR_ROOT
         / 'backend'
         / 'packages'
         / 'harness'
