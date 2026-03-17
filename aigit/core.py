@@ -290,7 +290,11 @@ def iter_repo_files(root: Path) -> list[Path]:
         rel = path.relative_to(root)
         if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
             continue
+        if any(part == '__pycache__' or part.endswith('.egg-info') for part in rel.parts):
+            continue
         if any(part.startswith('.') and part != '.github' for part in rel.parts):
+            continue
+        if path.suffix == '.pyc':
             continue
         files.append(rel)
     return sorted(files)
