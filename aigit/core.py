@@ -6,10 +6,14 @@ import dataclasses
 import difflib
 import hashlib
 import json
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+import subprocess
+=======
 import os
 import re
 import subprocess
 import tempfile
+>>>>>>> main
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -22,6 +26,14 @@ INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
 
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
+DEERFLOW_LAUNCH_SCRIPT = Path('scripts/run_deerflow.sh')
+DEERFLOW_ENV_FILE = Path('.deerflow/.env.example')
+DEERFLOW_CONFIG_FILE = Path('.deerflow/config.yaml')
+
+=======
+>>>>>>> main
 
 @dataclasses.dataclass
 class Chunk:
@@ -72,8 +84,13 @@ def parse_python(path: str, text: str) -> list[Chunk]:
             anchor = node.name
             chunks.append(
                 Chunk(
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+                    semantic_id=_chunk_id(path, anchor, chunk_type),
+                    path=path,
+=======
                     semantic_id=_chunk_id(str(path), anchor, chunk_type),
                     path=str(path),
+>>>>>>> main
                     chunk_type=chunk_type,
                     anchor=anchor,
                     content_hash=_content_hash(segment),
@@ -93,12 +110,21 @@ def parse_markdown(path: str, text: str) -> list[Chunk]:
         start = header_idx + 1
         end = header_idxs[idx + 1] if idx + 1 < len(header_idxs) else len(lines)
         segment_lines = lines[header_idx:end]
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+        header = lines[header_idx].lstrip('#').strip() or f'section-{idx + 1}'
+        segment = '\n'.join(segment_lines)
+        chunks.append(
+            Chunk(
+                semantic_id=_chunk_id(path, header, 'section'),
+                path=path,
+=======
         header = lines[header_idx].lstrip('#').strip() or f'section-{idx+1}'
         segment = '\n'.join(segment_lines)
         chunks.append(
             Chunk(
                 semantic_id=_chunk_id(str(path), header, 'section'),
                 path=str(path),
+>>>>>>> main
                 chunk_type='section',
                 anchor=header,
                 content_hash=_content_hash(segment),
@@ -111,8 +137,13 @@ def parse_markdown(path: str, text: str) -> list[Chunk]:
         segment = '\n'.join(lines)
         chunks.append(
             Chunk(
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+                semantic_id=_chunk_id(path, 'document', 'document'),
+                path=path,
+=======
                 semantic_id=_chunk_id(str(path), 'document', 'document'),
                 path=str(path),
+>>>>>>> main
                 chunk_type='document',
                 anchor='document',
                 content_hash=_content_hash(segment),
@@ -128,8 +159,13 @@ def parse_text(path: str, text: str) -> list[Chunk]:
     line_count = len(text.splitlines())
     return [
         Chunk(
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+            semantic_id=_chunk_id(path, 'file', 'file'),
+            path=path,
+=======
             semantic_id=_chunk_id(str(path), 'file', 'file'),
             path=str(path),
+>>>>>>> main
             chunk_type='file',
             anchor='file',
             content_hash=_content_hash(text),
@@ -176,7 +212,11 @@ def iter_repo_files(root: Path) -> list[Path]:
         if not path.is_file():
             continue
         rel = path.relative_to(root)
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+        if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
+=======
         if rel.parts[0] in {'.git', '.semantic'}:
+>>>>>>> main
             continue
         if any(part.startswith('.') and part != '.github' for part in rel.parts):
             continue
@@ -289,7 +329,15 @@ def cmd_merge(args: argparse.Namespace) -> int:
         t = theirs.get(sid)
         if not o or not t:
             continue
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+        if (
+            o['content_hash'] != b['content_hash']
+            and t['content_hash'] != b['content_hash']
+            and o['content_hash'] != t['content_hash']
+        ):
+=======
         if o['content_hash'] != b['content_hash'] and t['content_hash'] != b['content_hash'] and o['content_hash'] != t['content_hash']:
+>>>>>>> main
             conflicts.append(sid)
     out = {'base': args.base, 'ours': args.ours, 'theirs': args.theirs, 'conflicts': conflicts}
     Path(args.output).write_text(json.dumps(out, indent=2) + '\n', encoding='utf-8')
@@ -321,6 +369,92 @@ def cmd_commit(args: argparse.Namespace) -> int:
     return 0
 
 
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+def _write_file_if_missing(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists():
+        path.write_text(content, encoding='utf-8')
+
+
+def bootstrap_deerflow_files() -> None:
+    _write_file_if_missing(
+        DEERFLOW_ENV_FILE,
+        '# Copy this file to .deerflow/.env and fill secrets\n'
+        'OPENAI_API_KEY=\n'
+        'TAVILY_API_KEY=\n'
+        'INFOQUEST_API_KEY=\n',
+    )
+    _write_file_if_missing(
+        DEERFLOW_CONFIG_FILE,
+        'models:\n'
+        '  - name: gpt-4o-mini\n'
+        '    display_name: GPT-4o Mini\n'
+        '    use: langchain_openai:ChatOpenAI\n'
+        '    model: gpt-4o-mini\n'
+        '    api_key: $OPENAI_API_KEY\n'
+        '    max_tokens: 4096\n'
+        '    temperature: 0.2\n'
+        '\n'
+        'sandbox:\n'
+        '  use: deerflow.community.docker_sandbox:DockerSandboxProvider\n'
+        '\n'
+        'channels:\n'
+        '  session:\n'
+        '    assistant_id: lead_agent\n'
+        '    config:\n'
+        '      recursion_limit: 120\n'
+        '    context:\n'
+        '      thinking_enabled: true\n'
+        '      is_plan_mode: true\n'
+        '      subagent_enabled: true\n',
+    )
+    _write_file_if_missing(
+        DEERFLOW_LAUNCH_SCRIPT,
+        '#!/usr/bin/env bash\n'
+        'set -euo pipefail\n'
+        'REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"\n'
+        'DEERFLOW_DIR="$REPO_ROOT/.deerflow/vendor/deer-flow"\n'
+        'if [ ! -d "$DEERFLOW_DIR" ]; then\n'
+        '  echo "deer-flow vendor directory missing. Run: aigit init-deerflow" >&2\n'
+        '  exit 1\n'
+        'fi\n'
+        'cd "$DEERFLOW_DIR"\n'
+        'make docker-init\n'
+        'make docker-start\n',
+    )
+    DEERFLOW_LAUNCH_SCRIPT.chmod(0o755)
+
+
+def cmd_init_deerflow(args: argparse.Namespace) -> int:
+    bootstrap_deerflow_files()
+    if args.skip_clone:
+        print('initialized local deerflow config files (skip clone)')
+        return 0
+
+    DEERFLOW_VENDOR_DIR.parent.mkdir(parents=True, exist_ok=True)
+    if not DEERFLOW_VENDOR_DIR.exists():
+        subprocess.run(
+            [
+                'git',
+                'clone',
+                '--depth',
+                '1',
+                args.repo,
+                str(DEERFLOW_VENDOR_DIR),
+            ],
+            check=True,
+        )
+    else:
+        subprocess.run(['git', '-C', str(DEERFLOW_VENDOR_DIR), 'pull', '--ff-only'], check=True)
+
+    subprocess.run(['make', 'config'], cwd=DEERFLOW_VENDOR_DIR, check=True)
+    print(f'initialized deer-flow harness in {DEERFLOW_VENDOR_DIR}')
+    print('next: copy .deerflow/.env.example to .deerflow/.env and set API keys')
+    return 0
+
+
+=======
+>>>>>>> main
 def serve_api(args: argparse.Namespace) -> int:
     class Handler(BaseHTTPRequestHandler):
         def _send(self, status: int, payload: dict[str, Any]) -> None:
@@ -383,6 +517,14 @@ def build_parser() -> argparse.ArgumentParser:
     commit.add_argument('--prompt', required=True)
     commit.set_defaults(func=cmd_commit)
 
+<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
+    init_deerflow = sub.add_parser('init-deerflow', help='Configure deer-flow harness for autonomous development')
+    init_deerflow.add_argument('--repo', default='https://github.com/bytedance/deer-flow.git')
+    init_deerflow.add_argument('--skip-clone', action='store_true')
+    init_deerflow.set_defaults(func=cmd_init_deerflow)
+
+=======
+>>>>>>> main
     api = sub.add_parser('serve-api', help='Serve local chunk API')
     api.add_argument('--host', default='127.0.0.1')
     api.add_argument('--port', type=int, default=8765)
