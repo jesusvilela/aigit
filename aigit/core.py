@@ -439,6 +439,56 @@ def cmd_record_provenance(args: argparse.Namespace) -> int:
     return 0
 
 
+def _parse_provenance_trailer(message: str) -> dict[str, str] | None:
+    trailer_line = None
+    for line in reversed(message.splitlines()):
+        if line.startswith('AI-Provenance: '):
+            trailer_line = line[len('AI-Provenance: ') :]
+            break
+    if trailer_line is None:
+        return None
+    fields: dict[str, str] = {}
+    for part in trailer_line.split(';'):
+        if '=' not in part:
+            continue
+        key, value = part.split('=', 1)
+        fields[key.strip()] = value.strip()
+    return fields or None
+
+
+def verify_provenance(ref: str = 'HEAD', repo_root: Path = Path('.')) -> dict[str, Any]:
+    repo_root = repo_root.resolve()
+    commit = _run_git(['rev-parse', ref], cwd=repo_root)
+    message = _run_git(['show', '-s', '--format=%B', commit], cwd=repo_root)
+    trailer = _parse_provenance_trailer(message)
+    if trailer is None:
+        raise ValueError(f'{commit} is missing an AI-Provenance trailer')
+
+    provenance_path = _repo_semantic_path(repo_root, SEMANTIC_DIR / 'provenance.jsonl')
+    rows = _read_jsonl_rows(provenance_path)
+    matching_row = next((row for row in reversed(rows) if row.get('commit') == commit), None)
+    if matching_row is None:
+        raise ValueError(f'no provenance log row found for commit {commit}')
+
+    prompt_hash = str(matching_row.get('prompt_hash', ''))
+    trailer_prompt_hash = trailer.get('prompt-hash', '')
+    if trailer_prompt_hash and not prompt_hash.startswith(trailer_prompt_hash):
+        raise ValueError(f'provenance trailer does not match log row for commit {commit}')
+
+    return {
+        'commit': commit,
+        'trailer': trailer,
+        'log_row': matching_row,
+        'provenance_path': str(provenance_path),
+    }
+
+
+def cmd_verify_provenance(args: argparse.Namespace) -> int:
+    result = verify_provenance(ref=args.ref, repo_root=Path('.'))
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+
 def cmd_commit(args: argparse.Namespace) -> int:
     trailer = f"AI-Provenance: agent={args.agent};model={args.model};prompt-hash={_hash([args.prompt])[:16]}"
     message = f"{args.message}\n\n{trailer}\n"
@@ -1540,6 +1590,10 @@ def build_parser() -> argparse.ArgumentParser:
     prov.add_argument('--model', required=True)
     prov.add_argument('--prompt', required=True)
     prov.set_defaults(func=cmd_record_provenance)
+
+    verify_prov = sub.add_parser('verify-provenance', help='Verify AI provenance for a commit')
+    verify_prov.add_argument('--ref', default='HEAD')
+    verify_prov.set_defaults(func=cmd_verify_provenance)
 
     commit = sub.add_parser('commit', help='Commit with AI provenance trailer')
     commit.add_argument('-m', '--message', required=True)
