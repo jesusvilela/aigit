@@ -1203,8 +1203,8 @@
     "anchor": "Release Gate",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "caab4be580b7a600d783162f4d7949b628071bd6703f2578bd56622228ab6bb4",
-    "end_line": 51,
+    "content_hash": "2348dfbc172ca84bc2b4a5c07be085cb32d7c1768902c4fb2d7c2d8ff238c0f4",
+    "end_line": 53,
     "path": "docs/CYCLE_02_10X_RELEASE.md",
     "semantic_id": "sc_bab125f75aeb6e24",
     "start_line": 45
@@ -1228,6 +1228,126 @@
     "path": "docs/CYCLE_02_10X_RELEASE.md",
     "semantic_id": "sc_079d21780181b6d4",
     "start_line": 37
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-01 Ruleset policy packs": {
+    "anchor": "C2-01 Ruleset policy packs",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "bbb42c390fd65dc1a9fdf9b3bf67d4d225b5208d937c42e092bba8fffc50ca4f",
+    "end_line": 18,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_a5c11e6afbbd904a",
+    "start_line": 13
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-02 Lineage replay suite": {
+    "anchor": "C2-02 Lineage replay suite",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "3bf7b1b177274ad8bc4353806c104488020b1f7ad159675b54900d4a3ba8946c",
+    "end_line": 24,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_5fc1a4563728a666",
+    "start_line": 19
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-03 Semantic PR publishing": {
+    "anchor": "C2-03 Semantic PR publishing",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "2be927ff98928962698bc80d4ad37ed2e009286a7ef8ca3cfe028b9c82f061bb",
+    "end_line": 30,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_3900f99f902d4f36",
+    "start_line": 25
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-04 Merge rehearsal mode": {
+    "anchor": "C2-04 Merge rehearsal mode",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "9d6cae10d7129acc47dc25fd1644df80bdce182889a4aa07ef0f8f39321e0822",
+    "end_line": 36,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_23a715e77bc9bf87",
+    "start_line": 31
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-05 Provenance verification": {
+    "anchor": "C2-05 Provenance verification",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "950c63d2d142e2c5df9301152e4a0556724b96aa9169b3fc17ad69205069078e",
+    "end_line": 42,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_e56674a17119763d",
+    "start_line": 37
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-06 API consumer kits": {
+    "anchor": "C2-06 API consumer kits",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "d3db369b3079dbb1aae30188bb0d67e2747a7d48fde6caebb8f146cbbcc4a5c3",
+    "end_line": 48,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_1340fdf1411adccb",
+    "start_line": 43
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-07 Persistent DeerFlow crews": {
+    "anchor": "C2-07 Persistent DeerFlow crews",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "6d804fce072e798fe9125e8cf45a0fc4bfb00755369c177270490bf8d99e1423",
+    "end_line": 54,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_9649a7b70b74aa05",
+    "start_line": 49
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-08 Polyglot parser expansion": {
+    "anchor": "C2-08 Polyglot parser expansion",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "534738e326dd0ad92b6601b532b7d8f87aa1a814b7137b8078d256a4eafeaff2",
+    "end_line": 61,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_e64a164ac3cd9f36",
+    "start_line": 55
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-09 Performance budgets": {
+    "anchor": "C2-09 Performance budgets",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "06898ab1a48eb7283ffb2465abbec9643695858120d657b9f18ccd139feddff9",
+    "end_line": 67,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_065019d4dce24a49",
+    "start_line": 62
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::C2-10 Adoption rails": {
+    "anchor": "C2-10 Adoption rails",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "251d1439fbf1150d917f1b8a07dfecb210e06873483ca99cdb7239bfc76b9905",
+    "end_line": 72,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_21d573cfafdb1ab0",
+    "start_line": 68
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::Cycle 2 10x Task Checklist": {
+    "anchor": "Cycle 2 10x Task Checklist",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c9c8e0a8ef75fa4f85a8465548a66e85a3747335a19e673780d603b25a3fcf7c",
+    "end_line": 4,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_6c5531e5d4a683ef",
+    "start_line": 1
+  },
+  "docs/CYCLE_02_10X_TASKS.md::section::Global gate": {
+    "anchor": "Global gate",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "60f33f0b51c16217954d2085449d0c8a1e663543a0d1c580383f5747be30c668",
+    "end_line": 12,
+    "path": "docs/CYCLE_02_10X_TASKS.md",
+    "semantic_id": "sc_e560410b0caec774",
+    "start_line": 5
   },
   "docs/DEERFLOW_RECOVERY.md::section::After recovery": {
     "anchor": "After recovery",

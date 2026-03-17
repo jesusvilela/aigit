@@ -49,3 +49,5 @@ Cycle 2 is considered landed when the release wave can demonstrate:
 - stable semantic outputs in clean CI and local rebuilds
 - agent-driven changes that stay reviewable and attributable
 - a documented operator path from bootstrap to recovery to release
+
+Execution checklist: `docs/CYCLE_02_10X_TASKS.md`
