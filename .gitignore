@@ -150,3 +150,6 @@ aigit.egg-info/
 # DeerFlow local harness checkout and secrets
 .deerflow/vendor/
 .deerflow/.env
+
+# Local editor/devcontainer config
+.devcontainer/
