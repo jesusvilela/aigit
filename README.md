@@ -56,24 +56,6 @@ aigit serve-api --host 127.0.0.1 --port 8765
   - `GET /healthz`
   - `GET /chunks`
 
-
-## DeerFlow harness bootstrap
-
-AIGit can provision a local DeerFlow agent harness (vendored under `.deerflow/vendor/deer-flow`) so autonomous agent runs can continue shipping semantic changes.
-
-```bash
-aigit init-deerflow               # clone + make config
-aigit init-deerflow --skip-clone  # only generate local templates
-cp .deerflow/.env.example .deerflow/.env
-# fill API keys in .deerflow/.env
-./scripts/run_deerflow.sh
-```
-
-Generated files:
-- `.deerflow/config.yaml` with agentic defaults (`is_plan_mode: true`, `subagent_enabled: true`)
-- `.deerflow/.env.example` secrets template
-- `scripts/run_deerflow.sh` for Docker-based startup
-
 ## Determinism and safety notes
 
 - Canonicalization uses LF normalization + trailing whitespace trimming.
