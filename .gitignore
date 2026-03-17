@@ -142,6 +142,7 @@ vite.config.ts.timestamp-*
 __pycache__/
 *.pyc
 .pytest_cache/
+aigit.egg-info/
 
 # AIGit local cache
 .semantic/cache/
