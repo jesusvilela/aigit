@@ -1,0 +1,11 @@
+export { ChunkType, SemanticChunk, ChunkEdge } from './chunk/types';
+export { parse } from './chunk/parser';
+export { ChunkGraph } from './chunk/graph';
+export { DiffKind, ChunkDiff, SemanticDiffResult } from './diff/types';
+export { diff } from './diff/engine';
+export { MergeStatus, MergeConflict, SemanticMergeResult } from './merge/types';
+export { merge } from './merge/engine';
+export { AgentIdentity, ProvenanceRecord, ProvenanceStore } from './provenance/types';
+export { ProvenanceTracker } from './provenance/tracker';
+export { JsonProvenanceStore } from './provenance/store';
+export { GitAdapter } from './git/adapter';
