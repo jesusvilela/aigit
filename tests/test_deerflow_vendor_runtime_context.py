@@ -1,13 +1,21 @@
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 
+import pytest
+
+
+VENDOR_ROOT = Path(__file__).resolve().parent.parent / '.deerflow' / 'vendor' / 'deer-flow'
+
+
+def _require_vendor_tree() -> Path:
+    if not VENDOR_ROOT.exists():
+        pytest.skip('optional DeerFlow vendor tree is not available in this checkout')
+    return VENDOR_ROOT
+
 
 def _load_runtime_context_module():
     module_path = (
-        Path(__file__).resolve().parent.parent
-        / '.deerflow'
-        / 'vendor'
-        / 'deer-flow'
+        _require_vendor_tree()
         / 'backend'
         / 'packages'
         / 'harness'
@@ -60,10 +68,7 @@ def test_vendor_runtime_context_setter_initializes_missing_context():
 
 def test_vendor_langgraph_dev_compose_disables_reload():
     compose_file = (
-        Path(__file__).resolve().parent.parent
-        / '.deerflow'
-        / 'vendor'
-        / 'deer-flow'
+        _require_vendor_tree()
         / 'docker'
         / 'docker-compose-dev.yaml'
     )
@@ -73,10 +78,7 @@ def test_vendor_langgraph_dev_compose_disables_reload():
 
 def test_vendor_paths_define_direct_repo_workspace_contract(tmp_path: Path):
     module_path = (
-        Path(__file__).resolve().parent.parent
-        / '.deerflow'
-        / 'vendor'
-        / 'deer-flow'
+        _require_vendor_tree()
         / 'backend'
         / 'packages'
         / 'harness'
