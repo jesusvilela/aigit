@@ -19,25 +19,22 @@
     "semantic_id": "sc_623cb1dcdc05d1d4",
     "start_line": 1
   },
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
   "README.md::section::Active development epics": {
     "anchor": "Active development epics",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "d164c5589fb8109ee8d7d009f48b46c461a2c4c84b713fc8b6a1ff161d55232b",
-    "end_line": 89,
+    "end_line": 90,
     "path": "README.md",
     "semantic_id": "sc_12d79a2d9ad3f54c",
-    "start_line": 84
+    "start_line": 85
   },
-=======
->>>>>>> main
   "README.md::section::CLI reference": {
     "anchor": "CLI reference",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "00b6b1b6be83811ff3637cb9565e2407b6915fa5c3bc23d374b747c84a6378a4",
-    "end_line": 59,
+    "content_hash": "e967456796d7de4388f100a82f1458599fb2d6ccbd028276261cf8ac75c1b8a0",
+    "end_line": 60,
     "path": "README.md",
     "semantic_id": "sc_e6d3a934c34e4842",
     "start_line": 48
@@ -47,27 +44,20 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "6309dd104d5cc14bb64ff62c05b9c5159c699e8a800e11b74c877fe21a266da0",
-    "end_line": 67,
+    "end_line": 68,
     "path": "README.md",
     "semantic_id": "sc_dba0f1108ec59f95",
-    "start_line": 60
+    "start_line": 61
   },
   "README.md::section::Determinism and safety notes": {
     "anchor": "Determinism and safety notes",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "66601da793895cf094a47dd6153ba40c228ad951e36b38320e85769f8bbe7edc",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 94,
+    "end_line": 95,
     "path": "README.md",
     "semantic_id": "sc_cf4664df89dcbbd0",
-    "start_line": 90
-=======
-    "end_line": 63,
-    "path": "README.md",
-    "semantic_id": "sc_cf4664df89dcbbd0",
-    "start_line": 59
->>>>>>> main
+    "start_line": 91
   },
   "README.md::section::MVP capabilities": {
     "anchor": "MVP capabilities",
@@ -109,41 +99,32 @@
     "semantic_id": "sc_031a7b48b85b06bb",
     "start_line": 24
   },
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
   "README.md::section::Skills and planning docs": {
     "anchor": "Skills and planning docs",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "7f199ddb5c917a8f0dc064d181c76879807c7b87dacf887a287bb185fa2c14a7",
-    "end_line": 83,
+    "end_line": 84,
     "path": "README.md",
     "semantic_id": "sc_7dff3edd72d469d8",
-    "start_line": 78
+    "start_line": 79
   },
-=======
->>>>>>> main
   "README.md::section::fill API keys in .deerflow/.env": {
     "anchor": "fill API keys in .deerflow/.env",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "8027d87d7470098e05093b680f761f4d2c4875d9289de562e58a760061b8e0f1",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 77,
-=======
-    "end_line": 76,
->>>>>>> main
+    "end_line": 78,
     "path": "README.md",
     "semantic_id": "sc_35aa64989bd052e4",
-    "start_line": 68
+    "start_line": 69
   },
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-=======
   "aigit.egg-info/PKG-INFO::file::file": {
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-    "content_hash": "0bf394d552e48934363bc5a906ca93e3b5b69b93473302c1cef47271270bc5c7",
-    "end_line": 72,
+    "content_hash": "999b6c5a5fa1c673f84c9760d89372a2e6a8b18e7fe557e3d05ba663fd58943a",
+    "end_line": 104,
     "path": "aigit.egg-info/PKG-INFO",
     "semantic_id": "sc_34f36d8a3e75d18d",
     "start_line": 1
@@ -152,8 +133,8 @@
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-    "content_hash": "23902106e0419d70e3cd72a09bff7c3047b5a1c47a99ff5521c67e4974b872d7",
-    "end_line": 12,
+    "content_hash": "f10e2a856a41f87fa9f5903deb0eb2070931ed1b067d1b49555e3f1a82aec88f",
+    "end_line": 14,
     "path": "aigit.egg-info/SOURCES.txt",
     "semantic_id": "sc_b818b0fd205a5821",
     "start_line": 1
@@ -188,16 +169,11 @@
     "semantic_id": "sc_8115d7c4b90b3969",
     "start_line": 1
   },
->>>>>>> main
   "aigit/__pycache__/__init__.cpython-312.pyc::file::file": {
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "content_hash": "022e8b62779393d589b751f1a0bf32c920853bc7f181740f97cef426a29104fb",
-=======
-    "content_hash": "84c743ab43027ee924f7b7afe9bd0fe1bd2f90c9543ec410d1156e055abeadeb",
->>>>>>> main
+    "content_hash": "2c128b8467d06bb40f9bbeb08024c2506cddc7031a8095547c708ffa3a19340b",
     "end_line": 6,
     "path": "aigit/__pycache__/__init__.cpython-312.pyc",
     "semantic_id": "sc_b129a24721a9795f",
@@ -207,11 +183,7 @@
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "content_hash": "87a6fc4b85cac681e8bd0490f1173f753d58fffe1eaf3e6ef8d0a23cbfc0d23e",
-=======
-    "content_hash": "c8728cda02e1b61dc73d628df2be2aad7807227273b552765dd7511fa1cd79a1",
->>>>>>> main
+    "content_hash": "7e48c5c15526fdebd8f5015868878fc8e9585b54d147053e965273191f2e62f4",
     "end_line": 13,
     "path": "aigit/__pycache__/cli.cpython-312.pyc",
     "semantic_id": "sc_9820101a77625f26",
@@ -221,13 +193,8 @@
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "content_hash": "a1101b20724ed3942bf3d40274c04d956d6336132066393803b3195787626425",
-    "end_line": 810,
-=======
-    "content_hash": "1fcc892799aae5512c7b8a00d40d03adf2949b3977cb1f728a4245800fa14a57",
-    "end_line": 712,
->>>>>>> main
+    "content_hash": "fd14d5b6aba002d469d7d028afb23ff123d6689aba9e8eba54cd98b5b04d1ac3",
+    "end_line": 883,
     "path": "aigit/__pycache__/core.cpython-312.pyc",
     "semantic_id": "sc_7f1be88ffc1dec3e",
     "start_line": 1
@@ -237,455 +204,330 @@
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "4e11d25a05923ab9e8761dd78f6580d8570749d4eec9d283ad3d0bb0ceacaf68",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 40,
+    "end_line": 42,
     "path": "aigit/core.py",
     "semantic_id": "sc_f4cd722c74240d4f",
-    "start_line": 29
-=======
-    "end_line": 38,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_f4cd722c74240d4f",
-    "start_line": 27
->>>>>>> main
+    "start_line": 31
   },
   "aigit/core.py::function::_chunk_id": {
     "anchor": "_chunk_id",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "70c9ee2f74727a73da345928e9655a4c7c0d93ed461e5ab2ccba269ce1ad11e9",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 54,
+    "end_line": 56,
     "path": "aigit/core.py",
     "semantic_id": "sc_7e445919e7911cdc",
-    "start_line": 53
-=======
-    "end_line": 52,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_7e445919e7911cdc",
-    "start_line": 51
->>>>>>> main
+    "start_line": 55
   },
   "aigit/core.py::function::_content_hash": {
     "anchor": "_content_hash",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1b6968b318cfa65839ff8ac9fd1246ba9152e700352e41ee464105b3779d8a63",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 58,
+    "end_line": 60,
     "path": "aigit/core.py",
     "semantic_id": "sc_bc7e47d81678a2ba",
-    "start_line": 57
-=======
-    "end_line": 56,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_bc7e47d81678a2ba",
-    "start_line": 55
->>>>>>> main
+    "start_line": 59
   },
   "aigit/core.py::function::_hash": {
     "anchor": "_hash",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "103aaefe1866ee02535cc2be0f8b5bf0e2c1c258ad5c6090b0850537ce5b3019",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 50,
+    "end_line": 52,
     "path": "aigit/core.py",
     "semantic_id": "sc_5becbef02f568dff",
-    "start_line": 49
-=======
-    "end_line": 48,
+    "start_line": 51
+  },
+  "aigit/core.py::function::_parse_bool": {
+    "anchor": "_parse_bool",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "901b6d09b3669048927d90a7e95c752399aa3e5cc0ddbca10d06dbba0815a06f",
+    "end_line": 229,
     "path": "aigit/core.py",
-    "semantic_id": "sc_5becbef02f568dff",
-    "start_line": 47
->>>>>>> main
+    "semantic_id": "sc_fd9e03e91d49792d",
+    "start_line": 223
+  },
+  "aigit/core.py::function::_parse_simple_yaml": {
+    "anchor": "_parse_simple_yaml",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9b970d670feaa6f16c94346a3e2bb8c247ace132b029f0bcf0535042a02d2824",
+    "end_line": 220,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_d583a25c94fd5522",
+    "start_line": 193
   },
   "aigit/core.py::function::_read_manifest_from_ref": {
     "anchor": "_read_manifest_from_ref",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "8f041bfe1d8689f547a1e3a1c1a7dd8bd621019961839a1342179bd5f0167b27",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 249,
+    "end_line": 336,
     "path": "aigit/core.py",
     "semantic_id": "sc_39879328e6c728f3",
-    "start_line": 241
-=======
-    "end_line": 247,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_39879328e6c728f3",
-    "start_line": 239
->>>>>>> main
+    "start_line": 328
   },
   "aigit/core.py::function::_run_git": {
     "anchor": "_run_git",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "96e5d63d423648f5d3a92991fe8adaa0a3776f2ba45c300743f4aa21916ae322",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 238,
+    "end_line": 325,
     "path": "aigit/core.py",
     "semantic_id": "sc_67ae6a14251d8020",
-    "start_line": 236
+    "start_line": 323
   },
   "aigit/core.py::function::_write_file_if_missing": {
     "anchor": "_write_file_if_missing",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "41c8f60ec230adf384572e87ed0c2f9d313437c599da98a403c61c9b09f9477d",
-    "end_line": 333,
+    "end_line": 427,
     "path": "aigit/core.py",
     "semantic_id": "sc_b2cc5162e1f78cfe",
-    "start_line": 330
+    "start_line": 424
   },
   "aigit/core.py::function::bootstrap_deerflow_files": {
     "anchor": "bootstrap_deerflow_files",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a14a6d1a81e75ebbb9a119b14ee278fc30ebe480cde3a0f38e7d3e58dea82abe",
-    "end_line": 382,
+    "end_line": 476,
     "path": "aigit/core.py",
     "semantic_id": "sc_423f4845a3d3b03c",
-    "start_line": 336
-=======
-    "end_line": 236,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_67ae6a14251d8020",
-    "start_line": 234
->>>>>>> main
+    "start_line": 430
   },
   "aigit/core.py::function::build_manifest": {
     "anchor": "build_manifest",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ba386452b55597dca924ea63c2ed9c16459a5b8b5d014d3db01688a0fa0ec42e",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 214,
+    "end_line": 299,
     "path": "aigit/core.py",
     "semantic_id": "sc_78f95bff76f9e094",
-    "start_line": 201
-=======
-    "end_line": 212,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_78f95bff76f9e094",
-    "start_line": 199
->>>>>>> main
+    "start_line": 286
   },
   "aigit/core.py::function::build_parser": {
     "anchor": "build_parser",
     "chunk_type": "function",
     "confidence": "high",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "content_hash": "cd8d9999c82275fadbd900bc374a3669b8086deaa6565e15a371834c26645b68",
-    "end_line": 485,
+    "content_hash": "3849703d3b6a67e9aa172186491d54d8e0ebce6c4c95d51b1cfdc8d8492786fb",
+    "end_line": 583,
     "path": "aigit/core.py",
     "semantic_id": "sc_db5f31922552aaeb",
-    "start_line": 441
-=======
-    "content_hash": "fb7e3cb506479d83cf5845a53c26768a592f8eb70f5ec217bbf6d2c1b0712bf3",
-    "end_line": 391,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_db5f31922552aaeb",
-    "start_line": 352
->>>>>>> main
+    "start_line": 535
   },
   "aigit/core.py::function::canonicalize_text": {
     "anchor": "canonicalize_text",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1c8c96df4dcffb751281cf95a06bde3df1f9d6a7450444ce3c2613fc39935af9",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 46,
+    "end_line": 48,
     "path": "aigit/core.py",
     "semantic_id": "sc_b2a6c15182f8ed35",
-    "start_line": 43
-=======
-    "end_line": 44,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_b2a6c15182f8ed35",
-    "start_line": 41
->>>>>>> main
+    "start_line": 45
   },
   "aigit/core.py::function::cmd_chunk": {
     "anchor": "cmd_chunk",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "574c0ad2224882f64c3b1b524f87b01159bc06f0d856b1a681969fbcb6980509",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 233,
+    "content_hash": "afc496f3ead46f3e214ce188f201e698a26a7305e4700f390b386206a8e4de38",
+    "end_line": 320,
     "path": "aigit/core.py",
     "semantic_id": "sc_ac13bf46fa21c890",
-    "start_line": 229
-=======
-    "end_line": 231,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_ac13bf46fa21c890",
-    "start_line": 227
->>>>>>> main
+    "start_line": 314
   },
   "aigit/core.py::function::cmd_commit": {
     "anchor": "cmd_commit",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "126d096d073b0a5f8172cfe8b9718f331a3f318a5035cdf8252354bdafd924ad",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 327,
+    "end_line": 421,
     "path": "aigit/core.py",
     "semantic_id": "sc_0f3dbf6b2c5cb9fc",
-    "start_line": 323
-=======
-    "end_line": 321,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_0f3dbf6b2c5cb9fc",
-    "start_line": 317
->>>>>>> main
+    "start_line": 417
   },
   "aigit/core.py::function::cmd_diff": {
     "anchor": "cmd_diff",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ad8e7c856f23458e020d2c5101785aeb101cd0ecdacda8a3fac0e106704c8d93",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 281,
+    "end_line": 375,
     "path": "aigit/core.py",
     "semantic_id": "sc_7c1dcd5056d4287f",
-    "start_line": 252
+    "start_line": 346
   },
   "aigit/core.py::function::cmd_init_deerflow": {
     "anchor": "cmd_init_deerflow",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "660075365f8f905b1b625a18673aa5a7811c2281658da353e7e2945f21866075",
-    "end_line": 410,
+    "end_line": 504,
     "path": "aigit/core.py",
     "semantic_id": "sc_5ec6bfa7e7d522f1",
-    "start_line": 385
-=======
-    "end_line": 279,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_7c1dcd5056d4287f",
-    "start_line": 250
->>>>>>> main
+    "start_line": 479
   },
   "aigit/core.py::function::cmd_merge": {
     "anchor": "cmd_merge",
     "chunk_type": "function",
     "confidence": "high",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
     "content_hash": "3451e487762bd46f67d72bf8dbe05db176612219a7c99a80143f8c37e11fcb78",
-    "end_line": 303,
+    "end_line": 397,
     "path": "aigit/core.py",
     "semantic_id": "sc_eb2deb5527a15df5",
-    "start_line": 284
-=======
-    "content_hash": "20f7a9e71041114d5a553e0512674e8ea9b02cd2b9cf177e890cf769324aa4fa",
-    "end_line": 297,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_eb2deb5527a15df5",
-    "start_line": 282
->>>>>>> main
+    "start_line": 378
   },
   "aigit/core.py::function::cmd_record_provenance": {
     "anchor": "cmd_record_provenance",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c042c97b74510fe158034379060c40a33f89eaba118cd9c1b135bb1b62078042",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 320,
+    "end_line": 414,
     "path": "aigit/core.py",
     "semantic_id": "sc_36a8bc1d556f2a2a",
-    "start_line": 306
-=======
-    "end_line": 314,
+    "start_line": 400
+  },
+  "aigit/core.py::function::cmd_validate_ruleset": {
+    "anchor": "cmd_validate_ruleset",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5f8ce69a9921ab24be02c749e01fc8dca6e63f168e26981b4f8d756ec4e623a2",
+    "end_line": 344,
     "path": "aigit/core.py",
-    "semantic_id": "sc_36a8bc1d556f2a2a",
-    "start_line": 300
->>>>>>> main
+    "semantic_id": "sc_ad1d15a155f78f61",
+    "start_line": 341
   },
   "aigit/core.py::function::ensure_semantic_scaffold": {
     "anchor": "ensure_semantic_scaffold",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0e0a25eae91688575f0abfc49fd519eabcb28060ebdc2c301bdffc2a7b49bd4b",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 198,
+    "end_line": 283,
     "path": "aigit/core.py",
     "semantic_id": "sc_1d93e73f62f06f66",
-    "start_line": 189
-=======
-    "end_line": 196,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_1d93e73f62f06f66",
-    "start_line": 187
->>>>>>> main
+    "start_line": 274
   },
   "aigit/core.py::function::iter_repo_files": {
     "anchor": "iter_repo_files",
     "chunk_type": "function",
     "confidence": "high",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
     "content_hash": "1941ae1c71628f4337d0776d358a1b5fe950854d3906ebca2a386f153f026933",
-    "end_line": 186,
+    "end_line": 188,
     "path": "aigit/core.py",
     "semantic_id": "sc_ad15c150c036ab1c",
-    "start_line": 175
-=======
-    "content_hash": "b71cade0f1b6262f87191e2381082b170e7da9f2ec6fae9340994f3f41d64a86",
-    "end_line": 184,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_ad15c150c036ab1c",
-    "start_line": 173
->>>>>>> main
+    "start_line": 177
   },
   "aigit/core.py::function::load_previous_index": {
     "anchor": "load_previous_index",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "dfa585fe6fa03c545b6989b0c73045cb95302451c23adbc39f6505aee9652b6f",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 158,
+    "end_line": 160,
     "path": "aigit/core.py",
     "semantic_id": "sc_3860c9ab723eea7e",
-    "start_line": 155
-=======
-    "end_line": 156,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_3860c9ab723eea7e",
-    "start_line": 153
->>>>>>> main
+    "start_line": 157
   },
   "aigit/core.py::function::main": {
     "anchor": "main",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "637f9187879350cf83535d141681732d53216b64263eeeb9eee18439b35a74e2",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 491,
+    "end_line": 589,
     "path": "aigit/core.py",
     "semantic_id": "sc_4dede0984ddd4213",
-    "start_line": 488
-=======
-    "end_line": 397,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_4dede0984ddd4213",
-    "start_line": 394
->>>>>>> main
+    "start_line": 586
   },
   "aigit/core.py::function::match_previous_id": {
     "anchor": "match_previous_id",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "70cd041589c22f037c343bda0cf45df81272696a2f4caf639dc74f7a35fc5759",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 172,
+    "end_line": 174,
     "path": "aigit/core.py",
     "semantic_id": "sc_d385f5d8dccb9797",
-    "start_line": 161
-=======
-    "end_line": 170,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_d385f5d8dccb9797",
-    "start_line": 159
->>>>>>> main
+    "start_line": 163
   },
   "aigit/core.py::function::parse_file": {
     "anchor": "parse_file",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "645c16f276ed88150d3922285654be179c1f467494a8495009d2908623503c7f",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 152,
+    "end_line": 154,
     "path": "aigit/core.py",
     "semantic_id": "sc_a174f27d2578cfce",
-    "start_line": 145
-=======
-    "end_line": 150,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_a174f27d2578cfce",
-    "start_line": 143
->>>>>>> main
+    "start_line": 147
   },
   "aigit/core.py::function::parse_markdown": {
     "anchor": "parse_markdown",
     "chunk_type": "function",
     "confidence": "high",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
     "content_hash": "5eed4689df36eada861a94ce92c543a0a57f088624bd996af27b4e1f1cc8fbaf",
-    "end_line": 126,
+    "end_line": 128,
     "path": "aigit/core.py",
     "semantic_id": "sc_471062592cc7f064",
-    "start_line": 90
-=======
-    "content_hash": "72dad89c7d596772ceaffd86d9b1773cb8705fe6191062dc598d1fc0fc17cba2",
-    "end_line": 124,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_471062592cc7f064",
-    "start_line": 88
->>>>>>> main
+    "start_line": 92
   },
   "aigit/core.py::function::parse_python": {
     "anchor": "parse_python",
     "chunk_type": "function",
     "confidence": "high",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
     "content_hash": "f86e0b4e1062251d9e76342f6317ba778d093302a176c02726248af3a3c8a92f",
-    "end_line": 87,
+    "end_line": 89,
     "path": "aigit/core.py",
     "semantic_id": "sc_0644bb3ac13ddd8c",
-    "start_line": 61
-=======
-    "content_hash": "916c3999f803d8525367e71d466a4b6e04eda2d8e4b2e07252aab34c02e93ef5",
-    "end_line": 85,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_0644bb3ac13ddd8c",
-    "start_line": 59
->>>>>>> main
+    "start_line": 63
   },
   "aigit/core.py::function::parse_text": {
     "anchor": "parse_text",
     "chunk_type": "function",
     "confidence": "high",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
     "content_hash": "193393c8bd8a7aa4b57fd732fc886ab8aaeda5fee9499ab9b03fd882a009ce64",
-    "end_line": 142,
+    "end_line": 144,
     "path": "aigit/core.py",
     "semantic_id": "sc_347823bcfe3e8b5a",
-    "start_line": 129
-=======
-    "content_hash": "36a1fc1737e7af2469dd8c196c252f56c3b2d2ecd639a2728df75bcc9c368d59",
-    "end_line": 140,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_347823bcfe3e8b5a",
-    "start_line": 127
->>>>>>> main
+    "start_line": 131
   },
   "aigit/core.py::function::serve_api": {
     "anchor": "serve_api",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "76b4f9448489d55acba5152326aa4c8ff3da9a1cf3db1cc604f2e1620dddc1a6",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 438,
+    "end_line": 532,
     "path": "aigit/core.py",
     "semantic_id": "sc_b555541820071b71",
-    "start_line": 413
-=======
-    "end_line": 349,
+    "start_line": 507
+  },
+  "aigit/core.py::function::validate_ruleset_content": {
+    "anchor": "validate_ruleset_content",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "405d96fca4c5cfbd9ffc5664b0d7ed5efa6da99fe07e98e51d6981f7c30748e8",
+    "end_line": 266,
     "path": "aigit/core.py",
-    "semantic_id": "sc_b555541820071b71",
-    "start_line": 324
->>>>>>> main
+    "semantic_id": "sc_dcc663996e61ddcd",
+    "start_line": 232
+  },
+  "aigit/core.py::function::validate_ruleset_file": {
+    "anchor": "validate_ruleset_file",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5eb27770717767b4ed255e981ac6026c10c91c4a7f15a91894b8b83c822d18e4",
+    "end_line": 272,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_4b58bae770541aeb",
+    "start_line": 269
   },
   "aigit/core.py::function::write_manifest": {
     "anchor": "write_manifest",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1c5734d75b39f8e3e1d3a47fbea9a1509e695a6b661a46fb87e8f0877e14a820",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "end_line": 226,
+    "end_line": 311,
     "path": "aigit/core.py",
     "semantic_id": "sc_4521b6be0fb0d0d6",
-    "start_line": 217
+    "start_line": 302
   },
   "docs/EPICS_ROADMAP.md::section::AIGit Development Roadmap: 10 Active Epics": {
     "anchor": "AIGit Development Roadmap: 10 Active Epics",
@@ -1226,24 +1068,17 @@
     "path": "docs/epics/EPIC-10-release-governance.md",
     "semantic_id": "sc_ebde9a4edc4fe723",
     "start_line": 3
-=======
-    "end_line": 224,
-    "path": "aigit/core.py",
-    "semantic_id": "sc_4521b6be0fb0d0d6",
-    "start_line": 215
->>>>>>> main
   },
   "pyproject.toml::file::file": {
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-    "content_hash": "6a39aa5cb95dfb710aa6c6d39e51518137dd0fcf462371b8f4f1be38e120c122",
-    "end_line": 17,
+    "content_hash": "073e0a669441d1a977cdd8eb62cc010e8e8c233e847adac2c5460828fccee741",
+    "end_line": 21,
     "path": "pyproject.toml",
     "semantic_id": "sc_8c66d52c16b5045b",
     "start_line": 1
   },
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
   "scripts/run_deerflow.sh::file::file": {
     "anchor": "file",
     "chunk_type": "file",
@@ -1374,35 +1209,36 @@
     "semantic_id": "sc_9b781344e992caf8",
     "start_line": 38
   },
-=======
->>>>>>> main
   "tests/__pycache__/test_chunking.cpython-312-pytest-9.0.2.pyc::file::file": {
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
-    "content_hash": "489b3b9e023be7e9258510b2c1ab4599a1dc0cd753234385b1c5f3f36a76273d",
-=======
-    "content_hash": "797176cec3f1b9b3ea34d8b07c82598394fc8a0724921046bf52997f58086c15",
->>>>>>> main
+    "content_hash": "7f13045c520dddc30585b84e5121b958c09bd393776832f11b85c16acb8d8751",
     "end_line": 87,
     "path": "tests/__pycache__/test_chunking.cpython-312-pytest-9.0.2.pyc",
     "semantic_id": "sc_7c1e50a9b02325e6",
     "start_line": 1
   },
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
   "tests/__pycache__/test_deerflow_init.cpython-312-pytest-9.0.2.pyc::file::file": {
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-    "content_hash": "95139d09c6730dafe3e3529f52e3c38021f58b47913848f13d6dc8e95fc8d670",
+    "content_hash": "8c7d1b95b63a2acb73b56be8dcf578ac22f0cc93a20142eb4d8a038eec796ca5",
     "end_line": 107,
     "path": "tests/__pycache__/test_deerflow_init.cpython-312-pytest-9.0.2.pyc",
     "semantic_id": "sc_0135754dc2dc23e4",
     "start_line": 1
   },
-=======
->>>>>>> main
+  "tests/__pycache__/test_ruleset_validation.cpython-312-pytest-9.0.2.pyc::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "28d552270d21f4a4762884d99bf5763d4107b4b9c0bc5bec345a50ac19ec0d76",
+    "end_line": 69,
+    "path": "tests/__pycache__/test_ruleset_validation.cpython-312-pytest-9.0.2.pyc",
+    "semantic_id": "sc_3821e8b52e2cbc61",
+    "start_line": 1
+  },
   "tests/test_chunking.py::function::test_chunk_generation_is_deterministic": {
     "anchor": "test_chunk_generation_is_deterministic",
     "chunk_type": "function",
@@ -1422,7 +1258,6 @@
     "path": "tests/test_chunking.py",
     "semantic_id": "sc_8ff5db7b8cb296cd",
     "start_line": 15
-<<<<<<< codex/implement-aigit-semantic-version-control-system-td6d41
   },
   "tests/test_deerflow_init.py::function::test_bootstrap_deerflow_files": {
     "anchor": "test_bootstrap_deerflow_files",
@@ -1433,7 +1268,25 @@
     "path": "tests/test_deerflow_init.py",
     "semantic_id": "sc_7a7c878b8489c604",
     "start_line": 6
-=======
->>>>>>> main
+  },
+  "tests/test_ruleset_validation.py::function::test_validate_ruleset_rejects_unknown_backend": {
+    "anchor": "test_validate_ruleset_rejects_unknown_backend",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "87ce472f66f8d7e1c09e05cc895fd49e880b99f9232a7ceeaee238af10c4f4c7",
+    "end_line": 25,
+    "path": "tests/test_ruleset_validation.py",
+    "semantic_id": "sc_4ff7f0de5c2df57f",
+    "start_line": 16
+  },
+  "tests/test_ruleset_validation.py::function::test_validate_ruleset_success": {
+    "anchor": "test_validate_ruleset_success",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "af2a68921b281f2e62475b095331ba4e76ff44469ddc89ab6cfe14dbaa7cac8d",
+    "end_line": 13,
+    "path": "tests/test_ruleset_validation.py",
+    "semantic_id": "sc_7b2fff7b5f93cef7",
+    "start_line": 8
   }
 }

@@ -48,6 +48,7 @@ aigit serve-api --host 127.0.0.1 --port 8765
 ## CLI reference
 
 - `aigit chunk` — Rebuild deterministic semantic artifacts for the current repository snapshot.
+- `aigit validate-ruleset` — Validate `.semantic/ruleset.yaml` before semantic generation.
 - `aigit semantic-diff --base <ref> --head <ref> --output <file>` — Generate a PR-ready semantic diff report from committed manifests.
 - `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` — Detect semantic conflicts where both sides changed the same chunk from base.
 - `aigit record-provenance --agent <name> --model <model> --prompt <text>` — Append AI provenance metadata for `HEAD`.
