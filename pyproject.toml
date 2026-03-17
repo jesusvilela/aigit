@@ -18,3 +18,7 @@ include = ["aigit*"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+include = ["aigit*"]
+exclude = ["skills*", "docs*", "tests*"]
