@@ -12,6 +12,12 @@ import shutil
 import subprocess
 import sys
 import time
+try:
+    import yaml as _yaml
+    _YAML_AVAILABLE = True
+except ImportError:  # pragma: no cover
+    _yaml = None  # type: ignore[assignment]
+    _YAML_AVAILABLE = False
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -26,7 +32,7 @@ INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
 
-SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'file'}
+SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 
 DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
 DEERFLOW_VENDOR_ENV_FILE = DEERFLOW_VENDOR_DIR / '.env'
@@ -207,6 +213,138 @@ def parse_text(path: str, text: str) -> list[Chunk]:
     ]
 
 
+def parse_json(path: str, text: str) -> list[Chunk]:
+    """Chunk a JSON file by top-level keys (objects) or index (arrays)."""
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return parse_text(path, text)
+    lines = text.splitlines()
+    line_count = len(lines)
+    if isinstance(data, dict):
+        if not data:
+            return parse_text(path, text)
+        chunks: list[Chunk] = []
+        for key in data:
+            anchor = str(key)
+            chunks.append(
+                Chunk(
+                    semantic_id=_chunk_id(path, anchor, 'key'),
+                    path=path,
+                    chunk_type='key',
+                    anchor=anchor,
+                    content_hash=_content_hash(json.dumps(data[key], sort_keys=True)),
+                    start_line=1,
+                    end_line=line_count,
+                    confidence='high',
+                )
+            )
+        return chunks
+    if isinstance(data, list):
+        anchor = f'array[{len(data)}]'
+        return [
+            Chunk(
+                semantic_id=_chunk_id(path, anchor, 'array'),
+                path=path,
+                chunk_type='array',
+                anchor=anchor,
+                content_hash=_content_hash(text),
+                start_line=1,
+                end_line=line_count,
+                confidence='medium',
+            )
+        ]
+    return parse_text(path, text)
+
+
+def parse_yaml(path: str, text: str) -> list[Chunk]:
+    """Chunk a YAML file by top-level keys using PyYAML when available."""
+    lines = text.splitlines()
+    line_count = len(lines)
+    if _YAML_AVAILABLE:
+        try:
+            data = _yaml.safe_load(text)
+        except Exception:
+            return parse_text(path, text)
+        if isinstance(data, dict) and data:
+            chunks: list[Chunk] = []
+            for key in data:
+                anchor = str(key)
+                chunks.append(
+                    Chunk(
+                        semantic_id=_chunk_id(path, anchor, 'key'),
+                        path=path,
+                        chunk_type='key',
+                        anchor=anchor,
+                        content_hash=_content_hash(json.dumps(data[key], sort_keys=True, default=str)),
+                        start_line=1,
+                        end_line=line_count,
+                        confidence='high',
+                    )
+                )
+            return chunks
+    # Fallback: top-level keys via line scanning (no-indent lines with a colon)
+    chunks_fb: list[Chunk] = []
+    for i, line in enumerate(lines, 1):
+        if line and not line[0].isspace() and ':' in line and not line.lstrip().startswith('#'):
+            key = line.split(':', 1)[0].strip()
+            if key:
+                chunks_fb.append(
+                    Chunk(
+                        semantic_id=_chunk_id(path, key, 'key'),
+                        path=path,
+                        chunk_type='key',
+                        anchor=key,
+                        content_hash=_content_hash(line),
+                        start_line=i,
+                        end_line=i,
+                        confidence='medium',
+                    )
+                )
+    return chunks_fb if chunks_fb else parse_text(path, text)
+
+
+_TS_DECL_PATTERN = re.compile(
+    r'^(?:export\s+)?(?:(?:async\s+)?function\*?\s+(\w+)|class\s+(\w+)|interface\s+(\w+)|type\s+(\w+)\s*=|(?:const|let|var)\s+(\w+)\s*(?::[^=]+)?=\s*(?:async\s+)?\()',
+    re.MULTILINE,
+)
+
+
+def parse_typescript(path: str, text: str) -> list[Chunk]:
+    """Chunk a TypeScript/JavaScript file by top-level declarations."""
+    lines = text.splitlines()
+    line_count = len(lines)
+    chunks: list[Chunk] = []
+    seen: set[str] = set()
+    for match in _TS_DECL_PATTERN.finditer(text):
+        name = next((g for g in match.groups() if g), None)
+        if not name or name in seen:
+            continue
+        seen.add(name)
+        start_line = text.count('\n', 0, match.start()) + 1
+        chunk_type = 'function'
+        raw = match.group(0)
+        if 'class' in raw:
+            chunk_type = 'class'
+        elif 'interface' in raw:
+            chunk_type = 'interface'
+        elif raw.lstrip().startswith('type '):
+            chunk_type = 'type'
+        chunks.append(
+            Chunk(
+                semantic_id=_chunk_id(path, name, chunk_type),
+                path=path,
+                chunk_type=chunk_type,
+                anchor=name,
+                content_hash=_content_hash(match.group(0)),
+                start_line=start_line,
+                end_line=start_line,
+                confidence='medium',
+            )
+        )
+    return chunks if chunks else parse_text(path, text)
+
+
 def parse_file(full_path: Path, rel_path: str) -> list[Chunk]:
     text = full_path.read_text(encoding='utf-8', errors='replace')
     suffix = full_path.suffix.lower()
@@ -214,6 +352,12 @@ def parse_file(full_path: Path, rel_path: str) -> list[Chunk]:
         return parse_python(rel_path, text)
     if suffix in {'.md', '.markdown'}:
         return parse_markdown(rel_path, text)
+    if suffix == '.json':
+        return parse_json(rel_path, text)
+    if suffix in {'.yaml', '.yml'}:
+        return parse_yaml(rel_path, text)
+    if suffix in {'.ts', '.tsx'}:
+        return parse_typescript(rel_path, text)
     return parse_text(rel_path, text)
 
 def _repo_semantic_path(root: Path, path: Path) -> Path:
@@ -319,7 +463,7 @@ def ensure_semantic_scaffold(root: Path | None = None) -> None:
         schema_file.write_text('1\n', encoding='utf-8')
     if not ruleset_file.exists():
         ruleset_file.write_text(
-            'version: 1\nparsers:\n  .py: python-ast\n  .md: markdown-headings\n  default: file\n',
+            'version: 1\nparsers:\n  .py: python-ast\n  .md: markdown-headings\n  .json: json-keys\n  .yaml: yaml-keys\n  .yml: yaml-keys\n  .ts: typescript-ast\n  .tsx: typescript-ast\n  default: file\n',
             encoding='utf-8',
         )
 
@@ -1981,6 +2125,54 @@ def serve_api(args: argparse.Namespace) -> int:
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f'serving API on http://{args.host}:{args.port}')
     server.serve_forever()
+
+
+def cmd_improve(args: argparse.Namespace) -> int:
+    """Lightweight auto improvement loop that works within Codespaces constraints.
+
+    The loop does not require Docker or DeerFlow.  It runs the local validation
+    cycle (tests + semantic rebuild) and reports a concise status summary so
+    operators can see at a glance whether the working tree is healthy.
+
+    Steps
+    -----
+    1. Rebuild semantic artifacts (``aigit chunk``).
+    2. Run the test suite with ``pytest``.
+    3. Print a short status summary.
+    """
+    repo_root = Path(args.repo).resolve()
+    print('=== AIGit improve loop (Codespaces-safe) ===')
+
+    # Step 1: rebuild semantic artifacts
+    print('\n[1/2] Rebuilding semantic artifacts...')
+    chunk_args = argparse.Namespace(repo=str(repo_root))
+    chunk_rc = cmd_chunk(chunk_args)
+    if chunk_rc != 0:
+        print('ERROR: semantic artifact rebuild failed')
+        return chunk_rc
+    print('      semantic artifacts up to date')
+
+    # Step 2: run tests
+    print('\n[2/2] Running test suite...')
+    pytest_cmd = [sys.executable, '-m', 'pytest', '--tb=short', '-q']
+    if args.test_path:
+        pytest_cmd.append(args.test_path)
+    result = subprocess.run(pytest_cmd, cwd=str(repo_root))
+    if result.returncode != 0:
+        print('\nIMPROVE LOOP: tests failed — fix failing tests before committing')
+        return result.returncode
+
+    # Summary
+    manifest_file = _repo_semantic_path(repo_root, MANIFEST_FILE)
+    chunk_count = 0
+    if manifest_file.exists():
+        chunk_count = sum(1 for line in manifest_file.read_text(encoding='utf-8').splitlines() if line.strip())
+
+    print(f'\n=== IMPROVE LOOP PASSED ===')
+    print(f'  semantic chunks: {chunk_count}')
+    print(f'  tests:           passed')
+    print(f'  next step:       commit with `aigit commit` or `git commit`')
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
