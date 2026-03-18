@@ -1,27 +1,54 @@
 # AIGit
 
-AI-native semantic version control layer built on top of Git.
+[![CI](https://github.com/jesusvilela/aigit/actions/workflows/ci.yml/badge.svg)](https://github.com/jesusvilela/aigit/actions/workflows/ci.yml)
+[![Semantic Maintenance](https://github.com/jesusvilela/aigit/actions/workflows/semantic-maintenance.yml/badge.svg)](https://github.com/jesusvilela/aigit/actions/workflows/semantic-maintenance.yml)
 
-AIGit keeps Git fully intact and adds a deterministic semantic chunk graph in `.semantic/` so both humans and agents can review intent, track lineage, and run semantic workflows.
+AI-native semantic version control on top of Git.
 
-## MVP capabilities
+AIGit keeps the Git object model untouched and layers a deterministic semantic graph on top so humans, agents, and CI can reason about intent instead of raw line diffs alone.
 
-- Parse supported files into semantic chunks (`.py`, `.md`, and fallback file chunks).
-- Assign stable semantic IDs (`sc_<hash>`) and preserve lineage with deterministic matching.
-- Persist semantic manifests in version-controlled files under `.semantic/`.
-- Track chunk lineage through `edges.jsonl` and `chunk_index.json`.
-- Support semantic-aware merge conflict analysis with `semantic-merge`.
-- Attach AI provenance via commit trailers and `.semantic/provenance.jsonl`.
-- Expose a local chunk API (`serve-api`) for agent tooling.
-- Generate semantic diff reports for CI and PR review (`semantic-diff`).
+> Git remains the source of truth. AIGit adds semantic structure, lineage, provenance, and automation around it.
 
-## Repository compatibility
+## Why AIGit
 
-- No custom Git object types.
-- Works on normal GitHub/GitLab workflows.
-- Degrades safely: if AIGit is missing, files and Git operations still work.
+| Problem | AIGit primitive | Outcome |
+| --- | --- | --- |
+| Source diffs lose intent | deterministic semantic chunking | agents and reviewers can inspect meaning-level changes |
+| Refactors break traceability | chunk identity + lineage edges | semantic continuity survives movement and reshaping |
+| AI edits need auditability | provenance records and commit trailers | generated work can be reviewed and verified |
+| CI sees syntax, not semantics | semantic diff + semantic merge outputs | review and merge flows get machine-readable intent |
+| autonomous loops drift | DeerFlow harness + admin UI | operators can observe and steer long-running work |
 
-## Semantic storage layout
+## What Ships Today
+
+| Area | Included |
+| --- | --- |
+| Semantic core | chunking for `.py`, `.md`, and fallback file chunks |
+| Lineage | stable semantic IDs, `edges.jsonl`, `chunk_index.json` |
+| Review tooling | semantic diff and semantic merge reports |
+| Provenance | append-only provenance log and commit trailers |
+| Agent API | local HTTP chunk API via `aigit serve-api` |
+| Autonomous delivery | DeerFlow bootstrap, recovery flow, admin UI |
+| CI/CD | semantic freshness checks and PR-based maintenance automation |
+
+## At A Glance
+
+| If you need to... | Start here |
+| --- | --- |
+| rebuild semantic state | `aigit chunk` |
+| review intent between refs | `aigit semantic-diff --base <ref> --head <ref>` |
+| inspect merge risk | `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` |
+| record AI authorship context | `aigit record-provenance ...` |
+| run autonomous work with visibility | `aigit init-deerflow`, `./scripts/run_deerflow_epics.sh`, `aigit admin-ui` |
+
+## Repository Contract
+
+- no custom Git object types
+- normal GitHub and GitLab workflows still work
+- semantic outputs are committed under `.semantic/`
+- if AIGit is absent, the repository still behaves like a normal Git repo
+
+## Storage Layout
 
 ```text
 .semantic/
@@ -34,10 +61,10 @@ AIGit keeps Git fully intact and adds a deterministic semantic chunk graph in `.
   cache/              # local-only, gitignored
 ```
 
-## Quickstart
+## Fast Start
 
 ```bash
-python -m pip install -e .
+python -m pip install -e ".[dev]"
 aigit chunk
 aigit semantic-diff --base main --head HEAD --output semantic_diff.md
 aigit semantic-merge --base main --ours HEAD --theirs feature --output semantic_merge.json
@@ -45,252 +72,127 @@ aigit record-provenance --agent codex --model gpt-5.2-codex --prompt "chunk upda
 aigit serve-api --host 127.0.0.1 --port 8765
 ```
 
-## CLI reference
+## CLI Surface
 
-- `aigit chunk` — Rebuild deterministic semantic artifacts for the current repository snapshot.
-- `aigit semantic-diff --base <ref> --head <ref> --output <file>` — Generate a PR-ready semantic diff report from committed manifests.
-- `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` — Detect semantic conflicts where both sides changed the same chunk from base.
-- `aigit record-provenance --agent <name> --model <model> --prompt <text>` — Append AI provenance metadata for `HEAD`.
-- `aigit commit -m <msg> --agent ... --model ... --prompt ...` — Create a Git commit with an AI provenance trailer.
-- `aigit serve-api` — Start a local HTTP server with endpoints:
-  - `GET /healthz`
-  - `GET /chunks`
+| Command | Purpose |
+| --- | --- |
+| `aigit chunk` | rebuild deterministic semantic artifacts for the current snapshot |
+| `aigit semantic-diff --base <ref> --head <ref> --output <file>` | generate a PR-ready semantic diff report |
+| `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` | detect semantic conflicts from a shared base |
+| `aigit record-provenance --agent <name> --model <model> --prompt <text>` | append provenance metadata for `HEAD` |
+| `aigit commit -m <msg> --agent ... --model ... --prompt ...` | create a commit with an AI provenance trailer |
+| `aigit serve-api` | expose `/healthz` and `/chunks` over HTTP |
+| `aigit deerflow-workspace-path --thread-id <id>` | show host and sandbox workspace mappings |
+| `aigit deerflow-import-repo --thread-id <id>` | stage the repo into DeerFlow's thread workspace |
+| `aigit deerflow-export-repo --thread-id <id>` | pull a staged thread workspace back into the repo |
 
+## DeerFlow Operator Loop
 
-## DeerFlow harness bootstrap
-
-AIGit can provision a local DeerFlow agent harness (vendored under `.deerflow/vendor/deer-flow`) so autonomous agent runs can continue shipping semantic changes.
+AIGit can provision a local DeerFlow harness under `.deerflow/` so autonomous agent runs can keep producing reviewable semantic changes.
 
 ```bash
-aigit init-deerflow               # clone + make config
-aigit init-deerflow --skip-clone  # only generate local templates
+aigit init-deerflow
+aigit launch-epics
+aigit admin-ui
 cp .deerflow/.env.example .deerflow/.env
-# fill API keys in .deerflow/.env
-./scripts/run_deerflow.sh
+./scripts/run_deerflow_epics.sh
 ```
 
-Generated files:
-- `.deerflow/config.yaml` with agentic defaults (`is_plan_mode: true`, `subagent_enabled: true`)
-- `.deerflow/.env.example` secrets template
-- `scripts/run_deerflow.sh` for Docker-based startup
+### Runtime contract
 
+- live development directory bind-mounted at `/workspaces/aigit`
+- first-class thread mount at `/mnt/user-data`
+- staged repo mount at `/mnt/user-data/workspace/repo`
+- recovery entrypoint: `./scripts/recover_deerflow.sh`
 
-## Skills and planning docs
+### Thread workspace flow
 
-- Skill: `skills/custom/deerflow-aigit-autopilot/SKILL.md`
-- MultiSOTA plans: `docs/MULTISOTA_CODEX.md`, `docs/MULTISOTA_CODEX_TASKS.md`
+```bash
+aigit deerflow-import-repo --thread-id roadmap-epic-01
+aigit deerflow-export-repo --thread-id roadmap-epic-01
+```
 
+### Admin observability UI
 
-## Active development epics
+```bash
+aigit admin-ui --host 127.0.0.1 --port 7860
+```
 
-The current environment has launched a 10-epic execution roadmap:
+The UI exposes:
+
+- DeerFlow API and container health
+- 10-epic queue readiness and objective status
+- thread workspace visibility for imports and exports
+- semantic chunk metrics and chunk-type distribution
+- operator actions for queue rebuild, harness recovery, and semantic regeneration
+
+### Default model catalog
+
+- `GPT-4.1`
+- `GPT-4o`
+- `GPT-4o Mini`
+- `GPT-4.1 Mini`
+- `GPT-4.1 Nano`
+
+### DeerFlow entrypoint
+
+```text
+http://localhost:2026/workspace/chats/new
+```
+
+## CI/CD Safety Rails
+
+Two GitHub Actions workflows ship in `.github/workflows/`:
+
+- `ci.yml` validates every push and pull request with tests, semantic rebuild, and stale-artifact enforcement
+- `semantic-maintenance.yml` runs on demand or weekly, executes `./scripts/ci_refresh_semantics.sh`, refreshes `.semantic/**`, and opens a pull request instead of pushing directly to `main`
+
+In a clean checkout, local verification matches CI:
+
+```bash
+python -m pip install -e ".[dev]"
+./scripts/ci_refresh_semantics.sh
+git diff --exit-code -- .semantic
+```
+
+Safety properties:
+
+- no force-push or direct maintenance commit to `main`
+- semantic maintenance is constrained to `.semantic/**`
+- disposable caches are deleted before and after maintenance runs
+- generated junk such as `__pycache__`, `.pyc`, and `aigit.egg-info/` is excluded from semantic indexing
+
+## Release Status
+
+### Cycle 1
+
+The first release wave launched 10 active epics spanning deterministic chunking, lineage, semantic CI, merge UX, provenance, API hardening, DeerFlow delivery, language expansion, performance, and release governance.
+
+Primary references:
+
 - `docs/EPICS_ROADMAP.md`
-- `docs/epics/EPIC-01-ruleset-engine-v2.md` ... `docs/epics/EPIC-10-release-governance.md`
+- `docs/epics/EPIC-01-ruleset-engine-v2.md` through `docs/epics/EPIC-10-release-governance.md`
 
-## Determinism and safety notes
+### Cycle 2: 10x release wave
 
-- Canonicalization uses LF normalization + trailing whitespace trimming.
-- Ruleset and schema version are committed, making chunk graph generation reproducible.
-- Identity uncertainty is resolved conservatively: if similarity is below threshold, a new semantic ID is assigned.
-# aigit
+The next 10x cycle is chartered as a follow-on release wave focused on productizing the first wave into tighter release loops, stronger adoption rails, and more autonomous delivery. These tracks are roadmap commitments, not claims about the currently shipped parser surface.
 
-> **A safe semantic chunk graph for AI workflows, built on top of Git.**
->
-> Semantic diff, merge, and provenance for AI-generated changes—without replacing Git.
+- charter: `docs/CYCLE_02_10X_RELEASE.md`
+- DeerFlow objective brief: `.deerflow/objectives/CYCLE-02-10X.md`
 
-aigit adds a semantic layer on top of Git: it parses source code into **named, typed chunks** (functions, classes, methods, etc.), builds a **deterministic chunk graph**, and enables **semantic diffs, three-way merges, and agent provenance tracking**—all stored alongside your existing Git history.
+## Docs Index
 
----
+- roadmap: `docs/EPICS_ROADMAP.md`
+- cycle 2 charter: `docs/CYCLE_02_10X_RELEASE.md`
+- MultiSOTA plans: `docs/MULTISOTA_CODEX.md`
+- task checklist: `docs/MULTISOTA_CODEX_TASKS.md`
+- release governance: `docs/RELEASE_GOVERNANCE.md`
+- DeerFlow recovery playbook: `docs/DEERFLOW_RECOVERY.md`
+- custom skill: `skills/custom/deerflow-aigit-autopilot/SKILL.md`
 
-## Features
+## Determinism Notes
 
-| Feature | Description |
-|---|---|
-| **Semantic chunking** | Parse JS/TS/Python into named chunks (functions, classes, methods, imports, variables) |
-| **Chunk graph (DAG)** | Represent relationships between chunks as a directed acyclic graph |
-| **Semantic diff** | Diff two versions at chunk level: Added / Removed / Modified / Renamed / Unchanged |
-| **Three-way merge** | Merge two branches at chunk boundaries, detecting true conflicts |
-| **Agent provenance** | Tag every chunk change with agent identity, timestamp, and commit SHA |
-| **Git native** | Works on top of any Git repo—reads blobs, resolves refs, writes git-notes |
-
----
-
-## Installation
-
-```bash
-npm install -g aigit
-```
-
-Or run locally from this repo:
-
-```bash
-npm install
-npm run build
-npm link   # makes `aigit` available globally
-```
-
----
-
-## Quick Start
-
-### Initialize
-
-```bash
-cd my-project
-aigit init
-# → Initialized aigit in .aigit/
-```
-
-### Semantic Diff
-
-```bash
-aigit diff HEAD~1 HEAD src/utils.ts
-```
-
-Output (JSON):
-
-```json
-{
-  "diffs": [
-    { "kind": "modified", "before": { "name": "computeHash", "type": "function", ... }, "after": { ... } },
-    { "kind": "added",    "after":  { "name": "validateInput", "type": "function", ... } }
-  ],
-  "added": 1, "removed": 0, "modified": 1, "renamed": 0, "unchanged": 3
-}
-```
-
-### Three-way Semantic Merge
-
-```bash
-aigit merge main feature-branch HEAD --file src/api.ts
-```
-
-### Provenance
-
-```bash
-# Show all records
-aigit provenance
-
-# Show history for a specific chunk
-aigit provenance <chunkId>
-```
-
----
-
-## Architecture
-
-```
-src/
-├── chunk/
-│   ├── types.ts     – ChunkType enum, SemanticChunk & ChunkEdge interfaces
-│   ├── parser.ts    – Language-aware regex parser (JS/TS/Python)
-│   └── graph.ts     – ChunkGraph class (add/query/topologicalSort/JSON)
-├── diff/
-│   ├── types.ts     – DiffKind enum, ChunkDiff & SemanticDiffResult
-│   └── engine.ts    – diff(before, after) → SemanticDiffResult
-├── merge/
-│   ├── types.ts     – MergeStatus enum, MergeConflict & SemanticMergeResult
-│   └── engine.ts    – merge(base, ours, theirs) → SemanticMergeResult
-├── provenance/
-│   ├── types.ts     – AgentIdentity, ProvenanceRecord & ProvenanceStore interfaces
-│   ├── tracker.ts   – ProvenanceTracker (record / query / history / listAll)
-│   └── store.ts     – JsonProvenanceStore (persists to .aigit/provenance.json)
-├── git/
-│   └── adapter.ts   – GitAdapter (getBlob, getCommitHash, getStagedFiles, notes)
-├── cli/
-│   └── index.ts     – CLI commands (init / diff / merge / provenance)
-└── index.ts         – Public API re-exports
-```
-
-### Core Types
-
-```typescript
-// A named, typed unit of code
-interface SemanticChunk {
-  id: string;          // sha1("filePath:name:type")
-  name: string;
-  type: ChunkType;     // function | class | method | interface | variable | import | block
-  filePath: string;
-  startLine: number;
-  endLine: number;
-  content: string;
-  contentHash: string; // sha1(content)
-  metadata: Record<string, unknown>;
-}
-
-// A directed relationship between chunks
-interface ChunkEdge {
-  from: string;  // chunk id
-  to: string;    // chunk id
-  kind: 'calls' | 'imports' | 'extends' | 'implements' | 'uses';
-}
-
-// An agent provenance record
-interface ProvenanceRecord {
-  chunkId: string;
-  agentId: string;
-  agentName: string;
-  action: 'created' | 'modified' | 'deleted' | 'reviewed';
-  commitSha?: string;
-  timestamp: string;  // ISO 8601
-  metadata?: Record<string, unknown>;
-}
-```
-
----
-
-## Programmatic API
-
-```typescript
-import { parse, ChunkGraph, diff, merge, ProvenanceTracker, JsonProvenanceStore } from 'aigit';
-
-// Parse a file into semantic chunks
-const chunks = parse(sourceCode, 'src/utils.ts');
-
-// Build a graph
-const graph = new ChunkGraph(chunks);
-
-// Semantic diff
-const result = diff(graphBefore, graphAfter);
-console.log(result.added, result.modified, result.removed);
-
-// Three-way merge
-const { status, merged, conflicts } = merge(baseGraph, oursGraph, theirsGraph);
-
-// Record provenance
-const store = new JsonProvenanceStore('/path/to/repo');
-const tracker = new ProvenanceTracker(store);
-await tracker.record({
-  chunkId: chunks[0].id,
-  agentId: 'gpt-4o',
-  agentName: 'OpenAI GPT-4o',
-  action: 'modified',
-  commitSha: 'abc123',
-});
-```
-
----
-
-## Development
-
-```bash
-npm install        # install dependencies
-npm run build      # compile TypeScript → dist/
-npm test           # run all 28 tests
-npm run lint       # type-check only (tsc --noEmit)
-```
-
----
-
-## Design Goals
-
-- **Non-destructive** – aigit never modifies your Git history; it only adds metadata (`.aigit/` directory, optional git-notes).
-- **Deterministic** – chunk IDs are content-addressed (`sha1(filePath:name:type)`), making graphs reproducible.
-- **Language-agnostic** – the parser supports JS/TS/Python today; more languages can be added via the `parse()` extension point.
-- **Composable** – every layer (chunk, diff, merge, provenance) is an independent module with a stable TypeScript interface.
-
----
-
-## License
-
-MIT
+- canonicalization uses LF normalization with trailing-whitespace trimming
+- ruleset and schema version are committed for reproducible graph generation
+- identity remaps stay conservative when similarity drops below threshold
+- semantic artifacts are now filtered away from local cache and packaging noise so CI and local rebuilds stay byte-stable

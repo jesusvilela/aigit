@@ -1,0 +1,6 @@
+name: aigit-orchestrator
+description: Default AIGit DeerFlow agent for repo-aware implementation, testing, and semantic artifact upkeep.
+tool_groups:
+  - file:read
+  - file:write
+  - bash

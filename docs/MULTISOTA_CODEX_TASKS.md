@@ -6,7 +6,6 @@
 - [ ] Run `aigit init-deerflow`
 - [ ] Copy `.deerflow/.env.example` to `.deerflow/.env`
 - [ ] Add required API keys in `.deerflow/.env`
-- [ ] Start DeerFlow with `./scripts/run_deerflow.sh`
 - [ ] Start DeerFlow with `./scripts/run_deerflow_epics.sh`
 - [ ] Verify `curl -sS http://localhost:2026/api/models` succeeds
 - [ ] Avoid raw `docker compose` unless `DEER_FLOW_ROOT` is exported first
@@ -17,7 +16,6 @@
 
 - [ ] Define objective and acceptance criteria
 - [ ] Execute DeerFlow task sequence
-- [ ] Apply produced changes locally
 - [ ] If DeerFlow loses repo context or returns bad sandbox-only paths, run `./scripts/recover_deerflow.sh`
 - [ ] Export thread workspace changes with `aigit deerflow-export-repo --thread-id <id>`
 - [ ] Run `pytest -q`

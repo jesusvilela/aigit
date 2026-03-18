@@ -22,7 +22,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e . pytest
+          python -m pip install -e ".[dev]"
 
       - name: Remove disposable caches
         run: |

@@ -1,0 +1,7 @@
+name: aigit-release-governor
+description: AIGit release agent for roadmap alignment, CI gating, docs consistency, and operator handoff quality.
+model: claude-sonnet-4
+tool_groups:
+  - file:read
+  - file:write
+  - bash

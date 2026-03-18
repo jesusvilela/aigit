@@ -1,4 +1,3 @@
-from pathlib import Path
 import os
 from pathlib import Path
 from subprocess import CompletedProcess
@@ -12,6 +11,8 @@ def test_bootstrap_deerflow_files(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(core, 'DEERFLOW_ENV_FILE', Path('.deerflow/.env.example'))
     monkeypatch.setattr(core, 'DEERFLOW_CONFIG_FILE', Path('.deerflow/config.yaml'))
+    monkeypatch.setattr(core, 'DEERFLOW_AGENTS_DIR', Path('.deerflow/agents'))
+    monkeypatch.setattr(core, 'DEERFLOW_USER_PROFILE_FILE', Path('.deerflow/USER.md'))
     monkeypatch.setattr(core, 'DEERFLOW_LAUNCH_SCRIPT', Path('scripts/run_deerflow.sh'))
     monkeypatch.setattr(core, 'DEERFLOW_EPIC_LAUNCH_SCRIPT', Path('scripts/run_deerflow_epics.sh'))
     monkeypatch.setattr(core, 'DEERFLOW_RECOVERY_SCRIPT', Path('scripts/recover_deerflow.sh'))
@@ -20,19 +21,30 @@ def test_bootstrap_deerflow_files(tmp_path: Path, monkeypatch) -> None:
 
     assert Path('.deerflow/.env.example').exists()
     assert Path('.deerflow/config.yaml').exists()
+    assert Path('.deerflow/USER.md').exists()
+    assert Path('.deerflow/agents/aigit-orchestrator/config.yaml').exists()
+    assert Path('.deerflow/agents/aigit-semantic-maintainer/SOUL.md').exists()
     assert Path('scripts/run_deerflow.sh').exists()
-    assert 'subagent_enabled: true' in Path('.deerflow/config.yaml').read_text(encoding='utf-8')
     assert Path('scripts/run_deerflow_epics.sh').exists()
     assert Path('scripts/recover_deerflow.sh').exists()
     config_text = Path('.deerflow/config.yaml').read_text(encoding='utf-8')
+    env_text = Path('.deerflow/.env.example').read_text(encoding='utf-8')
     assert 'subagent_enabled: true' in config_text
     assert 'workspace_repo_subdir: repo' in config_text
+    assert 'assistant_id: aigit-orchestrator' in config_text
+    assert 'name: claude-sonnet-4' in config_text
+    assert 'name: deepseek-v3.2' in config_text
+    assert 'path: ' in config_text
     assert f'host_path: "{tmp_path.as_posix()}"' in config_text
     assert f'container_path: "{tmp_path.as_posix()}"' in config_text
     assert 'use: deerflow.sandbox.tools:bash_tool' in config_text
     assert 'use: deerflow.sandbox.tools:read_file_tool' in config_text
+    assert 'ANTHROPIC_API_KEY=' in env_text
+    assert 'GOOGLE_API_KEY=' in env_text
+    assert 'DEEPSEEK_API_KEY=' in env_text
     launch_text = Path('scripts/run_deerflow_epics.sh').read_text(encoding='utf-8')
     assert 'DEER_FLOW_ROOT' in Path('scripts/run_deerflow.sh').read_text(encoding='utf-8')
+    assert 'LOCAL_AGENTS_DIR' in Path('scripts/run_deerflow.sh').read_text(encoding='utf-8')
     assert f'Live development directory mount: {tmp_path.as_posix()}' in launch_text
     assert f'Prefer DeerFlow work in: {tmp_path.as_posix()}' in launch_text
     assert 'docker restart deer-flow-nginx' in Path('scripts/recover_deerflow.sh').read_text(encoding='utf-8')
@@ -89,21 +101,34 @@ def test_sync_deerflow_harness_files(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(core, 'DEERFLOW_CONFIG_FILE', Path('.deerflow/config.yaml'))
     monkeypatch.setattr(core, 'DEERFLOW_RUNTIME_ENV_FILE', Path('.deerflow/.env'))
+    monkeypatch.setattr(core, 'DEERFLOW_AGENTS_DIR', Path('.deerflow/agents'))
+    monkeypatch.setattr(core, 'DEERFLOW_USER_PROFILE_FILE', Path('.deerflow/USER.md'))
     monkeypatch.setattr(core, 'DEERFLOW_VENDOR_DIR', Path('.deerflow/vendor/deer-flow'))
     monkeypatch.setattr(core, 'DEERFLOW_VENDOR_CONFIG_FILE', Path('.deerflow/vendor/deer-flow/config.yaml'))
     monkeypatch.setattr(core, 'DEERFLOW_VENDOR_ENV_FILE', Path('.deerflow/vendor/deer-flow/.env'))
+    monkeypatch.setattr(core, 'DEERFLOW_VENDOR_RUNTIME_DIR', Path('.deerflow/vendor/deer-flow/backend/.deer-flow'))
+    monkeypatch.setattr(core, 'DEERFLOW_VENDOR_AGENTS_DIR', Path('.deerflow/vendor/deer-flow/backend/.deer-flow/agents'))
+    monkeypatch.setattr(core, 'DEERFLOW_VENDOR_USER_PROFILE_FILE', Path('.deerflow/vendor/deer-flow/backend/.deer-flow/USER.md'))
 
     Path('.deerflow').mkdir()
-    Path('.deerflow/vendor/deer-flow').mkdir(parents=True)
+    Path('.deerflow/vendor/deer-flow/backend/.deer-flow').mkdir(parents=True)
     Path('.deerflow/config.yaml').write_text('models:\n  - name: test\n', encoding='utf-8')
     Path('.deerflow/.env').write_text('OPENAI_API_KEY=test\n', encoding='utf-8')
+    Path('.deerflow/USER.md').write_text('# operator\n', encoding='utf-8')
+    Path('.deerflow/agents/aigit-orchestrator').mkdir(parents=True)
+    Path('.deerflow/agents/aigit-orchestrator/config.yaml').write_text('name: aigit-orchestrator\n', encoding='utf-8')
+    Path('.deerflow/agents/aigit-orchestrator/SOUL.md').write_text('ship it\n', encoding='utf-8')
 
     synced = core.sync_deerflow_harness_files()
 
     assert Path('.deerflow/vendor/deer-flow/config.yaml').read_text(encoding='utf-8') == 'models:\n  - name: test\n'
     assert Path('.deerflow/vendor/deer-flow/.env').read_text(encoding='utf-8') == 'OPENAI_API_KEY=test\n'
+    assert Path('.deerflow/vendor/deer-flow/backend/.deer-flow/USER.md').read_text(encoding='utf-8') == '# operator\n'
+    assert Path('.deerflow/vendor/deer-flow/backend/.deer-flow/agents/aigit-orchestrator/config.yaml').read_text(encoding='utf-8') == 'name: aigit-orchestrator\n'
+    assert Path('.deerflow/vendor/deer-flow/backend/.deer-flow/agents/aigit-orchestrator/SOUL.md').read_text(encoding='utf-8') == 'ship it\n'
     assert Path('.deerflow/vendor/deer-flow/config.yaml') in synced
     assert Path('.deerflow/vendor/deer-flow/.env') in synced
+    assert Path('.deerflow/vendor/deer-flow/backend/.deer-flow/USER.md') in synced
 
 
 def test_deerflow_repo_import_and_export_round_trip(tmp_path: Path, monkeypatch) -> None:

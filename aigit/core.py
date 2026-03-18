@@ -6,7 +6,6 @@ import dataclasses
 import difflib
 import hashlib
 import json
-import subprocess
 import os
 import re
 import shutil
@@ -26,20 +25,20 @@ INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
 
-DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
-DEERFLOW_LAUNCH_SCRIPT = Path('scripts/run_deerflow.sh')
-DEERFLOW_ENV_FILE = Path('.deerflow/.env.example')
-DEERFLOW_CONFIG_FILE = Path('.deerflow/config.yaml')
-
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'file'}
 
 DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
 DEERFLOW_VENDOR_ENV_FILE = DEERFLOW_VENDOR_DIR / '.env'
 DEERFLOW_VENDOR_CONFIG_FILE = DEERFLOW_VENDOR_DIR / 'config.yaml'
+DEERFLOW_VENDOR_RUNTIME_DIR = DEERFLOW_VENDOR_DIR / 'backend' / '.deer-flow'
+DEERFLOW_VENDOR_AGENTS_DIR = DEERFLOW_VENDOR_RUNTIME_DIR / 'agents'
+DEERFLOW_VENDOR_USER_PROFILE_FILE = DEERFLOW_VENDOR_RUNTIME_DIR / 'USER.md'
 DEERFLOW_LAUNCH_SCRIPT = Path('scripts/run_deerflow.sh')
 DEERFLOW_ENV_FILE = Path('.deerflow/.env.example')
 DEERFLOW_RUNTIME_ENV_FILE = Path('.deerflow/.env')
 DEERFLOW_CONFIG_FILE = Path('.deerflow/config.yaml')
+DEERFLOW_AGENTS_DIR = Path('.deerflow/agents')
+DEERFLOW_USER_PROFILE_FILE = Path('.deerflow/USER.md')
 DEERFLOW_OBJECTIVES_DIR = Path('.deerflow/objectives')
 DEERFLOW_QUEUE_FILE = Path('.deerflow/epic_queue.json')
 DEERFLOW_EPIC_LAUNCH_SCRIPT = Path('scripts/run_deerflow_epics.sh')
@@ -215,11 +214,6 @@ def parse_file(full_path: Path, rel_path: str) -> list[Chunk]:
         return parse_markdown(rel_path, text)
     return parse_text(rel_path, text)
 
-
-def load_previous_index() -> dict[str, dict[str, Any]]:
-    if not INDEX_FILE.exists():
-        return {}
-    return json.loads(INDEX_FILE.read_text(encoding='utf-8'))
 def _repo_semantic_path(root: Path, path: Path) -> Path:
     return root / path
 
@@ -302,8 +296,6 @@ def iter_repo_files(root: Path) -> list[Path]:
         rel = path.relative_to(root)
         if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
             continue
-        if any(part.startswith('.') and part != '.github' for part in rel.parts):
-            continue
         if any(part == '__pycache__' or part.endswith('.egg-info') for part in rel.parts):
             continue
         if any(part.startswith('.') and part != '.github' for part in rel.parts):
@@ -314,13 +306,6 @@ def iter_repo_files(root: Path) -> list[Path]:
     return sorted(files)
 
 
-def ensure_semantic_scaffold() -> None:
-    SEMANTIC_DIR.mkdir(exist_ok=True)
-    (SEMANTIC_DIR / 'cache').mkdir(exist_ok=True)
-    if not SCHEMA_FILE.exists():
-        SCHEMA_FILE.write_text('1\n', encoding='utf-8')
-    if not RULESET_FILE.exists():
-        RULESET_FILE.write_text(
 def ensure_semantic_scaffold(root: Path | None = None) -> None:
     root = root.resolve() if root is not None else Path('.').resolve()
     semantic_dir = _repo_semantic_path(root, SEMANTIC_DIR)
@@ -338,8 +323,6 @@ def ensure_semantic_scaffold(root: Path | None = None) -> None:
 
 
 def build_manifest(root: Path) -> tuple[list[Chunk], list[dict[str, Any]]]:
-    ensure_semantic_scaffold()
-    previous = load_previous_index()
     ensure_semantic_scaffold(root)
     previous = load_previous_index(root)
     chunks: list[Chunk] = []
@@ -355,11 +338,6 @@ def build_manifest(root: Path) -> tuple[list[Chunk], list[dict[str, Any]]]:
     return chunks, edges
 
 
-def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]]) -> None:
-    manifest_lines = [json.dumps(chunk.to_dict(), sort_keys=True) for chunk in chunks]
-    MANIFEST_FILE.write_text('\n'.join(manifest_lines) + ('\n' if manifest_lines else ''), encoding='utf-8')
-    edge_lines = [json.dumps(edge, sort_keys=True) for edge in edges]
-    EDGES_FILE.write_text('\n'.join(edge_lines) + ('\n' if edge_lines else ''), encoding='utf-8')
 def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path = Path('.')) -> None:
     manifest_file = _repo_semantic_path(root, MANIFEST_FILE)
     edges_file = _repo_semantic_path(root, EDGES_FILE)
@@ -372,12 +350,6 @@ def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path 
     for chunk in chunks:
         key = f"{chunk.path}::{chunk.chunk_type}::{chunk.anchor}"
         index[key] = chunk.to_dict()
-    INDEX_FILE.write_text(json.dumps(index, indent=2, sort_keys=True) + '\n', encoding='utf-8')
-
-
-def cmd_chunk(args: argparse.Namespace) -> int:
-    chunks, edges = build_manifest(Path(args.repo).resolve())
-    write_manifest(chunks, edges)
     index_file.write_text(json.dumps(index, indent=2, sort_keys=True) + '\n', encoding='utf-8')
 
 
@@ -447,11 +419,6 @@ def cmd_merge(args: argparse.Namespace) -> int:
         t = theirs.get(sid)
         if not o or not t:
             continue
-        if (
-            o['content_hash'] != b['content_hash']
-            and t['content_hash'] != b['content_hash']
-            and o['content_hash'] != t['content_hash']
-        ):
         if o['content_hash'] != b['content_hash'] and t['content_hash'] != b['content_hash'] and o['content_hash'] != t['content_hash']:
             conflicts.append(sid)
     out = {'base': args.base, 'ours': args.ours, 'theirs': args.theirs, 'conflicts': conflicts}
@@ -461,7 +428,6 @@ def cmd_merge(args: argparse.Namespace) -> int:
 
 
 def cmd_record_provenance(args: argparse.Namespace) -> int:
-    ensure_semantic_scaffold()
     repo_root = Path('.').resolve()
     ensure_semantic_scaffold(repo_root)
     commit = _run_git(['rev-parse', 'HEAD'])
@@ -472,7 +438,6 @@ def cmd_record_provenance(args: argparse.Namespace) -> int:
         'model': args.model,
         'prompt_hash': _hash([args.prompt]),
     }
-    path = SEMANTIC_DIR / 'provenance.jsonl'
     path = _repo_semantic_path(repo_root, SEMANTIC_DIR / 'provenance.jsonl')
     with path.open('a', encoding='utf-8') as f:
         f.write(json.dumps(row, sort_keys=True) + '\n')
@@ -547,7 +512,12 @@ def _write_file_if_missing(path: Path, content: str) -> None:
         path.write_text(content, encoding='utf-8')
 
 
-def bootstrap_deerflow_files() -> None:
+def _write_deerflow_agent_if_missing(name: str, config_yaml: str, soul_md: str) -> None:
+    agent_dir = DEERFLOW_AGENTS_DIR / name
+    _write_file_if_missing(agent_dir / 'config.yaml', config_yaml)
+    _write_file_if_missing(agent_dir / 'SOUL.md', soul_md)
+
+
 def _parse_env_file(path: Path) -> dict[str, str]:
     values: dict[str, str] = {}
     if not path.exists():
@@ -561,13 +531,48 @@ def _parse_env_file(path: Path) -> dict[str, str]:
     return values
 
 
+def _merge_env_defaults(target_text: str, template_text: str) -> str:
+    existing_keys: set[str] = set()
+    merged_lines = target_text.splitlines()
+    for raw_line in merged_lines:
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, _value = line.split('=', 1)
+        existing_keys.add(key.strip())
+
+    missing_lines: list[str] = []
+    for raw_line in template_text.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, _value = line.split('=', 1)
+        normalized = key.strip()
+        if normalized in existing_keys:
+            continue
+        missing_lines.append(f'{normalized}=')
+        existing_keys.add(normalized)
+
+    combined = merged_lines[:]
+    if missing_lines:
+        if combined and combined[-1].strip():
+            combined.append('')
+        combined.extend(missing_lines)
+    return '\n'.join(combined).rstrip() + '\n'
+
+
 def ensure_deerflow_runtime_env() -> bool:
-    if DEERFLOW_RUNTIME_ENV_FILE.exists():
-        return False
     if not DEERFLOW_ENV_FILE.exists():
         return False
+    template_text = DEERFLOW_ENV_FILE.read_text(encoding='utf-8')
+    if DEERFLOW_RUNTIME_ENV_FILE.exists():
+        merged = _merge_env_defaults(DEERFLOW_RUNTIME_ENV_FILE.read_text(encoding='utf-8'), template_text)
+        if DEERFLOW_RUNTIME_ENV_FILE.read_text(encoding='utf-8') != merged:
+            DEERFLOW_RUNTIME_ENV_FILE.write_text(merged, encoding='utf-8')
+            return True
+        return False
     DEERFLOW_RUNTIME_ENV_FILE.parent.mkdir(parents=True, exist_ok=True)
-    DEERFLOW_RUNTIME_ENV_FILE.write_text(DEERFLOW_ENV_FILE.read_text(encoding='utf-8'), encoding='utf-8')
+    DEERFLOW_RUNTIME_ENV_FILE.write_text(template_text, encoding='utf-8')
     return True
 
 
@@ -806,9 +811,36 @@ def sync_deerflow_harness_files() -> list[Path]:
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
         source_text = source.read_text(encoding='utf-8')
+        if source == DEERFLOW_RUNTIME_ENV_FILE and DEERFLOW_ENV_FILE.exists():
+            source_text = _merge_env_defaults(source_text, DEERFLOW_ENV_FILE.read_text(encoding='utf-8'))
         if not target.exists() or target.read_text(encoding='utf-8') != source_text:
             target.write_text(source_text, encoding='utf-8')
             synced.append(target)
+
+    if DEERFLOW_USER_PROFILE_FILE.exists():
+        DEERFLOW_VENDOR_USER_PROFILE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        source_text = DEERFLOW_USER_PROFILE_FILE.read_text(encoding='utf-8')
+        if (
+            not DEERFLOW_VENDOR_USER_PROFILE_FILE.exists()
+            or DEERFLOW_VENDOR_USER_PROFILE_FILE.read_text(encoding='utf-8') != source_text
+        ):
+            DEERFLOW_VENDOR_USER_PROFILE_FILE.write_text(source_text, encoding='utf-8')
+            synced.append(DEERFLOW_VENDOR_USER_PROFILE_FILE)
+
+    if DEERFLOW_AGENTS_DIR.exists():
+        DEERFLOW_VENDOR_AGENTS_DIR.mkdir(parents=True, exist_ok=True)
+        for agent_dir in sorted(path for path in DEERFLOW_AGENTS_DIR.iterdir() if path.is_dir()):
+            target_dir = DEERFLOW_VENDOR_AGENTS_DIR / agent_dir.name
+            target_dir.mkdir(parents=True, exist_ok=True)
+            for filename in ('config.yaml', 'SOUL.md'):
+                source = agent_dir / filename
+                if not source.exists():
+                    continue
+                target = target_dir / filename
+                source_text = source.read_text(encoding='utf-8')
+                if not target.exists() or target.read_text(encoding='utf-8') != source_text:
+                    target.write_text(source_text, encoding='utf-8')
+                    synced.append(target)
     return synced
 
 
@@ -944,6 +976,12 @@ def bootstrap_deerflow_files() -> None:
         DEERFLOW_ENV_FILE,
         '# Copy this file to .deerflow/.env and fill secrets\n'
         'OPENAI_API_KEY=\n'
+        'ANTHROPIC_API_KEY=\n'
+        'GOOGLE_API_KEY=\n'
+        'DEEPSEEK_API_KEY=\n'
+        'MOONSHOT_API_KEY=\n'
+        'NOVITA_API_KEY=\n'
+        'VOLCENGINE_API_KEY=\n'
         'TAVILY_API_KEY=\n'
         'INFOQUEST_API_KEY=\n',
     )
@@ -952,6 +990,7 @@ def bootstrap_deerflow_files() -> None:
         'models:\n'
         '  - name: gpt-4.1\n'
         '    display_name: GPT-4.1\n'
+        '    description: Default OpenAI coding model for the AIGit DeerFlow harness.\n'
         '    use: langchain_openai:ChatOpenAI\n'
         '    model: gpt-4.1\n'
         '    api_key: $OPENAI_API_KEY\n'
@@ -960,6 +999,7 @@ def bootstrap_deerflow_files() -> None:
         '\n'
         '  - name: gpt-4o\n'
         '    display_name: GPT-4o\n'
+        '    description: Balanced multimodal model for operator-facing DeerFlow tasks.\n'
         '    use: langchain_openai:ChatOpenAI\n'
         '    model: gpt-4o\n'
         '    api_key: $OPENAI_API_KEY\n'
@@ -968,16 +1008,16 @@ def bootstrap_deerflow_files() -> None:
         '\n'
         '  - name: gpt-4o-mini\n'
         '    display_name: GPT-4o Mini\n'
+        '    description: Fast low-cost model for lightweight DeerFlow loops.\n'
         '    use: langchain_openai:ChatOpenAI\n'
         '    model: gpt-4o-mini\n'
         '    api_key: $OPENAI_API_KEY\n'
         '    max_tokens: 4096\n'
         '    temperature: 0.2\n'
         '\n'
-        'sandbox:\n'
-        '  use: deerflow.community.docker_sandbox:DockerSandboxProvider\n'
         '  - name: gpt-4.1-mini\n'
         '    display_name: GPT-4.1 Mini\n'
+        '    description: Fast OpenAI fallback for code review and status updates.\n'
         '    use: langchain_openai:ChatOpenAI\n'
         '    model: gpt-4.1-mini\n'
         '    api_key: $OPENAI_API_KEY\n'
@@ -986,11 +1026,77 @@ def bootstrap_deerflow_files() -> None:
         '\n'
         '  - name: gpt-4.1-nano\n'
         '    display_name: GPT-4.1 Nano\n'
+        '    description: Cheapest OpenAI model for titles, summaries, and quick planning.\n'
         '    use: langchain_openai:ChatOpenAI\n'
         '    model: gpt-4.1-nano\n'
         '    api_key: $OPENAI_API_KEY\n'
         '    max_tokens: 2048\n'
         '    temperature: 0.2\n'
+        '\n'
+        '  - name: claude-sonnet-4\n'
+        '    display_name: Claude Sonnet 4\n'
+        '    description: Frontier review model for release-critical AIGit changes.\n'
+        '    use: langchain_anthropic:ChatAnthropic\n'
+        '    model: claude-sonnet-4-20250514\n'
+        '    api_key: $ANTHROPIC_API_KEY\n'
+        '    max_tokens: 8192\n'
+        '    supports_vision: true\n'
+        '    supports_thinking: true\n'
+        '    when_thinking_enabled:\n'
+        '      thinking:\n'
+        '        type: enabled\n'
+        '\n'
+        '  - name: gemini-2.5-pro\n'
+        '    display_name: Gemini 2.5 Pro\n'
+        '    description: Long-context synthesis model for roadmap and repo-wide reasoning.\n'
+        '    use: langchain_google_genai:ChatGoogleGenerativeAI\n'
+        '    model: gemini-2.5-pro\n'
+        '    google_api_key: $GOOGLE_API_KEY\n'
+        '    max_tokens: 8192\n'
+        '    supports_vision: true\n'
+        '\n'
+        '  - name: deepseek-reasoner\n'
+        '    display_name: DeepSeek Reasoner\n'
+        '    description: Native DeepSeek reasoning model for semantic diff and merge analysis.\n'
+        '    use: deerflow.models.patched_deepseek:PatchedChatDeepSeek\n'
+        '    model: deepseek-reasoner\n'
+        '    api_key: $DEEPSEEK_API_KEY\n'
+        '    max_tokens: 16384\n'
+        '    supports_thinking: true\n'
+        '    when_thinking_enabled:\n'
+        '      extra_body:\n'
+        '        thinking:\n'
+        '          type: enabled\n'
+        '\n'
+        '  - name: kimi-k2.5\n'
+        '    display_name: Kimi K2.5\n'
+        '    description: Moonshot large-context model for multi-epic planning and synthesis.\n'
+        '    use: deerflow.models.patched_deepseek:PatchedChatDeepSeek\n'
+        '    model: kimi-k2.5\n'
+        '    api_base: https://api.moonshot.cn/v1\n'
+        '    api_key: $MOONSHOT_API_KEY\n'
+        '    max_tokens: 32768\n'
+        '    supports_thinking: true\n'
+        '    supports_vision: true\n'
+        '    when_thinking_enabled:\n'
+        '      extra_body:\n'
+        '        thinking:\n'
+        '          type: enabled\n'
+        '\n'
+        '  - name: deepseek-v3.2\n'
+        '    display_name: DeepSeek V3.2\n'
+        '    description: OpenAI-compatible DeepSeek V3.2 access through Novita for coding-heavy flows.\n'
+        '    use: langchain_openai:ChatOpenAI\n'
+        '    model: deepseek/deepseek-v3.2\n'
+        '    api_key: $NOVITA_API_KEY\n'
+        '    base_url: https://api.novita.ai/openai\n'
+        '    max_tokens: 8192\n'
+        '    temperature: 0.1\n'
+        '    supports_thinking: true\n'
+        '    when_thinking_enabled:\n'
+        '      extra_body:\n'
+        '        thinking:\n'
+        '          type: enabled\n'
         '\n'
         'tool_groups:\n'
         '  - name: file:read\n'
@@ -1026,15 +1132,88 @@ def bootstrap_deerflow_files() -> None:
         f'      container_path: {json.dumps(live_repo_mount)}\n'
         '      read_only: false\n'
         '\n'
+        'skills:\n'
+        f'  path: {json.dumps(str((Path(live_repo_mount) / "skills" / "custom").resolve()))}\n'
+        '  container_path: /mnt/skills\n'
+        '\n'
+        'subagents:\n'
+        '  timeout_seconds: 1800\n'
+        '  agents:\n'
+        '    general-purpose:\n'
+        '      timeout_seconds: 2400\n'
+        '    bash:\n'
+        '      timeout_seconds: 600\n'
+        '\n'
         'channels:\n'
         '  session:\n'
-        '    assistant_id: lead_agent\n'
+        '    assistant_id: aigit-orchestrator\n'
         '    config:\n'
         '      recursion_limit: 120\n'
         '    context:\n'
         '      thinking_enabled: true\n'
         '      is_plan_mode: true\n'
         '      subagent_enabled: true\n',
+    )
+    _write_file_if_missing(
+        DEERFLOW_USER_PROFILE_FILE,
+        '# AIGit Operator Profile\n\n'
+        '- This DeerFlow deployment exists to work on AIGit repositories.\n'
+        '- Preserve Git-native behavior and deterministic semantic artifacts under `.semantic/`.\n'
+        '- Prefer focused, reviewable changes and keep docs/tests aligned with behavior.\n'
+        '- Treat `.deerflow/.env` and vendored runtime files as sensitive operational state.\n',
+    )
+    _write_deerflow_agent_if_missing(
+        'aigit-orchestrator',
+        'name: aigit-orchestrator\n'
+        'description: Default AIGit DeerFlow agent for repo-aware implementation, testing, and semantic artifact upkeep.\n'
+        'tool_groups:\n'
+        '  - file:read\n'
+        '  - file:write\n'
+        '  - bash\n',
+        '# AIGit Orchestrator\n\n'
+        'You are the default DeerFlow operator for AIGit.\n\n'
+        '## Mission\n'
+        '- Ship changes inside the current AIGit repository with tests, semantic artifacts, and docs kept in sync.\n'
+        '- Use the custom AIGit skill bundle under `skills/custom/deerflow-aigit-autopilot/` when it shortens setup or execution.\n\n'
+        '## Guardrails\n'
+        '- Prefer the live checkout at `/workspaces/aigit` when available.\n'
+        '- When working inside a staged DeerFlow thread workspace, treat `/mnt/user-data/workspace/repo` as the writable checkout.\n'
+        '- Re-run `pytest -q` and `python -m aigit.cli chunk --repo .` after meaningful changes.\n'
+        '- Keep release notes, README, and operator docs aligned with actual shipped behavior.\n',
+    )
+    _write_deerflow_agent_if_missing(
+        'aigit-semantic-maintainer',
+        'name: aigit-semantic-maintainer\n'
+        'description: Focused AIGit agent for chunk graph integrity, provenance, semantic diff, and semantic merge workflows.\n'
+        'model: deepseek-reasoner\n'
+        'tool_groups:\n'
+        '  - file:read\n'
+        '  - file:write\n'
+        '  - bash\n',
+        '# AIGit Semantic Maintainer\n\n'
+        'You specialize in AIGit semantic storage correctness.\n\n'
+        '## Focus\n'
+        '- Deterministic chunk generation, lineage continuity, semantic diff quality, semantic merge analysis, and provenance verification.\n'
+        '- Changes under `.semantic/`, parser behavior, chunk identity, and CI freshness enforcement.\n\n'
+        '## Output Contract\n'
+        '- Explain any semantic artifact changes in terms of chunk identity, hashes, and lineage effects.\n'
+        '- Call out risks to determinism or false-positive semantic diffs before finalizing work.\n',
+    )
+    _write_deerflow_agent_if_missing(
+        'aigit-release-governor',
+        'name: aigit-release-governor\n'
+        'description: AIGit release agent for roadmap alignment, CI gating, docs consistency, and operator handoff quality.\n'
+        'model: claude-sonnet-4\n'
+        'tool_groups:\n'
+        '  - file:read\n'
+        '  - file:write\n'
+        '  - bash\n',
+        '# AIGit Release Governor\n\n'
+        'You are responsible for release readiness across code, CI, docs, and DeerFlow operations.\n\n'
+        '## Responsibilities\n'
+        '- Keep roadmap status, README claims, and shipped implementation aligned.\n'
+        '- Preserve non-destructive CI behavior and ensure maintenance automation only changes intended files.\n'
+        '- Produce concise release notes, operator steps, and risk summaries.\n',
     )
     _write_file_if_missing(
         DEERFLOW_LAUNCH_SCRIPT,
@@ -1045,15 +1224,13 @@ def bootstrap_deerflow_files() -> None:
         'LOCAL_CONFIG="$REPO_ROOT/.deerflow/config.yaml"\n'
         'LOCAL_ENV="$REPO_ROOT/.deerflow/.env"\n'
         'LOCAL_ENV_EXAMPLE="$REPO_ROOT/.deerflow/.env.example"\n'
+        'LOCAL_AGENTS_DIR="$REPO_ROOT/.deerflow/agents"\n'
+        'LOCAL_USER_PROFILE="$REPO_ROOT/.deerflow/USER.md"\n'
+        'RUNTIME_HOME="$DEERFLOW_DIR/backend/.deer-flow"\n'
         'if [ ! -d "$DEERFLOW_DIR" ]; then\n'
         '  echo "deer-flow vendor directory missing. Run: aigit init-deerflow" >&2\n'
         '  exit 1\n'
         'fi\n'
-        'cd "$DEERFLOW_DIR"\n'
-        'make docker-init\n'
-        'make docker-start\n',
-    )
-    DEERFLOW_LAUNCH_SCRIPT.chmod(0o755)
         'if [ -f "$LOCAL_CONFIG" ]; then\n'
         '  cp "$LOCAL_CONFIG" "$DEERFLOW_DIR/config.yaml"\n'
         'fi\n'
@@ -1061,6 +1238,19 @@ def bootstrap_deerflow_files() -> None:
         '  cp "$LOCAL_ENV" "$DEERFLOW_DIR/.env"\n'
         'elif [ -f "$LOCAL_ENV_EXAMPLE" ] && [ ! -f "$DEERFLOW_DIR/.env" ]; then\n'
         '  cp "$LOCAL_ENV_EXAMPLE" "$DEERFLOW_DIR/.env"\n'
+        'fi\n'
+        'mkdir -p "$RUNTIME_HOME/agents"\n'
+        'if [ -f "$LOCAL_USER_PROFILE" ]; then\n'
+        '  cp "$LOCAL_USER_PROFILE" "$RUNTIME_HOME/USER.md"\n'
+        'fi\n'
+        'if [ -d "$LOCAL_AGENTS_DIR" ]; then\n'
+        '  for agent_dir in "$LOCAL_AGENTS_DIR"/*; do\n'
+        '    [ -d "$agent_dir" ] || continue\n'
+        '    target_dir="$RUNTIME_HOME/agents/$(basename "$agent_dir")"\n'
+        '    mkdir -p "$target_dir"\n'
+        '    [ -f "$agent_dir/config.yaml" ] && cp "$agent_dir/config.yaml" "$target_dir/config.yaml"\n'
+        '    [ -f "$agent_dir/SOUL.md" ] && cp "$agent_dir/SOUL.md" "$target_dir/SOUL.md"\n'
+        '  done\n'
         'fi\n'
         'export DEER_FLOW_ROOT="$DEERFLOW_DIR"\n'
         'cd "$DEERFLOW_DIR"\n'
@@ -1103,6 +1293,9 @@ def bootstrap_deerflow_files() -> None:
         'LOCAL_CONFIG="$REPO_ROOT/.deerflow/config.yaml"\n'
         'LOCAL_ENV="$REPO_ROOT/.deerflow/.env"\n'
         'LOCAL_ENV_EXAMPLE="$REPO_ROOT/.deerflow/.env.example"\n'
+        'LOCAL_AGENTS_DIR="$REPO_ROOT/.deerflow/agents"\n'
+        'LOCAL_USER_PROFILE="$REPO_ROOT/.deerflow/USER.md"\n'
+        'RUNTIME_HOME="$DEERFLOW_DIR/backend/.deer-flow"\n'
         'if [ ! -d "$DEERFLOW_DIR" ]; then\n'
         '  echo "deer-flow vendor directory missing. Run: aigit init-deerflow" >&2\n'
         '  exit 1\n'
@@ -1114,6 +1307,19 @@ def bootstrap_deerflow_files() -> None:
         '  cp "$LOCAL_ENV" "$DEERFLOW_DIR/.env"\n'
         'elif [ -f "$LOCAL_ENV_EXAMPLE" ] && [ ! -f "$DEERFLOW_DIR/.env" ]; then\n'
         '  cp "$LOCAL_ENV_EXAMPLE" "$DEERFLOW_DIR/.env"\n'
+        'fi\n'
+        'mkdir -p "$RUNTIME_HOME/agents"\n'
+        'if [ -f "$LOCAL_USER_PROFILE" ]; then\n'
+        '  cp "$LOCAL_USER_PROFILE" "$RUNTIME_HOME/USER.md"\n'
+        'fi\n'
+        'if [ -d "$LOCAL_AGENTS_DIR" ]; then\n'
+        '  for agent_dir in "$LOCAL_AGENTS_DIR"/*; do\n'
+        '    [ -d "$agent_dir" ] || continue\n'
+        '    target_dir="$RUNTIME_HOME/agents/$(basename "$agent_dir")"\n'
+        '    mkdir -p "$target_dir"\n'
+        '    [ -f "$agent_dir/config.yaml" ] && cp "$agent_dir/config.yaml" "$target_dir/config.yaml"\n'
+        '    [ -f "$agent_dir/SOUL.md" ] && cp "$agent_dir/SOUL.md" "$target_dir/SOUL.md"\n'
+        '  done\n'
         'fi\n'
         'export DEER_FLOW_ROOT="$DEERFLOW_DIR"\n'
         'cd "$DEERFLOW_DIR"\n'
@@ -1164,9 +1370,6 @@ def cmd_init_deerflow(args: argparse.Namespace) -> int:
             check=True,
         )
     else:
-        subprocess.run(['git', '-C', str(DEERFLOW_VENDOR_DIR), 'pull', '--ff-only'], check=True)
-
-    subprocess.run(['make', 'config'], cwd=DEERFLOW_VENDOR_DIR, check=True)
         vendor_status = subprocess.run(
             ['git', '-C', str(DEERFLOW_VENDOR_DIR), 'status', '--porcelain'],
             check=True,
@@ -1193,7 +1396,6 @@ def cmd_init_deerflow(args: argparse.Namespace) -> int:
     return 0
 
 
-def serve_api(args: argparse.Namespace) -> int:
 def cmd_launch_epics(args: argparse.Namespace) -> int:
     bootstrap_deerflow_files()
     written = build_epic_objective_bundle(Path(args.epics_dir), Path(args.output_dir), Path(args.queue_file))
@@ -1551,7 +1753,18 @@ def collect_admin_snapshot(repo_root: Path = Path('.')) -> dict[str, Any]:
     repo_root = repo_root.resolve()
     env_values = _parse_env_file(repo_root / DEERFLOW_RUNTIME_ENV_FILE)
     configured_keys = {
-        key: bool(env_values.get(key)) for key in ('OPENAI_API_KEY', 'TAVILY_API_KEY', 'INFOQUEST_API_KEY')
+        key: bool(env_values.get(key))
+        for key in (
+            'OPENAI_API_KEY',
+            'ANTHROPIC_API_KEY',
+            'GOOGLE_API_KEY',
+            'DEEPSEEK_API_KEY',
+            'MOONSHOT_API_KEY',
+            'NOVITA_API_KEY',
+            'VOLCENGINE_API_KEY',
+            'TAVILY_API_KEY',
+            'INFOQUEST_API_KEY',
+        )
     }
     queue = collect_epic_queue_status(repo_root)
     threads = list_deerflow_threads()
@@ -1608,10 +1821,6 @@ def serve_api(args: argparse.Namespace) -> int:
                 self._send(200, {'status': 'ok'})
                 return
             if self.path.startswith('/chunks'):
-                if not MANIFEST_FILE.exists():
-                    self._send(404, {'error': 'manifest missing'})
-                    return
-                chunks = [json.loads(line) for line in MANIFEST_FILE.read_text(encoding='utf-8').splitlines() if line]
                 if not manifest_file.exists():
                     self._send(404, {'error': 'manifest missing'})
                     return

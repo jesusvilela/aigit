@@ -1,0 +1,7 @@
+name: aigit-semantic-maintainer
+description: Focused AIGit agent for chunk graph integrity, provenance, semantic diff, and semantic merge workflows.
+model: deepseek-reasoner
+tool_groups:
+  - file:read
+  - file:write
+  - bash
