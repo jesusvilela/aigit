@@ -142,6 +142,7 @@ vite.config.ts.timestamp-*
 __pycache__/
 *.pyc
 .pytest_cache/
+aigit.egg-info/
 
 # AIGit local cache
 .semantic/cache/
@@ -149,3 +150,6 @@ __pycache__/
 # DeerFlow local harness checkout and secrets
 .deerflow/vendor/
 .deerflow/.env
+
+# Local editor/devcontainer config
+.devcontainer/

@@ -1,6 +1,12 @@
 # AIGit Development Roadmap: 10 Active Epics
 
 This roadmap launches ten concurrent epics tailored to the current repository state and local toolchain.
+# AIGit Development Roadmap
+
+This roadmap now tracks two linked waves:
+
+- Cycle 1: the currently launched 10-epic foundation
+- Cycle 2: a new 10x release wave that productizes and operationalizes the first cycle
 
 ## Execution Cadence
 
@@ -9,6 +15,7 @@ This roadmap launches ten concurrent epics tailored to the current repository st
 - **Definition of done:** tests pass, docs updated, no secrets in git, PR includes provenance context
 
 ## Epic Portfolio
+## Cycle 1 Epic Portfolio
 
 1. **EPIC-01 Deterministic Ruleset Engine v2** (`docs/epics/EPIC-01-ruleset-engine-v2.md`)
 2. **EPIC-02 Chunk Identity & Lineage Hardening** (`docs/epics/EPIC-02-identity-lineage-hardening.md`)
@@ -22,6 +29,7 @@ This roadmap launches ten concurrent epics tailored to the current repository st
 10. **EPIC-10 Release Governance & Adoption Pack** (`docs/epics/EPIC-10-release-governance.md`)
 
 ## Current Environment Launch Status
+## Cycle 1 Launch Status
 
 | Epic | Owner Mode | Status | First Milestone |
 |---|---|---|---|
@@ -35,3 +43,22 @@ This roadmap launches ten concurrent epics tailored to the current repository st
 | EPIC-08 | local Codex | launched | parser plugin contract + first extra language |
 | EPIC-09 | local Codex | launched | benchmark harness + budget thresholds |
 | EPIC-10 | local Codex | launched | release checklist + migration notes |
+
+## Cycle 2: 10x Release Wave
+
+Cycle 2 builds on the existing epics instead of replacing them. The objective is to turn the current platform into a faster, safer, more operator-friendly release engine.
+
+| Track | Scope | Status | First milestone |
+| --- | --- | --- | --- |
+| C2-01 | ruleset policy packs | released | repo-class presets and compatibility contracts |
+| C2-02 | lineage replay suite | released | deterministic regression fixture matrix |
+| C2-03 | semantic PR publishing | released | PR-ready semantic summary generation |
+| C2-04 | merge rehearsal mode | released | pre-merge semantic conflict preview |
+| C2-05 | provenance verification | released | proof checks in CLI and CI |
+| C2-06 | API consumer kits | released | stable examples for agents and dashboards |
+| C2-07 | persistent DeerFlow crews | released | resumable objective state handoff |
+| C2-08 | polyglot parser expansion | released | JSON, YAML, and TypeScript parser contract |
+| C2-09 | performance budgets | released | benchmark caps and regression alarms |
+| C2-10 | adoption rails | released | rollout scorecards and release templates |
+
+Cycle 2 charter: `docs/CYCLE_02_10X_RELEASE.md`
