@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -48,6 +49,7 @@ DEERFLOW_DEFAULT_WORKSPACE_SUBDIR = 'repo'
 EPICS_DIR = Path('docs/epics')
 ROADMAP_FILE = Path('docs/EPICS_ROADMAP.md')
 TASKS_FILE = Path('docs/MULTISOTA_CODEX_TASKS.md')
+AIGIT_RUNTIME_DIR = Path('.aigit/runtime')
 
 DEERFLOW_THREAD_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]+$')
 DEERFLOW_SYNC_SKIP_NAMES = {
@@ -579,6 +581,90 @@ def ensure_deerflow_runtime_env() -> bool:
 def missing_deerflow_env_keys(required: tuple[str, ...] = ('OPENAI_API_KEY',)) -> list[str]:
     env = _parse_env_file(DEERFLOW_RUNTIME_ENV_FILE)
     return [key for key in required if not env.get(key)]
+
+
+def _runtime_file(service_name: str, suffix: str) -> Path:
+    return AIGIT_RUNTIME_DIR / f'{service_name}.{suffix}'
+
+
+def _service_is_healthy(url: str, timeout: float = 2.5) -> bool:
+    try:
+        with urllib_request.urlopen(url, timeout=timeout) as response:
+            return 200 <= response.status < 300
+    except Exception:
+        return False
+
+
+def _read_service_pid(service_name: str, repo_root: Path) -> int | None:
+    pid_file = (repo_root / _runtime_file(service_name, 'pid')).resolve()
+    if not pid_file.exists():
+        return None
+    try:
+        return int(pid_file.read_text(encoding='utf-8').strip())
+    except ValueError:
+        return None
+
+
+def _pid_is_running(pid: int) -> bool:
+    if pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
+
+
+def _wait_for_service(url: str, timeout_seconds: float) -> bool:
+    deadline = time.monotonic() + max(timeout_seconds, 0)
+    while time.monotonic() < deadline:
+        if _service_is_healthy(url):
+            return True
+        time.sleep(1)
+    return _service_is_healthy(url)
+
+
+def _spawn_detached_python_service(service_name: str, repo_root: Path, args: list[str]) -> tuple[int, Path]:
+    runtime_dir = (repo_root / AIGIT_RUNTIME_DIR).resolve()
+    runtime_dir.mkdir(parents=True, exist_ok=True)
+    log_path = (repo_root / _runtime_file(service_name, 'log')).resolve()
+    pid_path = (repo_root / _runtime_file(service_name, 'pid')).resolve()
+
+    with log_path.open('a', encoding='utf-8') as log_handle:
+        process = subprocess.Popen(
+            [sys.executable, '-m', 'aigit.cli', *args],
+            cwd=repo_root,
+            stdin=subprocess.DEVNULL,
+            stdout=log_handle,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+
+    pid_path.write_text(f'{process.pid}\n', encoding='utf-8')
+    return process.pid, log_path
+
+
+def _ensure_background_service(
+    service_name: str,
+    repo_root: Path,
+    health_url: str,
+    cli_args: list[str],
+    startup_timeout: float,
+) -> tuple[bool, str]:
+    if _service_is_healthy(health_url):
+        return True, f'{service_name} already healthy at {health_url}'
+
+    pid = _read_service_pid(service_name, repo_root)
+    log_path = (repo_root / _runtime_file(service_name, 'log')).resolve()
+    if pid is not None and _pid_is_running(pid):
+        if _wait_for_service(health_url, startup_timeout):
+            return True, f'{service_name} became healthy at {health_url} (pid {pid})'
+        return False, f'{service_name} is still running but not healthy; inspect {log_path}'
+
+    pid, log_path = _spawn_detached_python_service(service_name, repo_root, cli_args)
+    if _wait_for_service(health_url, startup_timeout):
+        return True, f'started {service_name} at {health_url} (pid {pid}, log {log_path})'
+    return False, f'started {service_name} but it did not become healthy; inspect {log_path}'
 
 
 def _validate_deerflow_thread_id(thread_id: str) -> str:
@@ -1432,6 +1518,69 @@ def cmd_launch_epics(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_up(args: argparse.Namespace) -> int:
+    repo_root = Path('.').resolve()
+    bootstrap_deerflow_files()
+
+    if args.bootstrap_deerflow or not DEERFLOW_VENDOR_DIR.exists():
+        init_args = argparse.Namespace(repo=args.deerflow_repo, skip_clone=args.skip_clone)
+        init_code = cmd_init_deerflow(init_args)
+        if init_code != 0:
+            return init_code
+
+    if not DEERFLOW_VENDOR_DIR.exists():
+        print('deer-flow vendor directory missing; run `aigit init-deerflow` or rerun `aigit up --bootstrap-deerflow`')
+        return 1
+
+    if ensure_deerflow_runtime_env():
+        print('seeded or refreshed .deerflow/.env from .deerflow/.env.example')
+
+    synced_files = sync_deerflow_harness_files()
+    if synced_files:
+        print('synced DeerFlow runtime files into the vendored harness:')
+        for path in synced_files:
+            print(f'  - {path}')
+
+    missing_keys = missing_deerflow_env_keys()
+    if missing_keys:
+        print(f'warning: missing DeerFlow env keys: {", ".join(missing_keys)}')
+        print('the local stack can still boot, but model-backed calls may fail until those keys are set')
+
+    subprocess.run([str(DEERFLOW_RECOVERY_SCRIPT.resolve())], check=True)
+
+    if not args.skip_serve_api:
+        ok, message = _ensure_background_service(
+            'serve-api',
+            repo_root,
+            f'http://{args.api_host}:{args.api_port}/healthz',
+            ['serve-api', '--host', args.api_host, '--port', str(args.api_port)],
+            startup_timeout=10,
+        )
+        print(message)
+        if not ok:
+            return 1
+
+    if not args.skip_admin_ui:
+        ok, message = _ensure_background_service(
+            'admin-ui',
+            repo_root,
+            f'http://{args.admin_host}:{args.admin_port}',
+            ['admin-ui', '--repo', str(repo_root), '--host', args.admin_host, '--port', str(args.admin_port)],
+            startup_timeout=30,
+        )
+        print(message)
+        if not ok:
+            return 1
+
+    print('AIGit stack is up:')
+    print('  - DeerFlow UI: http://localhost:2026/workspace/chats/new')
+    if not args.skip_serve_api:
+        print(f'  - Chunk API: http://{args.api_host}:{args.api_port}/healthz')
+    if not args.skip_admin_ui:
+        print(f'  - Admin UI: http://{args.admin_host}:{args.admin_port}')
+    return 0
+
+
 def cmd_deerflow_workspace_path(args: argparse.Namespace) -> int:
     try:
         host_workspace = deerflow_repo_workspace_dir(args.thread_id, args.workspace_subdir)
@@ -1886,6 +2035,18 @@ def build_parser() -> argparse.ArgumentParser:
     launch_epics.add_argument('--bootstrap-deerflow', action='store_true')
     launch_epics.add_argument('--start-harness', action='store_true')
     launch_epics.set_defaults(func=cmd_launch_epics)
+
+    up = sub.add_parser('up', help='Bring up the full local AIGit and DeerFlow stack')
+    up.add_argument('--deerflow-repo', default='https://github.com/bytedance/deer-flow.git')
+    up.add_argument('--bootstrap-deerflow', action='store_true')
+    up.add_argument('--skip-clone', action='store_true')
+    up.add_argument('--skip-serve-api', action='store_true')
+    up.add_argument('--skip-admin-ui', action='store_true')
+    up.add_argument('--api-host', default='127.0.0.1')
+    up.add_argument('--api-port', type=int, default=8765)
+    up.add_argument('--admin-host', default='127.0.0.1')
+    up.add_argument('--admin-port', type=int, default=7860)
+    up.set_defaults(func=cmd_up)
 
     deerflow_workspace = sub.add_parser(
         'deerflow-workspace-path',

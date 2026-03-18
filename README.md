@@ -39,6 +39,7 @@ AIGit keeps the Git object model untouched and layers a deterministic semantic g
 | review intent between refs | `aigit semantic-diff --base <ref> --head <ref>` |
 | inspect merge risk | `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` |
 | record AI authorship context | `aigit record-provenance ...` |
+| bring up the full local stack | `aigit up` |
 | run autonomous work with visibility | `aigit init-deerflow`, `./scripts/run_deerflow_epics.sh`, `aigit admin-ui` |
 
 ## Repository Contract
@@ -65,11 +66,11 @@ AIGit keeps the Git object model untouched and layers a deterministic semantic g
 
 ```bash
 python -m pip install -e ".[dev]"
+aigit up
 aigit chunk
 aigit semantic-diff --base main --head HEAD --output semantic_diff.md
 aigit semantic-merge --base main --ours HEAD --theirs feature --output semantic_merge.json
 aigit record-provenance --agent codex --model gpt-5.2-codex --prompt "chunk update"
-aigit serve-api --host 127.0.0.1 --port 8765
 ```
 
 ## CLI Surface
@@ -81,6 +82,7 @@ aigit serve-api --host 127.0.0.1 --port 8765
 | `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` | detect semantic conflicts from a shared base |
 | `aigit record-provenance --agent <name> --model <model> --prompt <text>` | append provenance metadata for `HEAD` |
 | `aigit commit -m <msg> --agent ... --model ... --prompt ...` | create a commit with an AI provenance trailer |
+| `aigit up` | recover DeerFlow and ensure the local chunk API and admin UI are running |
 | `aigit serve-api` | expose `/healthz` and `/chunks` over HTTP |
 | `aigit deerflow-workspace-path --thread-id <id>` | show host and sandbox workspace mappings |
 | `aigit deerflow-import-repo --thread-id <id>` | stage the repo into DeerFlow's thread workspace |
@@ -91,12 +93,11 @@ aigit serve-api --host 127.0.0.1 --port 8765
 AIGit can provision a local DeerFlow harness under `.deerflow/` so autonomous agent runs can keep producing reviewable semantic changes.
 
 ```bash
-aigit init-deerflow
-aigit launch-epics
-aigit admin-ui
 cp .deerflow/.env.example .deerflow/.env
-./scripts/run_deerflow_epics.sh
+aigit up
 ```
+
+`aigit up` uses the current Python interpreter to launch local services in the background, which fits containerized environments such as Codespaces. If you prefer uv-managed environments, run it as `uv run aigit up` so the same command uses your uv interpreter and dependency graph.
 
 ### Runtime contract
 

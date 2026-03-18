@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from subprocess import CompletedProcess
+from types import SimpleNamespace
 
 import pytest
 
@@ -212,3 +213,66 @@ def test_init_deerflow_skips_pull_when_vendor_is_dirty(tmp_path: Path, monkeypat
     assert result == 0
     assert 'skipping upstream pull' in output
     assert ['git', '-C', str(vendor_dir), 'status', '--porcelain'] in calls
+
+
+def test_cmd_up_recovers_deerflow_and_starts_local_services(tmp_path: Path, monkeypatch, capsys) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(core, 'DEERFLOW_VENDOR_DIR', Path('.deerflow/vendor/deer-flow'))
+    monkeypatch.setattr(core, 'DEERFLOW_RECOVERY_SCRIPT', Path('scripts/recover_deerflow.sh'))
+
+    Path('.deerflow/vendor/deer-flow').mkdir(parents=True)
+    Path('scripts').mkdir()
+    Path('scripts/recover_deerflow.sh').write_text('#!/usr/bin/env bash\n', encoding='utf-8')
+
+    bootstrap_calls: list[str] = []
+    monkeypatch.setattr(core, 'bootstrap_deerflow_files', lambda: bootstrap_calls.append('bootstrapped'))
+    monkeypatch.setattr(core, 'ensure_deerflow_runtime_env', lambda: True)
+    monkeypatch.setattr(core, 'sync_deerflow_harness_files', lambda: [Path('.deerflow/vendor/deer-flow/config.yaml')])
+    monkeypatch.setattr(core, 'missing_deerflow_env_keys', lambda required=('OPENAI_API_KEY',): ['OPENAI_API_KEY'])
+
+    run_calls: list[list[str]] = []
+
+    def fake_run(args: list[str], **kwargs) -> CompletedProcess[str]:
+        run_calls.append(args)
+        return CompletedProcess(args, 0, stdout='', stderr='')
+
+    monkeypatch.setattr(core.subprocess, 'run', fake_run)
+
+    service_requests: list[tuple[str, str, list[str], float]] = []
+
+    def fake_ensure_background_service(
+        service_name: str,
+        repo_root: Path,
+        health_url: str,
+        cli_args: list[str],
+        startup_timeout: float,
+    ) -> tuple[bool, str]:
+        service_requests.append((service_name, health_url, cli_args, startup_timeout))
+        return True, f'{service_name} ok'
+
+    monkeypatch.setattr(core, '_ensure_background_service', fake_ensure_background_service)
+
+    args = SimpleNamespace(
+        deerflow_repo='https://example.invalid/deer-flow.git',
+        bootstrap_deerflow=False,
+        skip_clone=False,
+        skip_serve_api=False,
+        skip_admin_ui=False,
+        api_host='127.0.0.1',
+        api_port=8765,
+        admin_host='127.0.0.1',
+        admin_port=7860,
+    )
+
+    result = core.cmd_up(args)
+
+    output = capsys.readouterr().out
+    assert result == 0
+    assert bootstrap_calls == ['bootstrapped']
+    assert run_calls == [[str(Path('scripts/recover_deerflow.sh').resolve())]]
+    assert service_requests == [
+        ('serve-api', 'http://127.0.0.1:8765/healthz', ['serve-api', '--host', '127.0.0.1', '--port', '8765'], 10),
+        ('admin-ui', f'http://127.0.0.1:7860', ['admin-ui', '--repo', str(tmp_path), '--host', '127.0.0.1', '--port', '7860'], 30),
+    ]
+    assert 'warning: missing DeerFlow env keys: OPENAI_API_KEY' in output
+    assert 'AIGit stack is up:' in output
