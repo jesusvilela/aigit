@@ -1,22 +1,72 @@
 {
-  ".github/workflows/ci.yml::file::file": {
-    "anchor": "file",
-    "chunk_type": "file",
-    "confidence": "low",
-    "content_hash": "bcd2779ce87ad381409da98082cd4f2a349e10f4cfbc95029c30ba08ffca4de9",
+  ".github/workflows/ci.yml::key::True": {
+    "anchor": "True",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "2ed6737f3c7e70dd49a139596feb21beaa1d0c1e3d400070256d8167e6210ca7",
     "end_line": 38,
     "path": ".github/workflows/ci.yml",
-    "semantic_id": "sc_72d049a6edbe3c36",
+    "semantic_id": "sc_1cd540ebcaa8642f",
     "start_line": 1
   },
-  ".github/workflows/semantic-maintenance.yml::file::file": {
-    "anchor": "file",
-    "chunk_type": "file",
-    "confidence": "low",
-    "content_hash": "6b2d1d1fd44bbbd298e37dd4a875934e792faa1fa84b26b287d7c55c82e95036",
+  ".github/workflows/ci.yml::key::jobs": {
+    "anchor": "jobs",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "e1a4d92d5552758b7718ee1926c47c12dd89d51a7b9b7b09c9036a9d50c94cd1",
+    "end_line": 38,
+    "path": ".github/workflows/ci.yml",
+    "semantic_id": "sc_79804a054a1fc53f",
+    "start_line": 1
+  },
+  ".github/workflows/ci.yml::key::name": {
+    "anchor": "name",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "0f1f121bc5cd3828006e76f34c1be33c6c2dbf597f55d5ae64b14f0255a04a23",
+    "end_line": 38,
+    "path": ".github/workflows/ci.yml",
+    "semantic_id": "sc_ed3ff760861cbef0",
+    "start_line": 1
+  },
+  ".github/workflows/semantic-maintenance.yml::key::True": {
+    "anchor": "True",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "dc4dc200ee78eedcaa8da6fffa3f47f6732ec9ed37c92439bf8d2325aad9abbf",
     "end_line": 52,
     "path": ".github/workflows/semantic-maintenance.yml",
-    "semantic_id": "sc_bd87cdea1b51cdb3",
+    "semantic_id": "sc_f63957c3f87dbb09",
+    "start_line": 1
+  },
+  ".github/workflows/semantic-maintenance.yml::key::jobs": {
+    "anchor": "jobs",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "5423f47760fab748c1219dd84d701278141ce599c8498a889449a35cd5d7bfe8",
+    "end_line": 52,
+    "path": ".github/workflows/semantic-maintenance.yml",
+    "semantic_id": "sc_00e3928e4b9507eb",
+    "start_line": 1
+  },
+  ".github/workflows/semantic-maintenance.yml::key::name": {
+    "anchor": "name",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "01c2cf6917d037b2e90145f1238ce67c54f4a1231b416afbcb44015f4dbb830e",
+    "end_line": 52,
+    "path": ".github/workflows/semantic-maintenance.yml",
+    "semantic_id": "sc_cc76ee04b0f524f5",
+    "start_line": 1
+  },
+  ".github/workflows/semantic-maintenance.yml::key::permissions": {
+    "anchor": "permissions",
+    "chunk_type": "key",
+    "confidence": "high",
+    "content_hash": "1ae3508cdb3164bce3a9d6476c9166d8ee95830fec00d616f9c4e1585e3ffb1d",
+    "end_line": 52,
+    "path": ".github/workflows/semantic-maintenance.yml",
+    "semantic_id": "sc_b00f31ab1a8374a2",
     "start_line": 1
   },
   "LICENSE::file::file": {
@@ -374,930 +424,1020 @@
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "4e11d25a05923ab9e8761dd78f6580d8570749d4eec9d283ad3d0bb0ceacaf68",
-    "end_line": 90,
+    "end_line": 96,
     "path": "aigit/core.py",
     "semantic_id": "sc_f4cd722c74240d4f",
-    "start_line": 79
+    "start_line": 85
   },
   "aigit/core.py::class::DeerFlowRepoSyncReport": {
     "anchor": "DeerFlowRepoSyncReport",
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "181bd2841512e08d10460df3af5a6f8dd30044c7f3e6389cd00eefd7c0a388ed",
-    "end_line": 100,
+    "end_line": 106,
     "path": "aigit/core.py",
     "semantic_id": "sc_0d5a2bf29cb9b3d4",
-    "start_line": 94
+    "start_line": 100
   },
   "aigit/core.py::class::EpicSpec": {
     "anchor": "EpicSpec",
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "36375876f19b5240a8c57d5a43c8a288261ea818de7d1d246d3ad531d7033b73",
-    "end_line": 76,
+    "end_line": 82,
     "path": "aigit/core.py",
     "semantic_id": "sc_348ced7b3d77ae8d",
-    "start_line": 70
+    "start_line": 76
   },
   "aigit/core.py::function::_chunk_id": {
     "anchor": "_chunk_id",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "70c9ee2f74727a73da345928e9655a4c7c0d93ed461e5ab2ccba269ce1ad11e9",
-    "end_line": 119,
+    "end_line": 125,
     "path": "aigit/core.py",
     "semantic_id": "sc_7e445919e7911cdc",
-    "start_line": 118
+    "start_line": 124
   },
   "aigit/core.py::function::_clean_section_lines": {
     "anchor": "_clean_section_lines",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4e55016f76fdf514627f7020d691190d8902af787872db653172109931b51a0b",
-    "end_line": 948,
+    "end_line": 1092,
     "path": "aigit/core.py",
     "semantic_id": "sc_c0b32c9f6d474335",
-    "start_line": 947
+    "start_line": 1091
   },
   "aigit/core.py::function::_content_hash": {
     "anchor": "_content_hash",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1b6968b318cfa65839ff8ac9fd1246ba9152e700352e41ee464105b3779d8a63",
-    "end_line": 123,
+    "end_line": 129,
     "path": "aigit/core.py",
     "semantic_id": "sc_bc7e47d81678a2ba",
-    "start_line": 122
+    "start_line": 128
   },
   "aigit/core.py::function::_copy_repo_tree": {
     "anchor": "_copy_repo_tree",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "37188cac039029c2a0181827adf756d42b8701adc916e538f0d6a4d471be1b1f",
-    "end_line": 786,
+    "end_line": 930,
     "path": "aigit/core.py",
     "semantic_id": "sc_a2d4b994a27f3d8c",
-    "start_line": 744
+    "start_line": 888
   },
   "aigit/core.py::function::_count_files_in_tree": {
     "anchor": "_count_files_in_tree",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "facd5a61ec9636da50fa863ff0a3ec6930529f4eb5515b350022f0244eab7f5a",
-    "end_line": 1670,
+    "end_line": 1814,
     "path": "aigit/core.py",
     "semantic_id": "sc_87fc3f8ac637d0fa",
-    "start_line": 1660
+    "start_line": 1804
   },
   "aigit/core.py::function::_ensure_background_service": {
     "anchor": "_ensure_background_service",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "303f024cba7849f107308e0a39c6a98f0f25b55a5a3ee5527deaf6649bc9498f",
-    "end_line": 667,
+    "end_line": 811,
     "path": "aigit/core.py",
     "semantic_id": "sc_61fdd7407ec7e166",
-    "start_line": 647
+    "start_line": 791
+  },
+  "aigit/core.py::function::_ensure_lfs_pattern": {
+    "anchor": "_ensure_lfs_pattern",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "80ec8fe542819150445d11482463590122a158725ccd748d9ba3f1543d8fef02",
+    "end_line": 2230,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_e7d7d15cb07b5a1a",
+    "start_line": 2220
   },
   "aigit/core.py::function::_format_epic_objective": {
     "anchor": "_format_epic_objective",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "072efe94a0f6856d0b77e2e75165ff7d3ac779a6ae0858b38276b2485bc29f6a",
-    "end_line": 1010,
+    "end_line": 1154,
     "path": "aigit/core.py",
     "semantic_id": "sc_0974dc049cb319f6",
-    "start_line": 983
+    "start_line": 1127
   },
   "aigit/core.py::function::_hash": {
     "anchor": "_hash",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "103aaefe1866ee02535cc2be0f8b5bf0e2c1c258ad5c6090b0850537ce5b3019",
-    "end_line": 115,
+    "end_line": 121,
     "path": "aigit/core.py",
     "semantic_id": "sc_5becbef02f568dff",
-    "start_line": 114
+    "start_line": 120
   },
   "aigit/core.py::function::_latest_mtime_iso": {
     "anchor": "_latest_mtime_iso",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "edff1ce5244334f7710b7bb3089f177ab8f5dfed8bc6a744ef3b318109bea4dc",
-    "end_line": 1685,
+    "end_line": 1829,
     "path": "aigit/core.py",
     "semantic_id": "sc_e362cddec82c5b8a",
-    "start_line": 1673
+    "start_line": 1817
   },
   "aigit/core.py::function::_merge_env_defaults": {
     "anchor": "_merge_env_defaults",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "81b9bd64898a533cbd07edfa85536512ee7dd29b664320058318fd072ba476cc",
-    "end_line": 563,
+    "end_line": 707,
     "path": "aigit/core.py",
     "semantic_id": "sc_58c3e57882163e55",
-    "start_line": 536
+    "start_line": 680
   },
   "aigit/core.py::function::_normalize_workspace_subdir": {
     "anchor": "_normalize_workspace_subdir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "91e1773aec1b48452828ba810da276e38f1d42767b82f51a220b52ff04ae3eea",
-    "end_line": 683,
+    "end_line": 827,
     "path": "aigit/core.py",
     "semantic_id": "sc_2eaca67c6eed7ca4",
-    "start_line": 676
+    "start_line": 820
   },
   "aigit/core.py::function::_parse_env_file": {
     "anchor": "_parse_env_file",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ea15ebfe4a2d6bb862bd6c706f8963ce4a65b66df71521d8a3762d4c22efe907",
-    "end_line": 533,
+    "end_line": 677,
     "path": "aigit/core.py",
     "semantic_id": "sc_05d76bd63503a252",
-    "start_line": 523
+    "start_line": 667
   },
   "aigit/core.py::function::_parse_markdown_sections": {
     "anchor": "_parse_markdown_sections",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d8c078cd0fdd4fc204768468f2d452d0c2e14030f5283334025d3958f6f35b9b",
-    "end_line": 944,
+    "end_line": 1088,
     "path": "aigit/core.py",
     "semantic_id": "sc_a7ccfb48efb47277",
-    "start_line": 933
+    "start_line": 1077
   },
   "aigit/core.py::function::_parse_provenance_trailer": {
     "anchor": "_parse_provenance_trailer",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "dc8593d447aaa8a168546ae371d222eec06adb69163a5371b6c07a73be3bb25f",
-    "end_line": 464,
+    "end_line": 608,
     "path": "aigit/core.py",
     "semantic_id": "sc_afca3ec0d88064df",
-    "start_line": 450
+    "start_line": 594
   },
   "aigit/core.py::function::_parse_simple_yaml": {
     "anchor": "_parse_simple_yaml",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "08afd38d325876aabee207f5ca636fa3c93ece83b255df837a8ed0369e359d7b",
-    "end_line": 248,
+    "end_line": 392,
     "path": "aigit/core.py",
     "semantic_id": "sc_d583a25c94fd5522",
-    "start_line": 223
+    "start_line": 367
   },
   "aigit/core.py::function::_pid_is_running": {
     "anchor": "_pid_is_running",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d44c9218206da33bc88c9f0522e50759ad866d09f1c54ce8ce9851d9645f31c0",
-    "end_line": 615,
+    "end_line": 759,
     "path": "aigit/core.py",
     "semantic_id": "sc_183eb2c975cfe6c3",
-    "start_line": 608
+    "start_line": 752
+  },
+  "aigit/core.py::function::_probe_git_lfs": {
+    "anchor": "_probe_git_lfs",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "2c72a2a14573ddb7e84ba5880e9a0cd6ad2f1a773cdfef4929c98ff88f384397",
+    "end_line": 2206,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_72f3085324f08589",
+    "start_line": 2196
+  },
+  "aigit/core.py::function::_read_gitattributes": {
+    "anchor": "_read_gitattributes",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "0ffcc9037fe7c9146a07d0b3e74f36477134eea1889d1ccab5082989a0426dc8",
+    "end_line": 2213,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_f109ab6bce4dc917",
+    "start_line": 2209
   },
   "aigit/core.py::function::_read_json_file": {
     "anchor": "_read_json_file",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a2bb41fbe1e088cdea5906163df70a0de4cd4a77c7feb1b68553ccfc1513c6bd",
-    "end_line": 1641,
+    "end_line": 1785,
     "path": "aigit/core.py",
     "semantic_id": "sc_d503545510f2d0a8",
-    "start_line": 1635
+    "start_line": 1779
   },
   "aigit/core.py::function::_read_jsonl_rows": {
     "anchor": "_read_jsonl_rows",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2959b50a702b3865ad087f2cf08f64c98ec959a0d13693a189ec5d3c989deeb9",
-    "end_line": 1657,
+    "end_line": 1801,
     "path": "aigit/core.py",
     "semantic_id": "sc_78ee9a919e0c9cfb",
-    "start_line": 1644
+    "start_line": 1788
   },
   "aigit/core.py::function::_read_manifest_from_ref": {
     "anchor": "_read_manifest_from_ref",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "8f041bfe1d8689f547a1e3a1c1a7dd8bd621019961839a1342179bd5f0167b27",
-    "end_line": 379,
+    "end_line": 523,
     "path": "aigit/core.py",
     "semantic_id": "sc_39879328e6c728f3",
-    "start_line": 371
+    "start_line": 515
   },
   "aigit/core.py::function::_read_service_pid": {
     "anchor": "_read_service_pid",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6afae2589cd5dbd99def72fbd3e0172dd89e3bca067239b5c9e06461795240ea",
-    "end_line": 605,
+    "end_line": 749,
     "path": "aigit/core.py",
     "semantic_id": "sc_d919c87fe7ff4f80",
-    "start_line": 598
+    "start_line": 742
   },
   "aigit/core.py::function::_relax_deerflow_workspace_permissions": {
     "anchor": "_relax_deerflow_workspace_permissions",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4391d91f5a97825a4d424bfdca9538d756f1f3b0596bfeedf1c3ddc7f1c77815",
-    "end_line": 800,
+    "end_line": 944,
     "path": "aigit/core.py",
     "semantic_id": "sc_c646866a86bc9ac6",
-    "start_line": 789
+    "start_line": 933
   },
   "aigit/core.py::function::_repo_semantic_path": {
     "anchor": "_repo_semantic_path",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7dd2f991d81bc95632cf3fc1be0220b2d178b685d07be3fccef944604af3dc46",
-    "end_line": 220,
+    "end_line": 364,
     "path": "aigit/core.py",
     "semantic_id": "sc_3659fde1ee566ca7",
-    "start_line": 219
+    "start_line": 363
   },
   "aigit/core.py::function::_run_command_capture": {
     "anchor": "_run_command_capture",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "56601079d25bf26f223105332db8f48a075258016ec9c7603c03d731c02016f5",
-    "end_line": 1690,
+    "end_line": 1834,
     "path": "aigit/core.py",
     "semantic_id": "sc_802e19c9b2056fce",
-    "start_line": 1688
+    "start_line": 1832
   },
   "aigit/core.py::function::_run_git": {
     "anchor": "_run_git",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "96e5d63d423648f5d3a92991fe8adaa0a3776f2ba45c300743f4aa21916ae322",
-    "end_line": 368,
+    "end_line": 512,
     "path": "aigit/core.py",
     "semantic_id": "sc_67ae6a14251d8020",
-    "start_line": 366
+    "start_line": 510
   },
   "aigit/core.py::function::_runtime_file": {
     "anchor": "_runtime_file",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "117caf4f0c5dea24990d790cbb69d1fbfcbc3a11bfb27799678f241f5278ba24",
-    "end_line": 587,
+    "end_line": 731,
     "path": "aigit/core.py",
     "semantic_id": "sc_49cd9ac853e09b85",
-    "start_line": 586
+    "start_line": 730
   },
   "aigit/core.py::function::_service_is_healthy": {
     "anchor": "_service_is_healthy",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "02ef57570f2be195291bfed6648a54299f25e4405fa4f2cb43dd8d75d07fee95",
-    "end_line": 595,
+    "end_line": 739,
     "path": "aigit/core.py",
     "semantic_id": "sc_beed60ce023c5f75",
-    "start_line": 590
+    "start_line": 734
   },
   "aigit/core.py::function::_should_skip_repo_sync_path": {
     "anchor": "_should_skip_repo_sync_path",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5aefe11fd44ae26acb9f734213c9d0a831ff97f240f13a89fc63eaf2546aa9b8",
-    "end_line": 741,
+    "end_line": 885,
     "path": "aigit/core.py",
     "semantic_id": "sc_36ec52813d9621f9",
-    "start_line": 731
+    "start_line": 875
   },
   "aigit/core.py::function::_spawn_detached_python_service": {
     "anchor": "_spawn_detached_python_service",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "df24e0f585fda4104597bd694b1def95878b90432ae1ae450d68ab0e37748c78",
-    "end_line": 644,
+    "end_line": 788,
     "path": "aigit/core.py",
     "semantic_id": "sc_eec127f5061f31c0",
-    "start_line": 627
+    "start_line": 771
   },
   "aigit/core.py::function::_strip_markdown_list_prefix": {
     "anchor": "_strip_markdown_list_prefix",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f02eeff1738c885bb4450d65d2f880aba1d0cba0cc4af7125aed85f1aa1c7330",
-    "end_line": 956,
+    "end_line": 1100,
     "path": "aigit/core.py",
     "semantic_id": "sc_b7a6dd04e55a7eab",
-    "start_line": 951
+    "start_line": 1095
   },
   "aigit/core.py::function::_validate_deerflow_thread_id": {
     "anchor": "_validate_deerflow_thread_id",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "67229f6f94cadf42525923432eba17413906fb94efa5aca3b7c187fe9423f69c",
-    "end_line": 673,
+    "end_line": 817,
     "path": "aigit/core.py",
     "semantic_id": "sc_de40c15127a651d4",
-    "start_line": 670
+    "start_line": 814
   },
   "aigit/core.py::function::_wait_for_service": {
     "anchor": "_wait_for_service",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "358d88d754e305ecf75cefd8dda01c42f5229963e303c56dd38ab9d863a9385d",
-    "end_line": 624,
+    "end_line": 768,
     "path": "aigit/core.py",
     "semantic_id": "sc_5fc6430f6c47fdbf",
-    "start_line": 618
+    "start_line": 762
   },
   "aigit/core.py::function::_write_deerflow_agent_if_missing": {
     "anchor": "_write_deerflow_agent_if_missing",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b2c79d9a6983ac2284f86d86caf966f9aab7168eea4e7946701a388de408164d",
-    "end_line": 520,
+    "end_line": 664,
     "path": "aigit/core.py",
     "semantic_id": "sc_f92da362eacf5130",
-    "start_line": 517
+    "start_line": 661
   },
   "aigit/core.py::function::_write_deerflow_sync_metadata": {
     "anchor": "_write_deerflow_sync_metadata",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "cea78d49cd087bc566d8d23eb67191c241294ea4339c85e646a4c221560dd416",
-    "end_line": 825,
+    "end_line": 969,
     "path": "aigit/core.py",
     "semantic_id": "sc_2ba4b42b2e7b63c0",
-    "start_line": 803
+    "start_line": 947
   },
   "aigit/core.py::function::_write_file_if_missing": {
     "anchor": "_write_file_if_missing",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "41c8f60ec230adf384572e87ed0c2f9d313437c599da98a403c61c9b09f9477d",
-    "end_line": 514,
+    "end_line": 658,
     "path": "aigit/core.py",
     "semantic_id": "sc_b2cc5162e1f78cfe",
-    "start_line": 511
+    "start_line": 655
+  },
+  "aigit/core.py::function::_write_gitattributes": {
+    "anchor": "_write_gitattributes",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "64b26db0e33b44e4b002a65950cc068384dcaea1ecf94df2eba855b3cf3bbb47",
+    "end_line": 2217,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_2fce62a9b2b66c17",
+    "start_line": 2216
   },
   "aigit/core.py::function::bootstrap_deerflow_files": {
     "anchor": "bootstrap_deerflow_files",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "875ea810eb6c207e1ca5bb5dee750c2b46b8a0628d6896d05d353e1cae7cb04b",
-    "end_line": 1436,
+    "end_line": 1580,
     "path": "aigit/core.py",
     "semantic_id": "sc_423f4845a3d3b03c",
-    "start_line": 1059
+    "start_line": 1203
   },
   "aigit/core.py::function::build_epic_objective_bundle": {
     "anchor": "build_epic_objective_bundle",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c6c41e021165d633ed9bc64f450c19ca2e6ce7ab97bded082afa3d9cee7c1241",
-    "end_line": 1056,
+    "end_line": 1200,
     "path": "aigit/core.py",
     "semantic_id": "sc_1e40bd65f8639c65",
-    "start_line": 1013
+    "start_line": 1157
   },
   "aigit/core.py::function::build_manifest": {
     "anchor": "build_manifest",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b83f82a0377c541cc060ff8aae13a439675ca52b21716c48bbb0dd5a320d8cc0",
-    "end_line": 340,
+    "end_line": 484,
     "path": "aigit/core.py",
     "semantic_id": "sc_78f95bff76f9e094",
-    "start_line": 327
+    "start_line": 471
   },
   "aigit/core.py::function::build_parser": {
     "anchor": "build_parser",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "af92fcc7e0ecaa09de9980ff1828ab8a49896359dc13a27dd758ed264921dbc3",
-    "end_line": 2090,
+    "content_hash": "c304dea9f1b748cbff34e9f2e176b7f90a9a799bb7d216b0a12c24a90724d138",
+    "end_line": 2430,
     "path": "aigit/core.py",
     "semantic_id": "sc_db5f31922552aaeb",
-    "start_line": 1986
+    "start_line": 2300
   },
   "aigit/core.py::function::canonicalize_text": {
     "anchor": "canonicalize_text",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1c8c96df4dcffb751281cf95a06bde3df1f9d6a7450444ce3c2613fc39935af9",
-    "end_line": 111,
+    "end_line": 117,
     "path": "aigit/core.py",
     "semantic_id": "sc_b2a6c15182f8ed35",
-    "start_line": 108
+    "start_line": 114
   },
   "aigit/core.py::function::cmd_admin_ui": {
     "anchor": "cmd_admin_ui",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "8d043c54963bda8a87da9d41c72847ab429e5236b5904c76b1a5006834e5eff4",
-    "end_line": 1953,
+    "end_line": 2097,
     "path": "aigit/core.py",
     "semantic_id": "sc_417c69deaa7c83e5",
-    "start_line": 1944
+    "start_line": 2088
   },
   "aigit/core.py::function::cmd_chunk": {
     "anchor": "cmd_chunk",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "85e2cdcb5593b42fe9e5e227f3a105516f612f1537c2ba72e6ac76e7cb5bcf4d",
-    "end_line": 363,
+    "end_line": 507,
     "path": "aigit/core.py",
     "semantic_id": "sc_ac13bf46fa21c890",
-    "start_line": 358
+    "start_line": 502
   },
   "aigit/core.py::function::cmd_commit": {
     "anchor": "cmd_commit",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "126d096d073b0a5f8172cfe8b9718f331a3f318a5035cdf8252354bdafd924ad",
-    "end_line": 508,
+    "end_line": 652,
     "path": "aigit/core.py",
     "semantic_id": "sc_0f3dbf6b2c5cb9fc",
-    "start_line": 504
+    "start_line": 648
   },
   "aigit/core.py::function::cmd_deerflow_export_repo": {
     "anchor": "cmd_deerflow_export_repo",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1435ccaf4aa262f3d00f194de03fbbc258a4ab2e7d81f5dd0b068ab1d0ba5e3e",
-    "end_line": 1632,
+    "end_line": 1776,
     "path": "aigit/core.py",
     "semantic_id": "sc_80905c820b4f3fa6",
-    "start_line": 1618
+    "start_line": 1762
   },
   "aigit/core.py::function::cmd_deerflow_import_repo": {
     "anchor": "cmd_deerflow_import_repo",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b4cf488897e069fb60b3f291c35bd14b80bdc7e93a976d6ae8b7f7ff4977354e",
-    "end_line": 1615,
+    "end_line": 1759,
     "path": "aigit/core.py",
     "semantic_id": "sc_dc338e7037435330",
-    "start_line": 1597
+    "start_line": 1741
   },
   "aigit/core.py::function::cmd_deerflow_workspace_path": {
     "anchor": "cmd_deerflow_workspace_path",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5b5c5a4c526cb73e9697658c54d35a4b26efc360ef13085b0b5556d81b65cabb",
-    "end_line": 1594,
+    "end_line": 1738,
     "path": "aigit/core.py",
     "semantic_id": "sc_751d4a12caa624a6",
-    "start_line": 1584
+    "start_line": 1728
   },
   "aigit/core.py::function::cmd_diff": {
     "anchor": "cmd_diff",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ad8e7c856f23458e020d2c5101785aeb101cd0ecdacda8a3fac0e106704c8d93",
-    "end_line": 411,
+    "end_line": 555,
     "path": "aigit/core.py",
     "semantic_id": "sc_7c1dcd5056d4287f",
-    "start_line": 382
+    "start_line": 526
+  },
+  "aigit/core.py::function::cmd_improve": {
+    "anchor": "cmd_improve",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "e620511e97d97f29f56d173d3d09b20c222cbcbd98fb988753efaa3d7dd27f5d",
+    "end_line": 2175,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_c719a6f4e8c45d5c",
+    "start_line": 2130
   },
   "aigit/core.py::function::cmd_init_deerflow": {
     "anchor": "cmd_init_deerflow",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c019acd0fbe99a716cb63571e670dedfb8e73b99ad7200dacd5949ad258cf552",
-    "end_line": 1482,
+    "end_line": 1626,
     "path": "aigit/core.py",
     "semantic_id": "sc_5ec6bfa7e7d522f1",
-    "start_line": 1439
+    "start_line": 1583
   },
   "aigit/core.py::function::cmd_launch_epics": {
     "anchor": "cmd_launch_epics",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0959167599288ff03e0b6ecea0f05ae0324f4f30839962e2afa0e75d0382c998",
-    "end_line": 1518,
+    "end_line": 1662,
     "path": "aigit/core.py",
     "semantic_id": "sc_0cb83fcaa2398f75",
-    "start_line": 1485
+    "start_line": 1629
   },
   "aigit/core.py::function::cmd_merge": {
     "anchor": "cmd_merge",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "20f7a9e71041114d5a553e0512674e8ea9b02cd2b9cf177e890cf769324aa4fa",
-    "end_line": 429,
+    "end_line": 573,
     "path": "aigit/core.py",
     "semantic_id": "sc_eb2deb5527a15df5",
-    "start_line": 414
+    "start_line": 558
   },
   "aigit/core.py::function::cmd_record_provenance": {
     "anchor": "cmd_record_provenance",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1024d9a3eae819b0d9e8e8c06b94f80e1f0670383e7f4b4b9b69eb740dc1a3e2",
-    "end_line": 447,
+    "end_line": 591,
     "path": "aigit/core.py",
     "semantic_id": "sc_36a8bc1d556f2a2a",
-    "start_line": 432
+    "start_line": 576
+  },
+  "aigit/core.py::function::cmd_setup_storage": {
+    "anchor": "cmd_setup_storage",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "92496bf7d18d5d3bccf2dd4287138b3fcddcf5075a52a3aa9f406674fd742274",
+    "end_line": 2297,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_b12cf1f454546bac",
+    "start_line": 2233
   },
   "aigit/core.py::function::cmd_up": {
     "anchor": "cmd_up",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "99e5a0d8af007e0916eadcb9ea1dfc6d40b95f9fff22e92103e82a0acbd3dee2",
-    "end_line": 1581,
+    "end_line": 1725,
     "path": "aigit/core.py",
     "semantic_id": "sc_260a1e34b8a8141a",
-    "start_line": 1521
+    "start_line": 1665
   },
   "aigit/core.py::function::cmd_verify_provenance": {
     "anchor": "cmd_verify_provenance",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7f9136d9fe5022c012877e9ec55f93dae94f74920cc98d105556461646e72db8",
-    "end_line": 501,
+    "end_line": 645,
     "path": "aigit/core.py",
     "semantic_id": "sc_c7705af99254c068",
-    "start_line": 494
+    "start_line": 638
   },
   "aigit/core.py::function::collect_admin_snapshot": {
     "anchor": "collect_admin_snapshot",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a3f2d6f87b96bc544d187c38d0b73769d138f1990c4347c5cdf5e4497fe3729e",
-    "end_line": 1941,
+    "end_line": 2085,
     "path": "aigit/core.py",
     "semantic_id": "sc_75d026917e6fac29",
-    "start_line": 1901
+    "start_line": 2045
   },
   "aigit/core.py::function::collect_epic_queue_status": {
     "anchor": "collect_epic_queue_status",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "cfe176e0e30b19ca43054ce9ea4af9cd62842ae5a002ff87a6365f66be2dcd15",
-    "end_line": 1850,
+    "end_line": 1994,
     "path": "aigit/core.py",
     "semantic_id": "sc_28c23661b7073faf",
-    "start_line": 1818
+    "start_line": 1962
   },
   "aigit/core.py::function::collect_epic_specs": {
     "anchor": "collect_epic_specs",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f2af3bc8543265340fc5ec681bc7270edd16e8b1721a47889e18ea6965ba8bb7",
-    "end_line": 980,
+    "end_line": 1124,
     "path": "aigit/core.py",
     "semantic_id": "sc_9a132d54d549f5a4",
-    "start_line": 959
+    "start_line": 1103
   },
   "aigit/core.py::function::collect_semantic_summary": {
     "anchor": "collect_semantic_summary",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b59c5c7af547ef83b8d585eeec68f38458c6f83f92bae0e37b0da880d616852b",
-    "end_line": 1815,
+    "end_line": 1959,
     "path": "aigit/core.py",
     "semantic_id": "sc_9bf3def77c0716d0",
-    "start_line": 1788
+    "start_line": 1932
   },
   "aigit/core.py::function::deerflow_api_health": {
     "anchor": "deerflow_api_health",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "9daed4262ba300f24011dba84b1eb529f6f7a7992fcb7295e96c5c34a523c3da",
-    "end_line": 1740,
+    "end_line": 1884,
     "path": "aigit/core.py",
     "semantic_id": "sc_02796c8a338f97cd",
-    "start_line": 1717
+    "start_line": 1861
   },
   "aigit/core.py::function::deerflow_live_repo_mount_path": {
     "anchor": "deerflow_live_repo_mount_path",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6a9efa79280d10b22938d9a74fffc066333de17d25b4c84571ba05721bdf5d26",
-    "end_line": 105,
+    "end_line": 111,
     "path": "aigit/core.py",
     "semantic_id": "sc_0b70ae6faa9d2f50",
-    "start_line": 103
+    "start_line": 109
   },
   "aigit/core.py::function::deerflow_repo_workspace_dir": {
     "anchor": "deerflow_repo_workspace_dir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "031d75c819136646970eb177b47816b077449cf316efd3a79eb46c426e3018ce",
-    "end_line": 709,
+    "end_line": 853,
     "path": "aigit/core.py",
     "semantic_id": "sc_e9f4d6c582afd378",
-    "start_line": 706
+    "start_line": 850
   },
   "aigit/core.py::function::deerflow_sandbox_repo_path": {
     "anchor": "deerflow_sandbox_repo_path",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c99fa79a14809016e6352dbffb871106412130bff6a03dd063fad5b5cf173ca4",
-    "end_line": 714,
+    "end_line": 858,
     "path": "aigit/core.py",
     "semantic_id": "sc_e6a2bc5fb56115fe",
-    "start_line": 712
+    "start_line": 856
   },
   "aigit/core.py::function::deerflow_sync_metadata_file": {
     "anchor": "deerflow_sync_metadata_file",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6691c85c3a12ba3270bf275dfe062e094db2ed27e7a911c37877877fc4753058",
-    "end_line": 718,
+    "end_line": 862,
     "path": "aigit/core.py",
     "semantic_id": "sc_2ecaa09232e18603",
-    "start_line": 717
+    "start_line": 861
   },
   "aigit/core.py::function::deerflow_thread_dir": {
     "anchor": "deerflow_thread_dir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "33ffe9a331c06b3e5f3b0d08f8b2d504e74aa43d3190c6863b34ababf7e0df22",
-    "end_line": 691,
+    "end_line": 835,
     "path": "aigit/core.py",
     "semantic_id": "sc_a420f169953665f7",
-    "start_line": 690
+    "start_line": 834
   },
   "aigit/core.py::function::deerflow_thread_outputs_dir": {
     "anchor": "deerflow_thread_outputs_dir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "cec05c99a21327e3b04f1d42756d5abce324393b3b178e4c01b2c3423fc82b62",
-    "end_line": 703,
+    "end_line": 847,
     "path": "aigit/core.py",
     "semantic_id": "sc_0bdefc5a45cddfb0",
-    "start_line": 702
+    "start_line": 846
   },
   "aigit/core.py::function::deerflow_thread_uploads_dir": {
     "anchor": "deerflow_thread_uploads_dir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "86a8c23bbc99abbbb6af06a5266600abacad0246d8009397765946672459ecc4",
-    "end_line": 699,
+    "end_line": 843,
     "path": "aigit/core.py",
     "semantic_id": "sc_eca43206a3613c09",
-    "start_line": 698
+    "start_line": 842
   },
   "aigit/core.py::function::deerflow_thread_workspace_dir": {
     "anchor": "deerflow_thread_workspace_dir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "37519e1731792a611f091d37c380c952c66e4086edba7300793734515a1a59fa",
-    "end_line": 695,
+    "end_line": 839,
     "path": "aigit/core.py",
     "semantic_id": "sc_41a44e31b9d3f13c",
-    "start_line": 694
+    "start_line": 838
   },
   "aigit/core.py::function::deerflow_threads_dir": {
     "anchor": "deerflow_threads_dir",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "347be6f670e0f40d78ed8f716c39e7b3aa2e9fbdead5530e4d1bceef28431496",
-    "end_line": 687,
+    "end_line": 831,
     "path": "aigit/core.py",
     "semantic_id": "sc_a045c57c0f298fd5",
-    "start_line": 686
+    "start_line": 830
   },
   "aigit/core.py::function::ensure_deerflow_runtime_env": {
     "anchor": "ensure_deerflow_runtime_env",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "3675bda3530daa4c9118f2eead2c535a348eccfa065f2b0ede004d84ef0decb7",
-    "end_line": 578,
+    "end_line": 722,
     "path": "aigit/core.py",
     "semantic_id": "sc_bf7bb6e5b33849c4",
-    "start_line": 566
+    "start_line": 710
   },
   "aigit/core.py::function::ensure_deerflow_thread_dirs": {
     "anchor": "ensure_deerflow_thread_dirs",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "221bc1008d0e59568accf9d08180d28d69f105c7a7a74fce24a7b1a0fe59d150",
-    "end_line": 728,
+    "end_line": 872,
     "path": "aigit/core.py",
     "semantic_id": "sc_1340b8d15711aa9b",
-    "start_line": 721
+    "start_line": 865
   },
   "aigit/core.py::function::ensure_semantic_scaffold": {
     "anchor": "ensure_semantic_scaffold",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "f06c124beb43c7c32374c67bce6c7677a5afe12d302c4abab87aab5f3c6cf284",
-    "end_line": 324,
+    "content_hash": "1abb3c1024ad52bb94b9f8f83c7832e93ec750365e0048fcd9f27d93affb3348",
+    "end_line": 468,
     "path": "aigit/core.py",
     "semantic_id": "sc_1d93e73f62f06f66",
-    "start_line": 311
+    "start_line": 455
   },
   "aigit/core.py::function::export_repo_from_deerflow_thread": {
     "anchor": "export_repo_from_deerflow_thread",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "56c9a14dd36c7e5a4cf471e92a884c0ccd4b6c5303d9945d35511a7ebbf0b32a",
-    "end_line": 884,
+    "end_line": 1028,
     "path": "aigit/core.py",
     "semantic_id": "sc_1e9d4e43ad2ef2dc",
-    "start_line": 860
+    "start_line": 1004
   },
   "aigit/core.py::function::get_deerflow_container_logs": {
     "anchor": "get_deerflow_container_logs",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "90d37189198c02c7a8ac0e672435ff922ca58b3e2063f3979d7c6bcadddb89ed",
-    "end_line": 1785,
+    "end_line": 1929,
     "path": "aigit/core.py",
     "semantic_id": "sc_36685ba3425c054c",
-    "start_line": 1776
+    "start_line": 1920
   },
   "aigit/core.py::function::get_deerflow_thread_details": {
     "anchor": "get_deerflow_thread_details",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "8f9e2ebf25081a29413e2d7718df3a25f422598b0c1fd87a09c0362ff1005320",
-    "end_line": 1898,
+    "end_line": 2042,
     "path": "aigit/core.py",
     "semantic_id": "sc_058a52ab323b69e2",
-    "start_line": 1891
+    "start_line": 2035
   },
   "aigit/core.py::function::git_status_summary": {
     "anchor": "git_status_summary",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0a2c7e78e3289cccbcf61f106eae3c25895b1ef2cd15aa4471aff1accc7196f0",
-    "end_line": 1714,
+    "end_line": 1858,
     "path": "aigit/core.py",
     "semantic_id": "sc_cb894d51c0445b40",
-    "start_line": 1693
+    "start_line": 1837
   },
   "aigit/core.py::function::import_repo_to_deerflow_thread": {
     "anchor": "import_repo_to_deerflow_thread",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "05b42b8edf475a96dab46de20d6c5ced78a0e4a9c7e2b0ba88d871c3c2b54f05",
-    "end_line": 857,
+    "end_line": 1001,
     "path": "aigit/core.py",
     "semantic_id": "sc_814edf9522fe4952",
-    "start_line": 828
+    "start_line": 972
   },
   "aigit/core.py::function::iter_repo_files": {
     "anchor": "iter_repo_files",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "076771705f2909d611278e3ab7417105d6f23f768beead1c309982b19ea64a62",
-    "end_line": 308,
+    "end_line": 452,
     "path": "aigit/core.py",
     "semantic_id": "sc_ad15c150c036ab1c",
-    "start_line": 293
+    "start_line": 437
   },
   "aigit/core.py::function::list_deerflow_containers": {
     "anchor": "list_deerflow_containers",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0c433b0d25acab73caa1ee98c518a41a4dfef315ad0f7db3fe1e1c507485f094",
-    "end_line": 1773,
+    "end_line": 1917,
     "path": "aigit/core.py",
     "semantic_id": "sc_206cae1472ae6728",
-    "start_line": 1743
+    "start_line": 1887
   },
   "aigit/core.py::function::list_deerflow_threads": {
     "anchor": "list_deerflow_threads",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ae7fa25fa2a4fca73d9c82d889b3fb5e7f59a51a44946364235b63bb55b4659f",
-    "end_line": 1888,
+    "end_line": 2032,
     "path": "aigit/core.py",
     "semantic_id": "sc_3b980765f1f9d1dd",
-    "start_line": 1853
+    "start_line": 1997
   },
   "aigit/core.py::function::load_previous_index": {
     "anchor": "load_previous_index",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "10c0d0dcbbaf4979780a10c590b24aa6f2f10cd3e866b4aa60c6f7b79d12df68",
-    "end_line": 276,
+    "end_line": 420,
     "path": "aigit/core.py",
     "semantic_id": "sc_3860c9ab723eea7e",
-    "start_line": 269
+    "start_line": 413
   },
   "aigit/core.py::function::main": {
     "anchor": "main",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "637f9187879350cf83535d141681732d53216b64263eeeb9eee18439b35a74e2",
-    "end_line": 2096,
+    "end_line": 2436,
     "path": "aigit/core.py",
     "semantic_id": "sc_4dede0984ddd4213",
-    "start_line": 2093
+    "start_line": 2433
   },
   "aigit/core.py::function::match_previous_id": {
     "anchor": "match_previous_id",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "70cd041589c22f037c343bda0cf45df81272696a2f4caf639dc74f7a35fc5759",
-    "end_line": 290,
+    "end_line": 434,
     "path": "aigit/core.py",
     "semantic_id": "sc_d385f5d8dccb9797",
-    "start_line": 279
+    "start_line": 423
   },
   "aigit/core.py::function::missing_deerflow_env_keys": {
     "anchor": "missing_deerflow_env_keys",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a9a026f742e3efe3e1ce3c3ede4f563fce96d4d840e66b1ad434e834698fa7f7",
-    "end_line": 583,
+    "end_line": 727,
     "path": "aigit/core.py",
     "semantic_id": "sc_e6e3aaac1a428650",
-    "start_line": 581
+    "start_line": 725
   },
   "aigit/core.py::function::parse_file": {
     "anchor": "parse_file",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "645c16f276ed88150d3922285654be179c1f467494a8495009d2908623503c7f",
-    "end_line": 217,
+    "content_hash": "49448bdd376f73cb44dfe312523607fbd9d726b51400680b8ff975084dc8e916",
+    "end_line": 361,
     "path": "aigit/core.py",
     "semantic_id": "sc_a174f27d2578cfce",
-    "start_line": 210
+    "start_line": 348
+  },
+  "aigit/core.py::function::parse_json": {
+    "anchor": "parse_json",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "b96c31ba087cec35977fe7436f4f39096896325b247bc5d2d9400ea682dbe208",
+    "end_line": 257,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_e6b8153cfc25f78d",
+    "start_line": 216
   },
   "aigit/core.py::function::parse_markdown": {
     "anchor": "parse_markdown",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5eed4689df36eada861a94ce92c543a0a57f088624bd996af27b4e1f1cc8fbaf",
-    "end_line": 191,
+    "end_line": 197,
     "path": "aigit/core.py",
     "semantic_id": "sc_471062592cc7f064",
-    "start_line": 155
+    "start_line": 161
   },
   "aigit/core.py::function::parse_python": {
     "anchor": "parse_python",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f86e0b4e1062251d9e76342f6317ba778d093302a176c02726248af3a3c8a92f",
-    "end_line": 152,
+    "end_line": 158,
     "path": "aigit/core.py",
     "semantic_id": "sc_0644bb3ac13ddd8c",
-    "start_line": 126
+    "start_line": 132
   },
   "aigit/core.py::function::parse_text": {
     "anchor": "parse_text",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "193393c8bd8a7aa4b57fd732fc886ab8aaeda5fee9499ab9b03fd882a009ce64",
-    "end_line": 207,
+    "end_line": 213,
     "path": "aigit/core.py",
     "semantic_id": "sc_347823bcfe3e8b5a",
-    "start_line": 194
+    "start_line": 200
+  },
+  "aigit/core.py::function::parse_typescript": {
+    "anchor": "parse_typescript",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "b957bacbb0d50c5e050b1139c456437e9d06bac76962a86664dbcbfcc53e7a55",
+    "end_line": 345,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_9d7d6eda5ee3a2da",
+    "start_line": 313
+  },
+  "aigit/core.py::function::parse_yaml": {
+    "anchor": "parse_yaml",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "162d2e3001e42ce9c30fd9e91bd3fd2e86ddc9abf5319c272ec2da24247703b1",
+    "end_line": 304,
+    "path": "aigit/core.py",
+    "semantic_id": "sc_0fdc58de30a3863d",
+    "start_line": 260
   },
   "aigit/core.py::function::serve_api": {
     "anchor": "serve_api",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "797622953f436d24c432073cdd192233bdef9ddab2cbcf855627b68b8a452877",
-    "end_line": 1983,
+    "end_line": 2127,
     "path": "aigit/core.py",
     "semantic_id": "sc_b555541820071b71",
-    "start_line": 1956
+    "start_line": 2100
   },
   "aigit/core.py::function::sync_deerflow_harness_files": {
     "anchor": "sync_deerflow_harness_files",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1a7ace34e78ef8f8927554e1a9502cdbccce5375ea91368b3c666034b61a7423",
-    "end_line": 930,
+    "end_line": 1074,
     "path": "aigit/core.py",
     "semantic_id": "sc_c871152fd394aa89",
-    "start_line": 887
+    "start_line": 1031
   },
   "aigit/core.py::function::validate_ruleset_file": {
     "anchor": "validate_ruleset_file",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "92669155691aa4df6db4c32de68752f46a82d8586b5ff54305e5500fe959007c",
-    "end_line": 266,
+    "end_line": 410,
     "path": "aigit/core.py",
     "semantic_id": "sc_4b58bae770541aeb",
-    "start_line": 251
+    "start_line": 395
   },
   "aigit/core.py::function::verify_provenance": {
     "anchor": "verify_provenance",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ecd6037c89db01574563ace02021868a0cb7790319a76dd5af91eeac8b7ef593",
-    "end_line": 491,
+    "end_line": 635,
     "path": "aigit/core.py",
     "semantic_id": "sc_e2f6e8b70d2e097e",
-    "start_line": 467
+    "start_line": 611
   },
   "aigit/core.py::function::write_manifest": {
     "anchor": "write_manifest",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "3578518fcaaaa25924b189f1009fdf4c824934c1bcbded93048eefef401e3fa5",
-    "end_line": 355,
+    "end_line": 499,
     "path": "aigit/core.py",
     "semantic_id": "sc_4521b6be0fb0d0d6",
-    "start_line": 343
+    "start_line": 487
   },
   "docs/CYCLE_02_10X_RELEASE.md::section::AIGit Cycle 2: 10x Release Wave": {
     "anchor": "AIGit Cycle 2: 10x Release Wave",
@@ -2404,20 +2544,190 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ff31367c6eddd6ec47099c4e5f0a55f916237ff328d0c688a0a7e60b21ebcc55",
-    "end_line": 12,
+    "end_line": 14,
     "path": "tests/test_chunking.py",
     "semantic_id": "sc_4517457defb25232",
-    "start_line": 6
+    "start_line": 8
+  },
+  "tests/test_chunking.py::function::test_cmd_improve_passes": {
+    "anchor": "test_cmd_improve_passes",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9f7836f7f5efa003ab19bc5adc6a0b115340c06fa082eb8416cb04c63b34539e",
+    "end_line": 143,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_e57052ff9ea2820e",
+    "start_line": 134
+  },
+  "tests/test_chunking.py::function::test_cmd_setup_storage_git_backend": {
+    "anchor": "test_cmd_setup_storage_git_backend",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "70c0a46fc0ec64429769371d62ac7a03612132a1802c50b6e293d28f7b2f2993",
+    "end_line": 164,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_446fda8807df8910",
+    "start_line": 151
+  },
+  "tests/test_chunking.py::function::test_cmd_setup_storage_lfs_no_lfs_binary": {
+    "anchor": "test_cmd_setup_storage_lfs_no_lfs_binary",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "b720360a29e0683fc4f769512feed75b0ef55ee49d09ded2e34f8df3081541cf",
+    "end_line": 174,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_8e6bf4874b5f1abd",
+    "start_line": 167
+  },
+  "tests/test_chunking.py::function::test_json_chunking_via_build_manifest": {
+    "anchor": "test_json_chunking_via_build_manifest",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "45f9d947b6fa58d3f234a986ae19038d9ac579dd081e730a4909a0995f9d1b72",
+    "end_line": 106,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_95371e37e6ca9ab9",
+    "start_line": 100
+  },
+  "tests/test_chunking.py::function::test_json_parser_array": {
+    "anchor": "test_json_parser_array",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "cd7a014f79bf016c9dfca9f853369438a7733060143b21948fc16889fd634009",
+    "end_line": 42,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_4da57114906dfd9f",
+    "start_line": 38
+  },
+  "tests/test_chunking.py::function::test_json_parser_empty_object": {
+    "anchor": "test_json_parser_empty_object",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "3b0e8c851132926e0c92831d5394800cf08fda18d40c9019aebb156ab2581e3f",
+    "end_line": 48,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_6dec7ca6925a1c2c",
+    "start_line": 45
+  },
+  "tests/test_chunking.py::function::test_json_parser_invalid_falls_back": {
+    "anchor": "test_json_parser_invalid_falls_back",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "4356102e93eab1f5be0e11a6206388b7010d15cc03b55f4fc61a256a3d4f1169",
+    "end_line": 54,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_2dc0530ae7ee79c3",
+    "start_line": 51
+  },
+  "tests/test_chunking.py::function::test_json_parser_object": {
+    "anchor": "test_json_parser_object",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "c4ece9e6d9e1387d1b0d6a032fee993456b514a593beb72d85e055b365ec8b65",
+    "end_line": 35,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_d112fd814f4aa58a",
+    "start_line": 29
   },
   "tests/test_chunking.py::function::test_markdown_chunking": {
     "anchor": "test_markdown_chunking",
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7f660a89969f6991806020546a241ca55145046964426c5f0f0dad0883379243",
-    "end_line": 19,
+    "end_line": 21,
     "path": "tests/test_chunking.py",
     "semantic_id": "sc_8ff5db7b8cb296cd",
-    "start_line": 15
+    "start_line": 17
+  },
+  "tests/test_chunking.py::function::test_setup_storage_lfs_writes_gitattributes": {
+    "anchor": "test_setup_storage_lfs_writes_gitattributes",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9374865a5a9c9b2b3ad0650f08ab0c09788d702cdb7acc7e7a234607212c9396",
+    "end_line": 196,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_26acefc2325f2e49",
+    "start_line": 177
+  },
+  "tests/test_chunking.py::function::test_typescript_chunking_via_build_manifest": {
+    "anchor": "test_typescript_chunking_via_build_manifest",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "f63eec5648301a51f47845bf32b8180709c2af5d0bf4ac2f04f6446f39bead2a",
+    "end_line": 126,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_8f9a5d1eb02ab84f",
+    "start_line": 118
+  },
+  "tests/test_chunking.py::function::test_typescript_parser_class": {
+    "anchor": "test_typescript_parser_class",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "65f20f7206281ea3fbc787f4ab9a6f43fb623eca0add19e616c25b4f06d6f9de",
+    "end_line": 83,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_b177fd099a14e140",
+    "start_line": 78
+  },
+  "tests/test_chunking.py::function::test_typescript_parser_function": {
+    "anchor": "test_typescript_parser_function",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "dab432f707f10ae32fcbc462461670a7bb868b0e4f1eea8a861ba7aeaee0f87e",
+    "end_line": 75,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_cc45a6dbdd5c0a79",
+    "start_line": 71
+  },
+  "tests/test_chunking.py::function::test_typescript_parser_interface": {
+    "anchor": "test_typescript_parser_interface",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "b3192b1b38cebe6a91c2c2dd2f79c40c0c48e3521bc31ae082dd1ebc2ea87284",
+    "end_line": 91,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_95e567e64296453c",
+    "start_line": 86
+  },
+  "tests/test_chunking.py::function::test_typescript_parser_no_decls_falls_back": {
+    "anchor": "test_typescript_parser_no_decls_falls_back",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "26d28422be765b06570ddd59459ebd66b764cc6d0714e3fe42ed89e42f804fa1",
+    "end_line": 97,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_b496b207cd2c17c3",
+    "start_line": 94
+  },
+  "tests/test_chunking.py::function::test_yaml_chunking_via_build_manifest": {
+    "anchor": "test_yaml_chunking_via_build_manifest",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "a414dcc440236773ca6d3d63699e9f65ebe560e7e8c85836e104aa62edcbb81b",
+    "end_line": 115,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_8677ac4452a74b3a",
+    "start_line": 109
+  },
+  "tests/test_chunking.py::function::test_yaml_parser_empty_falls_back": {
+    "anchor": "test_yaml_parser_empty_falls_back",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "036c241bd58f93169a23ad0febc290898779b7cde003c2ddde3a6c82241fc298",
+    "end_line": 68,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_e5eccafc9a61bb64",
+    "start_line": 65
+  },
+  "tests/test_chunking.py::function::test_yaml_parser_top_level_keys": {
+    "anchor": "test_yaml_parser_top_level_keys",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "6f6681fca86d15ffae3d184d550e6b0762bdc975ea87ad798114e9fc852c1673",
+    "end_line": 62,
+    "path": "tests/test_chunking.py",
+    "semantic_id": "sc_db3560b34269e7b0",
+    "start_line": 57
   },
   "tests/test_deerflow_init.py::function::test_bootstrap_deerflow_files": {
     "anchor": "test_bootstrap_deerflow_files",
