@@ -137,3 +137,19 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+aigit.egg-info/
+
+# AIGit local cache
+.semantic/cache/
+
+# DeerFlow local harness checkout and secrets
+.deerflow/vendor/
+.deerflow/.env
+
+# Local editor/devcontainer config
+.devcontainer/

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aigit"
+version = "0.1.0"
+description = "AI-native semantic version control layer built on Git"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["gradio>=4.44,<6"]
+
+[project.scripts]
+aigit = "aigit.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["aigit*"]
+exclude = ["skills*", "docs*", "tests*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

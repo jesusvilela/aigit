@@ -1,0 +1,62 @@
+[
+  {
+    "id": "EPIC-01",
+    "title": "EPIC-01: Deterministic Ruleset Engine v2",
+    "objective_file": ".deerflow/objectives/EPIC-01.md",
+    "source_file": "docs/epics/EPIC-01-ruleset-engine-v2.md"
+  },
+  {
+    "id": "EPIC-02",
+    "title": "EPIC-02: Chunk Identity & Lineage Hardening",
+    "objective_file": ".deerflow/objectives/EPIC-02.md",
+    "source_file": "docs/epics/EPIC-02-identity-lineage-hardening.md"
+  },
+  {
+    "id": "EPIC-03",
+    "title": "EPIC-03: Semantic Diff Quality & CI Integration",
+    "objective_file": ".deerflow/objectives/EPIC-03.md",
+    "source_file": "docs/epics/EPIC-03-semantic-diff-ci.md"
+  },
+  {
+    "id": "EPIC-04",
+    "title": "EPIC-04: Semantic Merge Conflict Resolution UX",
+    "objective_file": ".deerflow/objectives/EPIC-04.md",
+    "source_file": "docs/epics/EPIC-04-semantic-merge-ux.md"
+  },
+  {
+    "id": "EPIC-05",
+    "title": "EPIC-05: AI Provenance Audit Chain",
+    "objective_file": ".deerflow/objectives/EPIC-05.md",
+    "source_file": "docs/epics/EPIC-05-provenance-audit-chain.md"
+  },
+  {
+    "id": "EPIC-06",
+    "title": "EPIC-06: Agent API Stabilization",
+    "objective_file": ".deerflow/objectives/EPIC-06.md",
+    "source_file": "docs/epics/EPIC-06-agent-api-stabilization.md"
+  },
+  {
+    "id": "EPIC-07",
+    "title": "EPIC-07: DeerFlow Autonomous Delivery Pipeline",
+    "objective_file": ".deerflow/objectives/EPIC-07.md",
+    "source_file": "docs/epics/EPIC-07-deerflow-delivery-pipeline.md"
+  },
+  {
+    "id": "EPIC-08",
+    "title": "EPIC-08: Language Expansion Beyond Python/Markdown",
+    "objective_file": ".deerflow/objectives/EPIC-08.md",
+    "source_file": "docs/epics/EPIC-08-language-expansion.md"
+  },
+  {
+    "id": "EPIC-09",
+    "title": "EPIC-09: Performance & Scaling Baselines",
+    "objective_file": ".deerflow/objectives/EPIC-09.md",
+    "source_file": "docs/epics/EPIC-09-performance-scaling.md"
+  },
+  {
+    "id": "EPIC-10",
+    "title": "EPIC-10: Release Governance & Adoption Pack",
+    "objective_file": ".deerflow/objectives/EPIC-10.md",
+    "source_file": "docs/epics/EPIC-10-release-governance.md"
+  }
+]
