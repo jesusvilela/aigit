@@ -23,6 +23,8 @@ models:
     max_tokens: 4096
     temperature: 0.2
 
+sandbox:
+  use: deerflow.community.docker_sandbox:DockerSandboxProvider
   - name: gpt-4.1-mini
     display_name: GPT-4.1 Mini
     use: langchain_openai:ChatOpenAI

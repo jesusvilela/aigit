@@ -1,3 +1,6 @@
+# AIGit Development Roadmap: 10 Active Epics
+
+This roadmap launches ten concurrent epics tailored to the current repository state and local toolchain.
 # AIGit Development Roadmap
 
 This roadmap now tracks two linked waves:
@@ -11,6 +14,7 @@ This roadmap now tracks two linked waves:
 - **Review gate:** all epics must produce semantic outputs where applicable (`aigit chunk`, semantic diff/merge artifacts)
 - **Definition of done:** tests pass, docs updated, no secrets in git, PR includes provenance context
 
+## Epic Portfolio
 ## Cycle 1 Epic Portfolio
 
 1. **EPIC-01 Deterministic Ruleset Engine v2** (`docs/epics/EPIC-01-ruleset-engine-v2.md`)
@@ -24,6 +28,7 @@ This roadmap now tracks two linked waves:
 9. **EPIC-09 Performance & Scaling Baselines** (`docs/epics/EPIC-09-performance-scaling.md`)
 10. **EPIC-10 Release Governance & Adoption Pack** (`docs/epics/EPIC-10-release-governance.md`)
 
+## Current Environment Launch Status
 ## Cycle 1 Launch Status
 
 | Epic | Owner Mode | Status | First Milestone |

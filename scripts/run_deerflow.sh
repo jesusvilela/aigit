@@ -9,6 +9,9 @@ if [ ! -d "$DEERFLOW_DIR" ]; then
   echo "deer-flow vendor directory missing. Run: aigit init-deerflow" >&2
   exit 1
 fi
+cd "$DEERFLOW_DIR"
+make docker-init
+make docker-start
 if [ -f "$LOCAL_CONFIG" ]; then
   cp "$LOCAL_CONFIG" "$DEERFLOW_DIR/config.yaml"
 fi

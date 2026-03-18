@@ -6,6 +6,7 @@ import dataclasses
 import difflib
 import hashlib
 import json
+import subprocess
 import os
 import re
 import shutil
@@ -24,6 +25,11 @@ EDGES_FILE = SEMANTIC_DIR / 'edges.jsonl'
 INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
+
+DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
+DEERFLOW_LAUNCH_SCRIPT = Path('scripts/run_deerflow.sh')
+DEERFLOW_ENV_FILE = Path('.deerflow/.env.example')
+DEERFLOW_CONFIG_FILE = Path('.deerflow/config.yaml')
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'file'}
 
@@ -209,6 +215,11 @@ def parse_file(full_path: Path, rel_path: str) -> list[Chunk]:
         return parse_markdown(rel_path, text)
     return parse_text(rel_path, text)
 
+
+def load_previous_index() -> dict[str, dict[str, Any]]:
+    if not INDEX_FILE.exists():
+        return {}
+    return json.loads(INDEX_FILE.read_text(encoding='utf-8'))
 def _repo_semantic_path(root: Path, path: Path) -> Path:
     return root / path
 
@@ -291,6 +302,8 @@ def iter_repo_files(root: Path) -> list[Path]:
         rel = path.relative_to(root)
         if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
             continue
+        if any(part.startswith('.') and part != '.github' for part in rel.parts):
+            continue
         if any(part == '__pycache__' or part.endswith('.egg-info') for part in rel.parts):
             continue
         if any(part.startswith('.') and part != '.github' for part in rel.parts):
@@ -301,6 +314,13 @@ def iter_repo_files(root: Path) -> list[Path]:
     return sorted(files)
 
 
+def ensure_semantic_scaffold() -> None:
+    SEMANTIC_DIR.mkdir(exist_ok=True)
+    (SEMANTIC_DIR / 'cache').mkdir(exist_ok=True)
+    if not SCHEMA_FILE.exists():
+        SCHEMA_FILE.write_text('1\n', encoding='utf-8')
+    if not RULESET_FILE.exists():
+        RULESET_FILE.write_text(
 def ensure_semantic_scaffold(root: Path | None = None) -> None:
     root = root.resolve() if root is not None else Path('.').resolve()
     semantic_dir = _repo_semantic_path(root, SEMANTIC_DIR)
@@ -318,6 +338,8 @@ def ensure_semantic_scaffold(root: Path | None = None) -> None:
 
 
 def build_manifest(root: Path) -> tuple[list[Chunk], list[dict[str, Any]]]:
+    ensure_semantic_scaffold()
+    previous = load_previous_index()
     ensure_semantic_scaffold(root)
     previous = load_previous_index(root)
     chunks: list[Chunk] = []
@@ -333,6 +355,11 @@ def build_manifest(root: Path) -> tuple[list[Chunk], list[dict[str, Any]]]:
     return chunks, edges
 
 
+def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]]) -> None:
+    manifest_lines = [json.dumps(chunk.to_dict(), sort_keys=True) for chunk in chunks]
+    MANIFEST_FILE.write_text('\n'.join(manifest_lines) + ('\n' if manifest_lines else ''), encoding='utf-8')
+    edge_lines = [json.dumps(edge, sort_keys=True) for edge in edges]
+    EDGES_FILE.write_text('\n'.join(edge_lines) + ('\n' if edge_lines else ''), encoding='utf-8')
 def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path = Path('.')) -> None:
     manifest_file = _repo_semantic_path(root, MANIFEST_FILE)
     edges_file = _repo_semantic_path(root, EDGES_FILE)
@@ -345,6 +372,12 @@ def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path 
     for chunk in chunks:
         key = f"{chunk.path}::{chunk.chunk_type}::{chunk.anchor}"
         index[key] = chunk.to_dict()
+    INDEX_FILE.write_text(json.dumps(index, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+
+
+def cmd_chunk(args: argparse.Namespace) -> int:
+    chunks, edges = build_manifest(Path(args.repo).resolve())
+    write_manifest(chunks, edges)
     index_file.write_text(json.dumps(index, indent=2, sort_keys=True) + '\n', encoding='utf-8')
 
 
@@ -414,6 +447,11 @@ def cmd_merge(args: argparse.Namespace) -> int:
         t = theirs.get(sid)
         if not o or not t:
             continue
+        if (
+            o['content_hash'] != b['content_hash']
+            and t['content_hash'] != b['content_hash']
+            and o['content_hash'] != t['content_hash']
+        ):
         if o['content_hash'] != b['content_hash'] and t['content_hash'] != b['content_hash'] and o['content_hash'] != t['content_hash']:
             conflicts.append(sid)
     out = {'base': args.base, 'ours': args.ours, 'theirs': args.theirs, 'conflicts': conflicts}
@@ -423,6 +461,7 @@ def cmd_merge(args: argparse.Namespace) -> int:
 
 
 def cmd_record_provenance(args: argparse.Namespace) -> int:
+    ensure_semantic_scaffold()
     repo_root = Path('.').resolve()
     ensure_semantic_scaffold(repo_root)
     commit = _run_git(['rev-parse', 'HEAD'])
@@ -433,6 +472,7 @@ def cmd_record_provenance(args: argparse.Namespace) -> int:
         'model': args.model,
         'prompt_hash': _hash([args.prompt]),
     }
+    path = SEMANTIC_DIR / 'provenance.jsonl'
     path = _repo_semantic_path(repo_root, SEMANTIC_DIR / 'provenance.jsonl')
     with path.open('a', encoding='utf-8') as f:
         f.write(json.dumps(row, sort_keys=True) + '\n')
@@ -507,6 +547,7 @@ def _write_file_if_missing(path: Path, content: str) -> None:
         path.write_text(content, encoding='utf-8')
 
 
+def bootstrap_deerflow_files() -> None:
 def _parse_env_file(path: Path) -> dict[str, str]:
     values: dict[str, str] = {}
     if not path.exists():
@@ -933,6 +974,8 @@ def bootstrap_deerflow_files() -> None:
         '    max_tokens: 4096\n'
         '    temperature: 0.2\n'
         '\n'
+        'sandbox:\n'
+        '  use: deerflow.community.docker_sandbox:DockerSandboxProvider\n'
         '  - name: gpt-4.1-mini\n'
         '    display_name: GPT-4.1 Mini\n'
         '    use: langchain_openai:ChatOpenAI\n'
@@ -1006,6 +1049,11 @@ def bootstrap_deerflow_files() -> None:
         '  echo "deer-flow vendor directory missing. Run: aigit init-deerflow" >&2\n'
         '  exit 1\n'
         'fi\n'
+        'cd "$DEERFLOW_DIR"\n'
+        'make docker-init\n'
+        'make docker-start\n',
+    )
+    DEERFLOW_LAUNCH_SCRIPT.chmod(0o755)
         'if [ -f "$LOCAL_CONFIG" ]; then\n'
         '  cp "$LOCAL_CONFIG" "$DEERFLOW_DIR/config.yaml"\n'
         'fi\n'
@@ -1116,6 +1164,9 @@ def cmd_init_deerflow(args: argparse.Namespace) -> int:
             check=True,
         )
     else:
+        subprocess.run(['git', '-C', str(DEERFLOW_VENDOR_DIR), 'pull', '--ff-only'], check=True)
+
+    subprocess.run(['make', 'config'], cwd=DEERFLOW_VENDOR_DIR, check=True)
         vendor_status = subprocess.run(
             ['git', '-C', str(DEERFLOW_VENDOR_DIR), 'status', '--porcelain'],
             check=True,
@@ -1142,6 +1193,7 @@ def cmd_init_deerflow(args: argparse.Namespace) -> int:
     return 0
 
 
+def serve_api(args: argparse.Namespace) -> int:
 def cmd_launch_epics(args: argparse.Namespace) -> int:
     bootstrap_deerflow_files()
     written = build_epic_objective_bundle(Path(args.epics_dir), Path(args.output_dir), Path(args.queue_file))
@@ -1556,6 +1608,10 @@ def serve_api(args: argparse.Namespace) -> int:
                 self._send(200, {'status': 'ok'})
                 return
             if self.path.startswith('/chunks'):
+                if not MANIFEST_FILE.exists():
+                    self._send(404, {'error': 'manifest missing'})
+                    return
+                chunks = [json.loads(line) for line in MANIFEST_FILE.read_text(encoding='utf-8').splitlines() if line]
                 if not manifest_file.exists():
                     self._send(404, {'error': 'manifest missing'})
                     return

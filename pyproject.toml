@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "AI-native semantic version control layer built on Git"
 readme = "README.md"
 requires-python = ">=3.10"
+dependencies = []
 dependencies = ["gradio>=4.44,<6"]
 
 [project.scripts]

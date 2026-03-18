@@ -1,3 +1,4 @@
+from pathlib import Path
 import os
 from pathlib import Path
 from subprocess import CompletedProcess
@@ -20,6 +21,7 @@ def test_bootstrap_deerflow_files(tmp_path: Path, monkeypatch) -> None:
     assert Path('.deerflow/.env.example').exists()
     assert Path('.deerflow/config.yaml').exists()
     assert Path('scripts/run_deerflow.sh').exists()
+    assert 'subagent_enabled: true' in Path('.deerflow/config.yaml').read_text(encoding='utf-8')
     assert Path('scripts/run_deerflow_epics.sh').exists()
     assert Path('scripts/recover_deerflow.sh').exists()
     config_text = Path('.deerflow/config.yaml').read_text(encoding='utf-8')
