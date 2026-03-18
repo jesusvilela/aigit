@@ -92,6 +92,84 @@ describe('ProvenanceTracker (in-memory)', () => {
     const latest = await tracker.query('chunk-1');
     expect(latest?.action).toBe('reviewed');
   });
+
+  test('blame() returns latest record per chunk', async () => {
+    const store = new MemoryProvenanceStore();
+    const tracker = new ProvenanceTracker(store);
+
+    await store.save({ chunkId: 'c1', agent, action: 'created',  timestamp: '2024-01-01T00:00:00.000Z' });
+    await store.save({ chunkId: 'c1', agent, action: 'modified', timestamp: '2024-01-02T00:00:00.000Z' });
+    await store.save({ chunkId: 'c2', agent, action: 'created',  timestamp: '2024-01-01T00:00:00.000Z' });
+
+    const blame = await tracker.blame();
+    expect(blame.size).toBe(2);
+    expect(blame.get('c1')?.action).toBe('modified');
+    expect(blame.get('c2')?.action).toBe('created');
+  });
+
+  test('byAgent() returns only records for the given agent', async () => {
+    const store = new MemoryProvenanceStore();
+    const tracker = new ProvenanceTracker(store);
+    const otherAgent = { id: 'agent-2', name: 'Other', type: 'ai' as const };
+
+    await store.save({ chunkId: 'c1', agent,      action: 'created', timestamp: '2024-01-01T00:00:00.000Z' });
+    await store.save({ chunkId: 'c2', agent: otherAgent, action: 'created', timestamp: '2024-01-01T00:00:00.000Z' });
+
+    const records = await tracker.byAgent('agent-1');
+    expect(records).toHaveLength(1);
+    expect(records[0].chunkId).toBe('c1');
+  });
+
+  test('byAgent() returns empty array when agent has no records', async () => {
+    const store = new MemoryProvenanceStore();
+    const tracker = new ProvenanceTracker(store);
+    const records = await tracker.byAgent('nonexistent-agent');
+    expect(records).toHaveLength(0);
+  });
+
+  test('since() returns only records after the timestamp', async () => {
+    const store = new MemoryProvenanceStore();
+    const tracker = new ProvenanceTracker(store);
+
+    await store.save({ chunkId: 'c1', agent, action: 'created',  timestamp: '2024-01-01T00:00:00.000Z' });
+    await store.save({ chunkId: 'c2', agent, action: 'modified', timestamp: '2024-06-01T00:00:00.000Z' });
+    await store.save({ chunkId: 'c3', agent, action: 'deleted',  timestamp: '2024-12-01T00:00:00.000Z' });
+
+    const records = await tracker.since('2024-06-01T00:00:00.000Z');
+    expect(records).toHaveLength(2);
+    records.forEach(r => expect(r.timestamp >= '2024-06-01T00:00:00.000Z').toBe(true));
+  });
+
+  test('lineage() traces derivedFrom chain', async () => {
+    const store = new MemoryProvenanceStore();
+    const tracker = new ProvenanceTracker(store);
+
+    // c2 was derived from c1
+    await store.save({ chunkId: 'c1', agent, action: 'created',  timestamp: '2024-01-01T00:00:00.000Z' });
+    await store.save({ chunkId: 'c2', agent, action: 'created',  timestamp: '2024-01-02T00:00:00.000Z', metadata: { derivedFrom: 'c1' } });
+    await store.save({ chunkId: 'c3', agent, action: 'created',  timestamp: '2024-01-03T00:00:00.000Z', metadata: { derivedFrom: 'c2' } });
+
+    const lineage = await tracker.lineage('c3');
+    const ids = lineage.map(r => r.chunkId);
+    expect(ids).toContain('c1');
+    expect(ids).toContain('c2');
+    expect(ids).toContain('c3');
+    // Ordered oldest-first
+    expect(lineage[0].chunkId).toBe('c1');
+  });
+
+  test('lineage() does not loop on circular derivedFrom', async () => {
+    const store = new MemoryProvenanceStore();
+    const tracker = new ProvenanceTracker(store);
+
+    // Circular: c1 → c2 → c1
+    await store.save({ chunkId: 'c1', agent, action: 'created',  timestamp: '2024-01-01T00:00:00.000Z', metadata: { derivedFrom: 'c2' } });
+    await store.save({ chunkId: 'c2', agent, action: 'created',  timestamp: '2024-01-02T00:00:00.000Z', metadata: { derivedFrom: 'c1' } });
+
+    // Should not throw or loop forever
+    const lineage = await tracker.lineage('c1');
+    expect(Array.isArray(lineage)).toBe(true);
+  });
 });
 
 describe('JsonProvenanceStore (file-system)', () => {

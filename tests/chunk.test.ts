@@ -132,11 +132,65 @@ import {
     expect(importChunk?.content).toContain('alpha');
   });
 
+  test('parses TypeScript enum', () => {
+    const content = `
+export enum Status {
+  Active = 'active',
+  Inactive = 'inactive',
+  Pending = 'pending',
+}
+`;
+    const chunks = parse(content, 'status.ts');
+    const enumChunk = chunks.find(c => c.name === 'Status');
+    expect(enumChunk).toBeDefined();
+    expect(enumChunk?.metadata?.isEnum).toBe(true);
+  });
+
+  test('parses const enum', () => {
+    const content = `export const enum Direction { Up, Down, Left, Right }`;
+    const chunks = parse(content, 'dir.ts');
+    const enumChunk = chunks.find(c => c.metadata?.isEnum === true);
+    expect(enumChunk).toBeDefined();
+    expect(enumChunk?.name).toBe('Direction');
+  });
+
+  test('parses decorator on class', () => {
+    const content = `
+@Injectable()
+class UserService {
+  get(): void {}
+}
+`;
+    const chunks = parse(content, 'user.ts');
+    const cls = chunks.find(c => c.type === ChunkType.Class);
+    expect(cls).toBeDefined();
+    expect(cls?.metadata?.decorators).toBeDefined();
+    expect((cls?.metadata?.decorators as string[])).toContain('Injectable');
+  });
+
   test('line ranges are 1-based', () => {
     const content = `function foo() {\n  return 1;\n}`;
     const chunks = parse(content, 'foo.ts');
     expect(chunks[0].startLine).toBeGreaterThanOrEqual(1);
     expect(chunks[0].endLine).toBeGreaterThanOrEqual(chunks[0].startLine);
+  });
+
+  test('decorator followed by unrecognised code does not propagate to next class', () => {
+    // A decorator followed by something that isn't a class/function
+    // should not attach decorators to a later class
+    const content = `
+@Service()
+const config = { value: 42 };
+
+class Plain {
+  run() {}
+}
+`;
+    const chunks = parse(content, 'plain.ts');
+    const cls = chunks.find(c => c.type === ChunkType.Class);
+    // Decorators should have been consumed/cleared by the time we reach Plain
+    const decorators = cls?.metadata?.decorators as string[] | undefined;
+    expect(decorators).toBeUndefined();
   });
 });
 

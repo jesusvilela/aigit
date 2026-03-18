@@ -66,16 +66,28 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
   const classDeclRe = /^(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+[\w<>, ]+)?(?:\s+implements\s+[\w<>,\s]+)?\s*\{?/;
   const interfaceDeclRe = /^(?:export\s+)?interface\s+(\w+)(?:\s*<[^>]*>)?(?:\s+extends\s+[\w<>,\s]+)?\s*\{?/;
   const typeAliasDeclRe = /^(?:export\s+)?type\s+(\w+)(?:\s*<[^>]*>)?\s*=/;
+  const enumDeclRe = /^(?:export\s+)?(?:const\s+)?enum\s+(\w+)\s*\{/;
+  const decoratorRe = /^@(\w+)(?:\s*\(.*\))?\s*$/;
   const varDeclRe = /^(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::\s*[\w<>[\]|&,\s]+)?\s*=/;
   const methodRe = /^\s{2,}(?:(?:public|private|protected|static|async|readonly|override|abstract)\s+)*(\w+)\s*(?:<[^>]*>)?\s*[(<][^=]*\)\s*(?::\s*[\w<>[\]|&,\s]+)?\s*\{/;
 
   let i = 0;
+  let pendingDecorators: string[] = [];
   while (i < lines.length) {
     if (consumed.has(i)) { i++; continue; }
     const line = lines[i];
     const trimmed = line.trim();
 
     if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) {
+      i++;
+      continue;
+    }
+
+    // Collect decorators (e.g. @Injectable(), @Component)
+    const decoratorMatch = trimmed.match(decoratorRe);
+    if (decoratorMatch) {
+      pendingDecorators.push(decoratorMatch[1]);
+      consumed.add(i);
       i++;
       continue;
     }
@@ -145,7 +157,30 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
         contentHash: makeContentHash(chunkContent),
         metadata: { isTypeAlias: true },
       });
+      pendingDecorators = [];
       i = endI + 1;
+      continue;
+    }
+
+    // Enum
+    const enumMatch = trimmed.match(enumDeclRe);
+    if (enumMatch) {
+      const name = enumMatch[1];
+      const { endLineIndex, content: chunkContent } = extractBracedBody(lines, i);
+      for (let j = i; j <= endLineIndex; j++) consumed.add(j);
+      chunks.push({
+        id: makeId(filePath, name, ChunkType.Variable),
+        name,
+        type: ChunkType.Variable,
+        filePath,
+        startLine: i + 1,
+        endLine: endLineIndex + 1,
+        content: chunkContent,
+        contentHash: makeContentHash(chunkContent),
+        metadata: { isEnum: true },
+      });
+      pendingDecorators = [];
+      i = endLineIndex + 1;
       continue;
     }
 
@@ -166,6 +201,7 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
         contentHash: makeContentHash(chunkContent),
         metadata: {},
       });
+      pendingDecorators = [];
       i = endLineIndex + 1;
       continue;
     }
@@ -211,8 +247,9 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
         endLine: endLineIndex + 1,
         content: chunkContent,
         contentHash: makeContentHash(chunkContent),
-        metadata: {},
+        metadata: pendingDecorators.length > 0 ? { decorators: [...pendingDecorators] } : {},
       });
+      pendingDecorators = [];
       i = endLineIndex + 1;
       continue;
     }
@@ -232,8 +269,9 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
         endLine: endLineIndex + 1,
         content: chunkContent,
         contentHash: makeContentHash(chunkContent),
-        metadata: {},
+        metadata: pendingDecorators.length > 0 ? { decorators: [...pendingDecorators] } : {},
       });
+      pendingDecorators = [];
       i = endLineIndex + 1;
       continue;
     }
@@ -256,6 +294,7 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
           contentHash: makeContentHash(chunkContent),
           metadata: {},
         });
+        pendingDecorators = [];
         i = endLineIndex + 1;
       } else {
         let endI = i;
@@ -275,6 +314,7 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
           contentHash: makeContentHash(chunkContent),
           metadata: {},
         });
+        pendingDecorators = [];
         i = endI + 1;
       }
       continue;
@@ -297,10 +337,12 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
         contentHash: makeContentHash(chunkContent),
         metadata: {},
       });
+      pendingDecorators = [];
       i++;
       continue;
     }
 
+    pendingDecorators = [];
     i++;
   }
 
