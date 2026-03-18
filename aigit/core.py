@@ -2175,6 +2175,128 @@ def cmd_improve(args: argparse.Namespace) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------
+# Storage backend support (Git LFS / Xet)
+# ---------------------------------------------------------------------------
+
+STORAGE_BACKENDS: set[str] = {'git', 'lfs', 'xet'}
+
+# Semantic artifact glob patterns that benefit from LFS / Xet block-level
+# deduplication.  These files grow monotonically with every `aigit chunk` run.
+LFS_SEMANTIC_PATTERNS: list[str] = [
+    '.semantic/manifest.jsonl',
+    '.semantic/edges.jsonl',
+    '.semantic/chunk_index.json',
+    '.semantic/provenance.jsonl',
+]
+
+GITATTRIBUTES_FILE = Path('.gitattributes')
+
+
+def _probe_git_lfs() -> bool:
+    """Return True when git-lfs is installed and available on PATH."""
+    try:
+        result = subprocess.run(
+            ['git', 'lfs', 'version'],
+            capture_output=True,
+            check=False,
+        )
+        return result.returncode == 0
+    except FileNotFoundError:
+        return False
+
+
+def _read_gitattributes(root: Path) -> list[str]:
+    ga = root / GITATTRIBUTES_FILE
+    if ga.exists():
+        return ga.read_text(encoding='utf-8').splitlines()
+    return []
+
+
+def _write_gitattributes(root: Path, lines: list[str]) -> None:
+    (root / GITATTRIBUTES_FILE).write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+
+def _ensure_lfs_pattern(lines: list[str], pattern: str, filter_value: str) -> tuple[list[str], bool]:
+    """Ensure *pattern* has filter=<filter_value> in .gitattributes.
+
+    Returns the (possibly updated) lines and a bool indicating whether a change
+    was made.
+    """
+    target = f'{pattern} filter={filter_value} diff={filter_value} merge={filter_value} -text'
+    for line in lines:
+        if re.match(rf'^{re.escape(pattern)}\s', line):
+            return lines, False  # already tracked
+    return lines + [target], True
+
+
+def cmd_setup_storage(args: argparse.Namespace) -> int:
+    """Configure Git LFS or Xet storage for semantic artifacts.
+
+    ``git``  — plain Git (removes any LFS tracking for the patterns).
+    ``lfs``  — Git LFS file-level deduplication.
+    ``xet``  — Git LFS Xet block-level deduplication (LFS-compatible transport;
+               installs the xet credential helper and sets the transfer.storage
+               config key).
+    """
+    backend: str = args.backend
+    repo_root = Path(args.repo).resolve()
+
+    if backend == 'git':
+        print('Storage backend: plain git (no LFS tracking)')
+        ga = repo_root / GITATTRIBUTES_FILE
+        if ga.exists():
+            lines = ga.read_text(encoding='utf-8').splitlines()
+            new_lines = [
+                ln for ln in lines
+                if not any(pat in ln for pat in LFS_SEMANTIC_PATTERNS)
+            ]
+            if len(new_lines) != len(lines):
+                _write_gitattributes(repo_root, new_lines)
+                print(f'Removed LFS tracking entries from {GITATTRIBUTES_FILE}')
+        return 0
+
+    if not _probe_git_lfs():
+        print(
+            'ERROR: git-lfs is not installed.  '
+            'Install it from https://git-lfs.github.com/ and run `git lfs install`.'
+        )
+        return 1
+
+    # Ensure LFS is initialised for this repository
+    subprocess.run(['git', 'lfs', 'install'], cwd=str(repo_root), check=False, capture_output=True)
+
+    filter_name = 'lfs'  # xet uses the same filter= value as lfs
+    lines = _read_gitattributes(repo_root)
+    changed = False
+    for pattern in LFS_SEMANTIC_PATTERNS:
+        lines, did_change = _ensure_lfs_pattern(lines, pattern, filter_name)
+        changed = changed or did_change
+
+    if changed:
+        _write_gitattributes(repo_root, lines)
+        print(f'Updated {GITATTRIBUTES_FILE} to track semantic artifacts via {backend.upper()}')
+    else:
+        print(f'{GITATTRIBUTES_FILE} already tracks semantic artifacts via {backend.upper()}')
+
+    if backend == 'xet':
+        # Xet uses its own transfer agent but identical .gitattributes syntax.
+        # Set git config to opt in.
+        subprocess.run(
+            ['git', 'config', 'lfs.transfer.storage', 'xet'],
+            cwd=str(repo_root),
+            check=False,
+            capture_output=True,
+        )
+        print('Configured lfs.transfer.storage=xet for block-level deduplication')
+        print('NOTE: Install the Xet CLI (https://github.com/xetdata/xet-tools) to activate transfer.')
+
+    print(f'\nSemantic artifact patterns registered:')
+    for pat in LFS_SEMANTIC_PATTERNS:
+        print(f'  {pat}')
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog='aigit')
     sub = parser.add_subparsers(dest='command', required=True)
@@ -2278,6 +2400,32 @@ def build_parser() -> argparse.ArgumentParser:
     api.add_argument('--host', default='127.0.0.1')
     api.add_argument('--port', type=int, default=8765)
     api.set_defaults(func=serve_api)
+
+    improve = sub.add_parser(
+        'improve',
+        help='Run the Codespaces-safe auto improvement loop (rebuild semantic artifacts + tests)',
+    )
+    improve.add_argument('--repo', default='.')
+    improve.add_argument(
+        '--test-path',
+        dest='test_path',
+        default='',
+        help='Optional path to pass to pytest (e.g. tests/)',
+    )
+    improve.set_defaults(func=cmd_improve)
+
+    setup_storage = sub.add_parser(
+        'setup-storage',
+        help='Configure Git LFS or Xet for semantic artifact storage',
+    )
+    setup_storage.add_argument(
+        '--backend',
+        choices=list(STORAGE_BACKENDS),
+        default='lfs',
+        help='Storage backend: git (plain), lfs (file-level dedup), xet (block-level dedup)',
+    )
+    setup_storage.add_argument('--repo', default='.')
+    setup_storage.set_defaults(func=cmd_setup_storage)
 
     return parser
 
