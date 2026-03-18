@@ -49,13 +49,25 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
 
   const consumed = new Set<number>();
 
-  const importRe = /^(import\s+.+?from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"])\s*;?\s*$/;
-  const functionDeclRe = /^(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*[(<]/;
-  const arrowFnRe = /^(?:export\s+)?(?:const|let)\s+(\w+)\s*=\s*(?:async\s+)?(?:\([^)]*\)|[^=]+)\s*=>/;
-  const classDeclRe = /^(?:export\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+\w+)?(?:\s+implements\s+[\w,\s]+)?\s*\{?/;
-  const interfaceDeclRe = /^(?:export\s+)?interface\s+(\w+)\s*(?:extends\s+[\w,\s]+)?\s*\{?/;
-  const varDeclRe = /^(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::\s*[\w<>\[\]|&,\s]+)?\s*=/;
-  const methodRe = /^\s{2,}(?:(?:public|private|protected|static|async|readonly)\s+)*(\w+)\s*[(<][^=]*\)\s*(?::\s*[\w<>\[\]|&,\s]+)?\s*\{/;
+  // Multi-line import: starts with `import` and ends with `;` possibly spanning lines
+  const importStartRe = /^(?:export\s+)?(?:import\s+)/;
+  const singleImportRe = /^(?:export\s+)?(?:import\s+.+?from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"])\s*;?\s*$/;
+
+  function isMultiLineImportStart(trimmed: string): boolean {
+    return (
+      importStartRe.test(trimmed) &&
+      !singleImportRe.test(trimmed) &&
+      trimmed.includes('{') &&
+      !trimmed.includes('}')
+    );
+  }
+  const functionDeclRe = /^(?:export\s+)?(?:default\s+)?(?:async\s+)?function\s*(\w+)?\s*[(<]/;
+  const arrowFnRe = /^(?:export\s+)?(?:const|let)\s+(\w+)\s*(?::[^=]*)?\s*=\s*(?:async\s+)?(?:\([^)]*\)|[^=]+)\s*=>/;
+  const classDeclRe = /^(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+(\w+)(?:\s+extends\s+[\w<>, ]+)?(?:\s+implements\s+[\w<>,\s]+)?\s*\{?/;
+  const interfaceDeclRe = /^(?:export\s+)?interface\s+(\w+)(?:\s*<[^>]*>)?(?:\s+extends\s+[\w<>,\s]+)?\s*\{?/;
+  const typeAliasDeclRe = /^(?:export\s+)?type\s+(\w+)(?:\s*<[^>]*>)?\s*=/;
+  const varDeclRe = /^(?:export\s+)?(?:const|let|var)\s+(\w+)\s*(?::\s*[\w<>[\]|&,\s]+)?\s*=/;
+  const methodRe = /^\s{2,}(?:(?:public|private|protected|static|async|readonly|override|abstract)\s+)*(\w+)\s*(?:<[^>]*>)?\s*[(<][^=]*\)\s*(?::\s*[\w<>[\]|&,\s]+)?\s*\{/;
 
   let i = 0;
   while (i < lines.length) {
@@ -68,8 +80,33 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
       continue;
     }
 
-    // Import
-    if (importRe.test(trimmed)) {
+    // Multi-line or single-line import
+    if (isMultiLineImportStart(trimmed)) {
+      // Multi-line import: scan until we find the closing `}`
+      let endI = i;
+      while (endI < lines.length && !lines[endI].includes('}')) endI++;
+      // Keep going until we find the `;`
+      while (endI < lines.length && !lines[endI].includes(';')) endI++;
+      const chunkContent = lines.slice(i, endI + 1).join('\n');
+      const name = `import_${i}`;
+      for (let j = i; j <= endI; j++) consumed.add(j);
+      chunks.push({
+        id: makeId(filePath, name, ChunkType.Import),
+        name,
+        type: ChunkType.Import,
+        filePath,
+        startLine: i + 1,
+        endLine: endI + 1,
+        content: chunkContent,
+        contentHash: makeContentHash(chunkContent),
+        metadata: {},
+      });
+      i = endI + 1;
+      continue;
+    }
+
+    // Single-line import
+    if (singleImportRe.test(trimmed)) {
       const chunkContent = line;
       const name = `import_${i}`;
       chunks.push({
@@ -85,6 +122,30 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
       });
       consumed.add(i);
       i++;
+      continue;
+    }
+
+    // Type alias
+    const typeAliasMatch = trimmed.match(typeAliasDeclRe);
+    if (typeAliasMatch) {
+      const name = typeAliasMatch[1];
+      let endI = i;
+      // Type aliases end with `;`
+      while (endI < lines.length - 1 && !lines[endI].includes(';')) endI++;
+      const chunkContent = lines.slice(i, endI + 1).join('\n');
+      for (let j = i; j <= endI; j++) consumed.add(j);
+      chunks.push({
+        id: makeId(filePath, name, ChunkType.Variable),
+        name,
+        type: ChunkType.Variable,
+        filePath,
+        startLine: i + 1,
+        endLine: endI + 1,
+        content: chunkContent,
+        contentHash: makeContentHash(chunkContent),
+        metadata: { isTypeAlias: true },
+      });
+      i = endI + 1;
       continue;
     }
 
@@ -112,7 +173,7 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
     // Class
     const classMatch = trimmed.match(classDeclRe);
     if (classMatch) {
-      const name = classMatch[1];
+      const name = classMatch[1] ?? `AnonymousClass_${i}`;
       const { endLineIndex, content: chunkContent } = extractBracedBody(lines, i);
       for (let j = i; j <= endLineIndex; j++) consumed.add(j);
 
@@ -156,10 +217,10 @@ function parseJsTs(content: string, filePath: string): SemanticChunk[] {
       continue;
     }
 
-    // Function declaration
+    // Function declaration (including export default function)
     const funcMatch = trimmed.match(functionDeclRe);
     if (funcMatch) {
-      const name = funcMatch[1];
+      const name = funcMatch[1] ?? `default_${i}`;
       const { endLineIndex, content: chunkContent } = extractBracedBody(lines, i);
       for (let j = i; j <= endLineIndex; j++) consumed.add(j);
       chunks.push({
@@ -251,7 +312,7 @@ function parsePython(content: string, filePath: string): SemanticChunk[] {
   const lines = content.split('\n');
 
   const importRe = /^(?:import\s+\S+|from\s+\S+\s+import\s+.+)/;
-  const defRe = /^def\s+(\w+)\s*\(/;
+  const defRe = /^(?:async\s+)?def\s+(\w+)\s*\(/;
   const classRe = /^class\s+(\w+)(?:\s*\([^)]*\))?\s*:/;
 
   function extractIndentedBlock(startIdx: number): { endIdx: number; content: string } {

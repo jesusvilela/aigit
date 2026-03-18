@@ -74,4 +74,60 @@ describe('Merge Engine', () => {
     expect(result.status).toBe(MergeStatus.Conflict);
     expect(result.conflicts).toHaveLength(1);
   });
+
+  test('deleted in both → do not include in merged', () => {
+    const base = new ChunkGraph([makeChunk('a', 'h1'), makeChunk('b', 'h2')]);
+    const ours = new ChunkGraph([makeChunk('b', 'h2')]);
+    const theirs = new ChunkGraph([makeChunk('b', 'h2')]);
+    const result = merge(base, ours, theirs);
+    expect(result.status).toBe(MergeStatus.Success);
+    expect(result.merged.hasChunk('a')).toBe(false);
+    expect(result.merged.hasChunk('b')).toBe(true);
+  });
+
+  test('unchanged in all three → keep base', () => {
+    const base = new ChunkGraph([makeChunk('a', 'h1')]);
+    const ours = new ChunkGraph([makeChunk('a', 'h1')]);
+    const theirs = new ChunkGraph([makeChunk('a', 'h1')]);
+    const result = merge(base, ours, theirs);
+    expect(result.status).toBe(MergeStatus.Success);
+    expect(result.merged.getChunk('a')?.contentHash).toBe('h1');
+  });
+
+  test('chunk added in both with same content → no conflict', () => {
+    const base = new ChunkGraph([]);
+    const ours = new ChunkGraph([makeChunk('new', 'h1', 'same')]);
+    const theirs = new ChunkGraph([makeChunk('new', 'h1', 'same')]);
+    const result = merge(base, ours, theirs);
+    expect(result.status).toBe(MergeStatus.Success);
+    expect(result.merged.hasChunk('new')).toBe(true);
+  });
+
+  test('chunk added in both with different content → conflict', () => {
+    const base = new ChunkGraph([]);
+    const ours = new ChunkGraph([makeChunk('new', 'h1', 'ours')]);
+    const theirs = new ChunkGraph([makeChunk('new', 'h2', 'theirs')]);
+    const result = merge(base, ours, theirs);
+    expect(result.status).toBe(MergeStatus.Conflict);
+    expect(result.conflicts[0].chunkId).toBe('new');
+  });
+
+  test('conflict message is descriptive', () => {
+    const base = new ChunkGraph([makeChunk('a', 'h1')]);
+    const ours = new ChunkGraph([makeChunk('a', 'h2', 'ours content')]);
+    const theirs = new ChunkGraph([makeChunk('a', 'h3', 'theirs content')]);
+    const result = merge(base, ours, theirs);
+    expect(result.conflicts[0].message).toBeTruthy();
+    expect(result.conflicts[0].message.length).toBeGreaterThan(0);
+  });
+
+  test('merged size equals expected chunk count', () => {
+    const base = new ChunkGraph([makeChunk('a', 'h1'), makeChunk('b', 'h2')]);
+    const ours = new ChunkGraph([makeChunk('a', 'h1'), makeChunk('b', 'h2'), makeChunk('c', 'h3')]);
+    const theirs = new ChunkGraph([makeChunk('a', 'h1'), makeChunk('b', 'h4')]); // b modified in theirs
+    const result = merge(base, ours, theirs);
+    expect(result.status).toBe(MergeStatus.Success);
+    // a: unchanged, b: take theirs, c: added in ours
+    expect(result.merged.size).toBe(3);
+  });
 });

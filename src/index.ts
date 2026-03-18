@@ -8,4 +8,14 @@ export { merge } from './merge/engine';
 export { AgentIdentity, ProvenanceRecord, ProvenanceStore } from './provenance/types';
 export { ProvenanceTracker } from './provenance/tracker';
 export { JsonProvenanceStore } from './provenance/store';
-export { GitAdapter } from './git/adapter';
+export { GitAdapter, LogEntry } from './git/adapter';
+export { AigitConfig, readConfig, writeConfig, initConfig } from './config';
+export { Snapshot } from './snapshot/types';
+export { SnapshotStore } from './snapshot/store';
+export {
+  AigitError,
+  ParseError,
+  GraphCycleError,
+  MergeConflictError,
+  ConfigError,
+} from './errors';
