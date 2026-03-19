@@ -4,7 +4,7 @@
     "chunk_type": "key",
     "confidence": "high",
     "content_hash": "2ed6737f3c7e70dd49a139596feb21beaa1d0c1e3d400070256d8167e6210ca7",
-    "end_line": 38,
+    "end_line": 59,
     "path": ".github/workflows/ci.yml",
     "semantic_id": "sc_1cd540ebcaa8642f",
     "start_line": 1
@@ -13,8 +13,8 @@
     "anchor": "jobs",
     "chunk_type": "key",
     "confidence": "high",
-    "content_hash": "e1a4d92d5552758b7718ee1926c47c12dd89d51a7b9b7b09c9036a9d50c94cd1",
-    "end_line": 38,
+    "content_hash": "5749def3e1c0c7869198fa0e6a15e88826a63bc1dd299783da9be55f84140024",
+    "end_line": 59,
     "path": ".github/workflows/ci.yml",
     "semantic_id": "sc_79804a054a1fc53f",
     "start_line": 1
@@ -24,7 +24,7 @@
     "chunk_type": "key",
     "confidence": "high",
     "content_hash": "0f1f121bc5cd3828006e76f34c1be33c6c2dbf597f55d5ae64b14f0255a04a23",
-    "end_line": 38,
+    "end_line": 59,
     "path": ".github/workflows/ci.yml",
     "semantic_id": "sc_ed3ff760861cbef0",
     "start_line": 1
@@ -77,6 +77,16 @@
     "end_line": 201,
     "path": "LICENSE",
     "semantic_id": "sc_840d0a1ddb5bc5d6",
+    "start_line": 1
+  },
+  "Makefile::file::file": {
+    "anchor": "file",
+    "chunk_type": "file",
+    "confidence": "low",
+    "content_hash": "37b83f878e850143b2cc6dc5233932bee2fde69eb3facfbe85fbe4e8bd687059",
+    "end_line": 10,
+    "path": "Makefile",
+    "semantic_id": "sc_178b03074824d8eb",
     "start_line": 1
   },
   "README.md::section::AIGit": {
