@@ -5,6 +5,7 @@ import ast
 import dataclasses
 import difflib
 import hashlib
+import importlib.util
 import json
 import os
 import re
@@ -2154,11 +2155,19 @@ def cmd_improve(args: argparse.Namespace) -> int:
 
     # Step 2: run tests
     print('\n[2/2] Running test suite...')
+    if importlib.util.find_spec('pytest') is None:
+        print('\nIMPROVE LOOP: pytest is not installed in the active Python environment')
+        print('install development dependencies with `python -m pip install -e ".[dev]"` and rerun `aigit improve`')
+        return 2
     pytest_cmd = [sys.executable, '-m', 'pytest', '--tb=short', '-q']
     if args.test_path:
         pytest_cmd.append(args.test_path)
     result = subprocess.run(pytest_cmd, cwd=str(repo_root))
-    if result.returncode != 0:
+    tests_status = 'passed'
+    if result.returncode == 5:
+        tests_status = 'no tests collected'
+        print('\nIMPROVE LOOP: pytest reported no tests collected; continuing because the validation run did not fail')
+    elif result.returncode != 0:
         print('\nIMPROVE LOOP: tests failed — fix failing tests before committing')
         return result.returncode
 
@@ -2170,7 +2179,7 @@ def cmd_improve(args: argparse.Namespace) -> int:
 
     print(f'\n=== IMPROVE LOOP PASSED ===')
     print(f'  semantic chunks: {chunk_count}')
-    print(f'  tests:           passed')
+    print(f'  tests:           {tests_status}')
     print(f'  next step:       commit with `aigit commit` or `git commit`')
     return 0
 

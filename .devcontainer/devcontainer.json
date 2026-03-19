@@ -1,0 +1,7 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"remoteEnv": {
+		"UV_CACHE_DIR": "${containerWorkspaceFolder}/.aigit/uv-cache"
+	},
+	"postCreateCommand": "bash scripts/bootstrap_uv.sh --sync-only"
+}

@@ -36,6 +36,7 @@ AIGit keeps the Git object model untouched and layers a deterministic semantic g
 | If you need to... | Start here |
 | --- | --- |
 | rebuild semantic state | `aigit chunk` |
+| run a local improvement cycle | `aigit improve` |
 | review intent between refs | `aigit semantic-diff --base <ref> --head <ref>` |
 | inspect merge risk | `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` |
 | record AI authorship context | `aigit record-provenance ...` |
@@ -64,9 +65,20 @@ AIGit keeps the Git object model untouched and layers a deterministic semantic g
 
 ## Fast Start
 
+Preferred workflow with `uv`:
+
+```bash
+./scripts/bootstrap_uv.sh
+uv run aigit up
+uv run aigit improve
+```
+
+Pip-compatible fallback:
+
 ```bash
 python -m pip install -e ".[dev]"
 aigit up
+aigit improve
 aigit chunk
 aigit semantic-diff --base main --head HEAD --output semantic_diff.md
 aigit semantic-merge --base main --ours HEAD --theirs feature --output semantic_merge.json
@@ -83,10 +95,40 @@ aigit record-provenance --agent codex --model gpt-5.2-codex --prompt "chunk upda
 | `aigit record-provenance --agent <name> --model <model> --prompt <text>` | append provenance metadata for `HEAD` |
 | `aigit commit -m <msg> --agent ... --model ... --prompt ...` | create a commit with an AI provenance trailer |
 | `aigit up` | recover DeerFlow and ensure the local chunk API and admin UI are running |
+| `aigit improve [--test-path <path>]` | rebuild semantic artifacts and run the local test cycle with a concise summary |
+| `./scripts/bootstrap_uv.sh [--up]` | install `uv` if needed, sync the project with dev dependencies, and optionally launch the stack |
 | `aigit serve-api` | expose `/healthz` and `/chunks` over HTTP |
 | `aigit deerflow-workspace-path --thread-id <id>` | show host and sandbox workspace mappings |
 | `aigit deerflow-import-repo --thread-id <id>` | stage the repo into DeerFlow's thread workspace |
 | `aigit deerflow-export-repo --thread-id <id>` | pull a staged thread workspace back into the repo |
+
+## Uv Workflow
+
+`uv` is the preferred local environment manager for AIGit in Codespaces and other containerized environments. The project keeps standard `pyproject.toml` packaging, so `pip` still works, but `uv` gives faster syncs and keeps `aigit up` and `aigit improve` on the same interpreter and dependency graph.
+
+Bootstrap the repo with one command:
+
+```bash
+./scripts/bootstrap_uv.sh
+```
+
+Bootstrap and launch the stack in one command:
+
+```bash
+./scripts/bootstrap_uv.sh --up
+```
+
+Equivalent manual flow:
+
+```bash
+uv sync --extra dev
+uv run aigit up
+uv run aigit improve
+```
+
+The checked-in `uv.lock` pins the resolved dependency graph for reproducible Codespaces and local setup.
+
+The bootstrap script also defaults `UV_CACHE_DIR` to `.aigit/uv-cache` so `uv` stays writable inside restricted Codespaces containers.
 
 ## DeerFlow Operator Loop
 
@@ -97,7 +139,7 @@ cp .deerflow/.env.example .deerflow/.env
 aigit up
 ```
 
-`aigit up` uses the current Python interpreter to launch local services in the background, which fits containerized environments such as Codespaces. If you prefer uv-managed environments, run it as `uv run aigit up` so the same command uses your uv interpreter and dependency graph.
+`aigit up` uses the current Python interpreter to launch local services in the background, which fits containerized environments such as Codespaces. When you start it with `uv run aigit up`, the background services stay on that same `uv`-managed interpreter and dependency graph.
 
 ### Runtime contract
 
@@ -149,6 +191,14 @@ Two GitHub Actions workflows ship in `.github/workflows/`:
 - `semantic-maintenance.yml` runs on demand or weekly, executes `./scripts/ci_refresh_semantics.sh`, refreshes `.semantic/**`, and opens a pull request instead of pushing directly to `main`
 
 In a clean checkout, local verification matches CI:
+
+```bash
+uv sync --extra dev
+./scripts/ci_refresh_semantics.sh
+git diff --exit-code -- .semantic
+```
+
+If you are not using `uv`, the equivalent fallback remains:
 
 ```bash
 python -m pip install -e ".[dev]"

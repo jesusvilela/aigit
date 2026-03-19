@@ -15,12 +15,15 @@ pids
 __pycache__/
 *.pyc
 .pytest_cache/
+.venv/
 aigit.egg-info/
 .coverage
 htmlcov/
 
 # Local tooling caches
 .cache/
+.aigit/uv-cache/
+.aigit/runtime/
 
 # AIGit local cache
 .semantic/cache/
@@ -30,4 +33,5 @@ htmlcov/
 .deerflow/.env
 
 # Local editor/devcontainer config
-.devcontainer/
+.devcontainer/*
+!.devcontainer/devcontainer.json

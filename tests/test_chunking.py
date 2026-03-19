@@ -1,6 +1,6 @@
-from pathlib import Path
-
 import argparse
+from pathlib import Path
+from types import SimpleNamespace
 
 from aigit.core import build_manifest, write_manifest, parse_json, parse_yaml, parse_typescript
 
@@ -136,11 +136,43 @@ def test_cmd_improve_passes(tmp_path: Path) -> None:
 
     (tmp_path / 'sample.py').write_text('def add(a, b):\n    return a + b\n', encoding='utf-8')
     ns = argparse.Namespace(repo=str(tmp_path), test_path='')
-    # Improve runs pytest; in test environments there is no test/ dir in tmp_path
-    # so pytest exits 0 (no tests collected is still exit code 5 — we accept nonzero
-    # from pytest itself but we should not crash).
     rc = cmd_improve(ns)
-    assert rc in (0, 5)  # 0 = passed, 5 = no tests collected
+    assert rc == 0
+
+
+def test_cmd_improve_treats_no_tests_collected_as_success(tmp_path: Path, monkeypatch, capsys) -> None:
+    from aigit.core import cmd_improve
+
+    (tmp_path / 'sample.py').write_text('def add(a, b):\n    return a + b\n', encoding='utf-8')
+
+    def fake_run(*args, **kwargs):
+        return SimpleNamespace(returncode=5)
+
+    monkeypatch.setattr('aigit.core.subprocess.run', fake_run)
+    ns = argparse.Namespace(repo=str(tmp_path), test_path='')
+
+    rc = cmd_improve(ns)
+
+    output = capsys.readouterr().out
+    assert rc == 0
+    assert 'no tests collected' in output
+    assert '=== IMPROVE LOOP PASSED ===' in output
+
+
+def test_cmd_improve_reports_missing_pytest(tmp_path: Path, monkeypatch, capsys) -> None:
+    from aigit.core import cmd_improve
+
+    (tmp_path / 'sample.py').write_text('def add(a, b):\n    return a + b\n', encoding='utf-8')
+
+    monkeypatch.setattr('aigit.core.importlib.util.find_spec', lambda name: None if name == 'pytest' else object())
+    ns = argparse.Namespace(repo=str(tmp_path), test_path='')
+
+    rc = cmd_improve(ns)
+
+    output = capsys.readouterr().out
+    assert rc == 2
+    assert 'pytest is not installed' in output
+    assert 'python -m pip install -e ".[dev]"' in output
 
 
 # ---------------------------------------------------------------------------
