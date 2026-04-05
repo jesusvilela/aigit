@@ -10,6 +10,7 @@ import json
 import os
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -72,6 +73,16 @@ DEERFLOW_SYNC_SKIP_NAMES = {
     'node_modules',
 }
 
+SCOUT_SKIP_DIRS = {
+    '.git',
+    '.venv',
+    '.mypy_cache',
+    '.pytest_cache',
+    '.ruff_cache',
+    '__pycache__',
+    'node_modules',
+}
+
 
 @dataclasses.dataclass(frozen=True)
 class EpicSpec:
@@ -105,6 +116,18 @@ class DeerFlowRepoSyncReport:
     files_copied: int
     symlinks_copied: int
     metadata_file: Path | None = None
+
+
+@dataclasses.dataclass(frozen=True)
+class RepoScoutSummary:
+    repo_root: Path
+    file_count: int
+    python_file_count: int
+    markdown_file_count: int
+    test_file_count: int
+    total_bytes: int
+    largest_files: list[tuple[str, int]]
+    recommended_tool: str
 
 
 def deerflow_live_repo_mount_path(repo_root: Path | None = None) -> str:
@@ -2184,6 +2207,154 @@ def cmd_improve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _iter_repo_files(repo_root: Path) -> list[Path]:
+    files: list[Path] = []
+    for root, dirs, filenames in os.walk(repo_root):
+        dirs[:] = [d for d in dirs if d not in SCOUT_SKIP_DIRS]
+        root_path = Path(root)
+        for filename in filenames:
+            path = root_path / filename
+            rel = path.relative_to(repo_root)
+            if any(part in SCOUT_SKIP_DIRS for part in rel.parts):
+                continue
+            files.append(path)
+    return files
+
+
+def scout_repo(repo_root: Path) -> RepoScoutSummary:
+    files = _iter_repo_files(repo_root)
+    python_file_count = 0
+    markdown_file_count = 0
+    test_file_count = 0
+    total_bytes = 0
+    sized_files: list[tuple[str, int]] = []
+    for path in files:
+        rel = path.relative_to(repo_root).as_posix()
+        suffix = path.suffix.lower()
+        if suffix == '.py':
+            python_file_count += 1
+        if suffix == '.md':
+            markdown_file_count += 1
+        if rel.startswith('tests/') and suffix == '.py':
+            test_file_count += 1
+        size = path.stat().st_size
+        total_bytes += size
+        sized_files.append((rel, size))
+    largest_files = sorted(sized_files, key=lambda item: item[1], reverse=True)[:5]
+    if test_file_count > 0:
+        recommended_tool = 'devx-quickcheck'
+    else:
+        recommended_tool = 'repo-health-baseline'
+    return RepoScoutSummary(
+        repo_root=repo_root,
+        file_count=len(files),
+        python_file_count=python_file_count,
+        markdown_file_count=markdown_file_count,
+        test_file_count=test_file_count,
+        total_bytes=total_bytes,
+        largest_files=largest_files,
+        recommended_tool=recommended_tool,
+    )
+
+
+def _render_scout_report(summary: RepoScoutSummary) -> str:
+    now = datetime.now(timezone.utc).isoformat()
+    lines = [
+        '# Subagent Scout Report',
+        '',
+        f'- generated_at_utc: `{now}`',
+        f'- repo_root: `{summary.repo_root.as_posix()}`',
+        '',
+        '## Snapshot',
+        '',
+        f'- files_scanned: **{summary.file_count}**',
+        f'- python_files: **{summary.python_file_count}**',
+        f'- markdown_files: **{summary.markdown_file_count}**',
+        f'- test_files: **{summary.test_file_count}**',
+        f'- total_size_bytes: **{summary.total_bytes}**',
+        '',
+        '## Largest Files',
+        '',
+    ]
+    if summary.largest_files:
+        for path, size in summary.largest_files:
+            lines.append(f'- `{path}` ({size} bytes)')
+    else:
+        lines.append('- no files discovered')
+    lines.extend(
+        [
+            '',
+            '## Diagnosis',
+            '',
+            '- The repository is suitable for a local verification helper that standardizes quick health checks.',
+            '- Current recommendation is based on the discovered testing surface and file mix.',
+            '',
+            '## Tool Bootstrap Recommendation',
+            '',
+            f'- recommended_tool: **{summary.recommended_tool}**',
+            '- proposed_tool_location: `scripts/devx_quickcheck.sh`',
+            '- proposed_tool_goal: run semantic rebuild, optional lint, and tests in one command.',
+            '',
+        ]
+    )
+    return '\n'.join(lines) + '\n'
+
+
+def _bootstrap_devx_quickcheck(repo_root: Path, script_path: Path) -> None:
+    relative_repo = script_path.relative_to(repo_root).as_posix()
+    script = (
+        '#!/usr/bin/env bash\n'
+        'set -euo pipefail\n\n'
+        'echo "[devx-quickcheck] starting"\n'
+        'python -m aigit.cli chunk --repo .\n\n'
+        'if command -v ruff >/dev/null 2>&1; then\n'
+        '  echo "[devx-quickcheck] running ruff check"\n'
+        '  ruff check .\n'
+        'else\n'
+        '  echo "[devx-quickcheck] ruff not found, skipping lint"\n'
+        'fi\n\n'
+        'if python - <<\'PY\'\n'
+        'import importlib.util\n'
+        'raise SystemExit(0 if importlib.util.find_spec("pytest") else 1)\n'
+        'PY\n'
+        'then\n'
+        '  echo "[devx-quickcheck] running pytest"\n'
+        '  python -m pytest --tb=short -q "${1:-tests}"\n'
+        'else\n'
+        '  echo "[devx-quickcheck] pytest missing, skipping tests"\n'
+        'fi\n\n'
+        'echo "[devx-quickcheck] complete"\n'
+    )
+    script_path.parent.mkdir(parents=True, exist_ok=True)
+    script_path.write_text(script, encoding='utf-8')
+    mode = script_path.stat().st_mode
+    script_path.chmod(mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    print(f'bootstrapped tool: {relative_repo}')
+
+
+def cmd_subagent_scout(args: argparse.Namespace) -> int:
+    repo_root = Path(args.repo).resolve()
+    output_file = Path(args.output)
+    if not output_file.is_absolute():
+        output_file = repo_root / output_file
+
+    print('=== Subagent Scout ===')
+    print(f'scanning repository: {repo_root.as_posix()}')
+    summary = scout_repo(repo_root)
+    report = _render_scout_report(summary)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    output_file.write_text(report, encoding='utf-8')
+    print(f'wrote scout report: {output_file.relative_to(repo_root).as_posix()}')
+
+    if args.bootstrap_tool:
+        script_path = repo_root / 'scripts' / 'devx_quickcheck.sh'
+        if script_path.exists() and not args.force:
+            print('tool bootstrap skipped: scripts/devx_quickcheck.sh already exists (use --force to overwrite)')
+        else:
+            _bootstrap_devx_quickcheck(repo_root, script_path)
+    return 0
+
+
 # ---------------------------------------------------------------------------
 # Storage backend support (Git LFS / Xet)
 # ---------------------------------------------------------------------------
@@ -2435,6 +2606,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     setup_storage.add_argument('--repo', default='.')
     setup_storage.set_defaults(func=cmd_setup_storage)
+
+    scout = sub.add_parser(
+        'subagent-scout',
+        help='Explore the repository and bootstrap a useful local dev helper tool',
+    )
+    scout.add_argument('--repo', default='.')
+    scout.add_argument('--output', default='.aigit/runtime/subagent_scout_report.md')
+    scout.add_argument('--bootstrap-tool', action='store_true')
+    scout.add_argument('--force', action='store_true', help='Overwrite an existing bootstrapped tool')
+    scout.set_defaults(func=cmd_subagent_scout)
 
     return parser
 
