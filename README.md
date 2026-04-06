@@ -96,6 +96,7 @@ aigit record-provenance --agent codex --model gpt-5.2-codex --prompt "chunk upda
 | `aigit commit -m <msg> --agent ... --model ... --prompt ...` | create a commit with an AI provenance trailer |
 | `aigit up` | recover DeerFlow and ensure the local chunk API and admin UI are running |
 | `aigit improve [--test-path <path>]` | rebuild semantic artifacts and run the local test cycle with a concise summary |
+| `aigit subagent-scout [--bootstrap-tool]` | scan the repo, emit markdown + JSON diagnostics, and optionally scaffold `scripts/devx_quickcheck.sh` |
 | `./scripts/bootstrap_uv.sh [--up]` | install `uv` if needed, sync the project with dev dependencies, and optionally launch the stack |
 | `aigit serve-api` | expose `/healthz` and `/chunks` over HTTP |
 | `aigit deerflow-workspace-path --thread-id <id>` | show host and sandbox workspace mappings |
