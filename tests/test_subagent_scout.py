@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from aigit import core
@@ -17,6 +18,7 @@ def test_scout_repo_summarizes_workspace(tmp_path: Path) -> None:
     assert summary.markdown_file_count == 1
     assert summary.test_file_count == 1
     assert summary.recommended_tool == 'devx-quickcheck'
+    assert 'aigit improve --repo .' in summary.recommended_interfaces
     assert summary.largest_files
 
 
@@ -31,6 +33,7 @@ def test_cmd_subagent_scout_writes_report_and_bootstraps_tool(tmp_path: Path, mo
         {
             'repo': '.',
             'output': '.aigit/runtime/subagent_scout_report.md',
+            'json_output': '.aigit/runtime/subagent_scout_report.json',
             'bootstrap_tool': True,
             'force': False,
         },
@@ -48,3 +51,16 @@ def test_cmd_subagent_scout_writes_report_and_bootstraps_tool(tmp_path: Path, mo
     tool_script = Path('scripts/devx_quickcheck.sh')
     assert tool_script.exists()
     assert 'python -m aigit.cli chunk --repo .' in tool_script.read_text(encoding='utf-8')
+    assert 'AIGit Developer Interfaces' in report_text
+
+    json_report = Path('.aigit/runtime/subagent_scout_report.json')
+    assert json_report.exists()
+    payload = json.loads(json_report.read_text(encoding='utf-8'))
+    assert payload['recommended_tool'] == 'repo-health-baseline'
+    assert 'recommended_interfaces' in payload
+
+    tool_script = Path('scripts/devx_quickcheck.sh')
+    assert tool_script.exists()
+    script_text = tool_script.read_text(encoding='utf-8')
+    assert 'AIGIT_BIN="aigit"' in script_text
+    assert '${AIGIT_BIN} improve --repo .' in script_text

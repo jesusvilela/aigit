@@ -14,12 +14,6 @@ import stat
 import subprocess
 import sys
 import time
-try:
-    import yaml as _yaml
-    _YAML_AVAILABLE = True
-except ImportError:  # pragma: no cover
-    _yaml = None  # type: ignore[assignment]
-    _YAML_AVAILABLE = False
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -128,6 +122,7 @@ class RepoScoutSummary:
     total_bytes: int
     largest_files: list[tuple[str, int]]
     recommended_tool: str
+    recommended_interfaces: list[str]
 
 
 def deerflow_live_repo_mount_path(repo_root: Path | None = None) -> str:
@@ -282,32 +277,14 @@ def parse_json(path: str, text: str) -> list[Chunk]:
 
 
 def parse_yaml(path: str, text: str) -> list[Chunk]:
-    """Chunk a YAML file by top-level keys using PyYAML when available."""
+    """Chunk a YAML file by top-level keys via deterministic line scanning.
+
+    We intentionally avoid dependency-specific parsing here so semantic output
+    remains stable across environments where optional YAML libraries may or may
+    not be installed.
+    """
     lines = text.splitlines()
-    line_count = len(lines)
-    if _YAML_AVAILABLE:
-        try:
-            data = _yaml.safe_load(text)
-        except Exception:
-            return parse_text(path, text)
-        if isinstance(data, dict) and data:
-            chunks: list[Chunk] = []
-            for key in data:
-                anchor = str(key)
-                chunks.append(
-                    Chunk(
-                        semantic_id=_chunk_id(path, anchor, 'key'),
-                        path=path,
-                        chunk_type='key',
-                        anchor=anchor,
-                        content_hash=_content_hash(json.dumps(data[key], sort_keys=True, default=str)),
-                        start_line=1,
-                        end_line=line_count,
-                        confidence='high',
-                    )
-                )
-            return chunks
-    # Fallback: top-level keys via line scanning (no-indent lines with a colon)
+    # Top-level keys via line scanning (no-indent lines with a colon).
     chunks_fb: list[Chunk] = []
     for i, line in enumerate(lines, 1):
         if line and not line[0].isspace() and ':' in line and not line.lstrip().startswith('#'):
@@ -2245,6 +2222,14 @@ def scout_repo(repo_root: Path) -> RepoScoutSummary:
         recommended_tool = 'devx-quickcheck'
     else:
         recommended_tool = 'repo-health-baseline'
+    recommended_interfaces = [
+        'aigit improve --repo .',
+        'aigit semantic-diff --base main --head HEAD --output semantic_diff.md',
+        'aigit semantic-merge --base main --ours HEAD --theirs <branch> --output semantic_merge.json',
+        'aigit serve-api --host 127.0.0.1 --port 8765',
+    ]
+    if python_file_count > 0:
+        recommended_interfaces.insert(1, 'aigit chunk --repo .')
     return RepoScoutSummary(
         repo_root=repo_root,
         file_count=len(files),
@@ -2254,6 +2239,7 @@ def scout_repo(repo_root: Path) -> RepoScoutSummary:
         total_bytes=total_bytes,
         largest_files=largest_files,
         recommended_tool=recommended_tool,
+        recommended_interfaces=recommended_interfaces,
     )
 
 
@@ -2294,10 +2280,41 @@ def _render_scout_report(summary: RepoScoutSummary) -> str:
             f'- recommended_tool: **{summary.recommended_tool}**',
             '- proposed_tool_location: `scripts/devx_quickcheck.sh`',
             '- proposed_tool_goal: run semantic rebuild, optional lint, and tests in one command.',
+            '- proposed_tool_goal: run AIGit-first quality loops through one command.',
+            '',
+            '## AIGit Developer Interfaces',
+            '',
+            '',
+        ]
+    )
+    for interface in summary.recommended_interfaces:
+        lines.append(f'- `{interface}`')
+    lines.extend(
+        [
+            '',
+            '## AI/ML Integration Hooks',
+            '',
+            '- Local semantic API endpoint: `GET /healthz` and `GET /chunks` via `aigit serve-api`.',
+            '- Machine-readable scout output: pass `--json-output <path>` for downstream agent/tool ingestion.',
             '',
         ]
     )
     return '\n'.join(lines) + '\n'
+
+
+def _scout_summary_json(summary: RepoScoutSummary) -> dict[str, Any]:
+    return {
+        'repo_root': summary.repo_root.as_posix(),
+        'files_scanned': summary.file_count,
+        'python_files': summary.python_file_count,
+        'markdown_files': summary.markdown_file_count,
+        'test_files': summary.test_file_count,
+        'total_size_bytes': summary.total_bytes,
+        'largest_files': [{'path': path, 'size_bytes': size} for path, size in summary.largest_files],
+        'recommended_tool': summary.recommended_tool,
+        'recommended_interfaces': summary.recommended_interfaces,
+        'generated_at_utc': datetime.now(timezone.utc).isoformat(),
+    }
 
 
 def _bootstrap_devx_quickcheck(repo_root: Path, script_path: Path) -> None:
@@ -2307,6 +2324,18 @@ def _bootstrap_devx_quickcheck(repo_root: Path, script_path: Path) -> None:
         'set -euo pipefail\n\n'
         'echo "[devx-quickcheck] starting"\n'
         'python -m aigit.cli chunk --repo .\n\n'
+        'if command -v aigit >/dev/null 2>&1; then\n'
+        '  AIGIT_BIN="aigit"\n'
+        'else\n'
+        '  AIGIT_BIN="python -m aigit.cli"\n'
+        'fi\n\n'
+        'echo "[devx-quickcheck] refreshing semantic state"\n'
+        '${AIGIT_BIN} chunk --repo .\n\n'
+        'if ${AIGIT_BIN} improve --repo . "${1:-}" ; then\n'
+        '  echo "[devx-quickcheck] aigit improve passed"\n'
+        '  exit 0\n'
+        'fi\n\n'
+        'echo "[devx-quickcheck] fallback checks because improve failed or environment is partial"\n'
         'if command -v ruff >/dev/null 2>&1; then\n'
         '  echo "[devx-quickcheck] running ruff check"\n'
         '  ruff check .\n'
@@ -2345,6 +2374,13 @@ def cmd_subagent_scout(args: argparse.Namespace) -> int:
     output_file.parent.mkdir(parents=True, exist_ok=True)
     output_file.write_text(report, encoding='utf-8')
     print(f'wrote scout report: {output_file.relative_to(repo_root).as_posix()}')
+    if args.json_output:
+        json_output = Path(args.json_output)
+        if not json_output.is_absolute():
+            json_output = repo_root / json_output
+        json_output.parent.mkdir(parents=True, exist_ok=True)
+        json_output.write_text(json.dumps(_scout_summary_json(summary), indent=2) + '\n', encoding='utf-8')
+        print(f'wrote scout JSON: {json_output.relative_to(repo_root).as_posix()}')
 
     if args.bootstrap_tool:
         script_path = repo_root / 'scripts' / 'devx_quickcheck.sh'
@@ -2613,6 +2649,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     scout.add_argument('--repo', default='.')
     scout.add_argument('--output', default='.aigit/runtime/subagent_scout_report.md')
+    scout.add_argument('--json-output', default='.aigit/runtime/subagent_scout_report.json')
     scout.add_argument('--bootstrap-tool', action='store_true')
     scout.add_argument('--force', action='store_true', help='Overwrite an existing bootstrapped tool')
     scout.set_defaults(func=cmd_subagent_scout)
