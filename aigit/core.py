@@ -97,6 +97,7 @@ class Chunk:
     start_line: int
     end_line: int
     confidence: str
+    fingerprint: str = ''
 
     def to_dict(self) -> dict[str, Any]:
         return dataclasses.asdict(self)
@@ -148,6 +149,44 @@ def _content_hash(text: str) -> str:
     return _hash([canonicalize_text(text)])
 
 
+def _simhash(text: str) -> str:
+    """Deterministic 64-bit SimHash over word tokens, as 16 hex chars.
+
+    Uses blake2b (not Python's salted ``hash``) so the value is stable across
+    processes and interpreter versions. Enables near-match (renamed + edited)
+    lineage detection via Hamming distance between fingerprints.
+    """
+    tokens = re.findall(r'\w+', text.lower())
+    if not tokens:
+        return '0' * 16
+    bits = [0] * 64
+    for token in tokens:
+        digest = hashlib.blake2b(token.encode('utf-8'), digest_size=8).digest()
+        value = int.from_bytes(digest, 'big')
+        for i in range(64):
+            bits[i] += 1 if (value >> i) & 1 else -1
+    out = 0
+    for i in range(64):
+        if bits[i] > 0:
+            out |= (1 << i)
+    return f'{out:016x}'
+
+
+def _chunk_similarity(a: dict[str, Any], b: dict[str, Any]) -> float:
+    """Similarity in [0,1] between two chunk records: exact content first,
+    then SimHash Hamming distance as a fallback."""
+    if a.get('content_hash') and a.get('content_hash') == b.get('content_hash'):
+        return 1.0
+    fa, fb = a.get('fingerprint'), b.get('fingerprint')
+    if fa and fb:
+        try:
+            dist = bin(int(fa, 16) ^ int(fb, 16)).count('1')
+        except ValueError:
+            return 0.0
+        return 1.0 - dist / 64.0
+    return 0.0
+
+
 def parse_python(path: str, text: str) -> list[Chunk]:
     chunks: list[Chunk] = []
     try:
@@ -176,6 +215,7 @@ def parse_python(path: str, text: str) -> list[Chunk]:
                     start_line=start,
                     end_line=end,
                     confidence='high',
+                    fingerprint=_simhash(segment),
                 )
             )
     return chunks
@@ -345,6 +385,7 @@ def parse_typescript(path: str, text: str) -> list[Chunk]:
                 start_line=start_line,
                 end_line=start_line,
                 confidence='medium',
+                fingerprint=_simhash(match.group(0)),
             )
         )
     return chunks if chunks else parse_text(path, text)
@@ -528,9 +569,67 @@ def _read_manifest_from_ref(ref: str) -> dict[str, dict[str, Any]]:
     return out
 
 
-def cmd_diff(args: argparse.Namespace) -> int:
-    base = _read_manifest_from_ref(args.base)
-    head = _read_manifest_from_ref(args.head)
+def _detect_lineage(
+    removed: list[dict[str, Any]],
+    added: list[dict[str, Any]],
+    threshold: float = 0.85,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """Greedily pair removed chunks with added chunks to recover lineage.
+
+    Returns ``(edges, unmatched_removed, unmatched_added)``. A pair is matched
+    when content is identical (move/rename) or SimHash similarity clears the
+    threshold (refactor). Inputs are assumed pre-sorted for determinism.
+    """
+    edges: list[dict[str, Any]] = []
+    used_added: set[int] = set()
+    used_removed: set[int] = set()
+    for ri, r in enumerate(removed):
+        best_sim = 0.0
+        best_ai: int | None = None
+        for ai, a in enumerate(added):
+            if ai in used_added:
+                continue
+            sim = _chunk_similarity(r, a)
+            if sim > best_sim:
+                best_sim = sim
+                best_ai = ai
+        if best_ai is None or best_sim < threshold:
+            continue
+        a = added[best_ai]
+        used_added.add(best_ai)
+        used_removed.add(ri)
+        moved = r.get('path') != a.get('path')
+        renamed = r.get('anchor') != a.get('anchor')
+        if best_sim >= 0.999:
+            kind = (
+                'moved+renamed' if moved and renamed
+                else 'moved' if moved
+                else 'renamed' if renamed
+                else 'relocated'
+            )
+        else:
+            kind = 'refactored'
+        edges.append(
+            {
+                'from': r['semantic_id'],
+                'to': a['semantic_id'],
+                'kind': kind,
+                'similarity': round(best_sim, 3),
+                'from_loc': f"{r.get('path')}::{r.get('anchor')}",
+                'to_loc': f"{a.get('path')}::{a.get('anchor')}",
+            }
+        )
+    rem_removed = [r for i, r in enumerate(removed) if i not in used_removed]
+    rem_added = [a for i, a in enumerate(added) if i not in used_added]
+    return edges, rem_removed, rem_added
+
+
+def compute_semantic_diff(
+    base: dict[str, dict[str, Any]],
+    head: dict[str, dict[str, Any]],
+    lineage_threshold: float = 0.85,
+) -> dict[str, Any]:
+    """Pure semantic diff with lineage recovery (move/rename/refactor)."""
     added = [v for k, v in head.items() if k not in base]
     removed = [v for k, v in base.items() if k not in head]
     changed = [
@@ -538,6 +637,21 @@ def cmd_diff(args: argparse.Namespace) -> int:
         for k in set(base).intersection(head)
         if base[k].get('content_hash') != head[k].get('content_hash')
     ]
+    sort_key = lambda c: (c.get('path', ''), c.get('anchor', ''), c.get('semantic_id', ''))
+    added.sort(key=sort_key)
+    removed.sort(key=sort_key)
+    changed.sort(key=sort_key)
+    lineage, removed, added = _detect_lineage(removed, added, lineage_threshold)
+    return {'added': added, 'removed': removed, 'changed': changed, 'lineage': lineage}
+
+
+def cmd_diff(args: argparse.Namespace) -> int:
+    base = _read_manifest_from_ref(args.base)
+    head = _read_manifest_from_ref(args.head)
+    result = compute_semantic_diff(base, head)
+    added, removed, changed, lineage = (
+        result['added'], result['removed'], result['changed'], result['lineage'],
+    )
     report = [
         '# Semantic Diff Report',
         f'- Base: `{args.base}`',
@@ -545,6 +659,7 @@ def cmd_diff(args: argparse.Namespace) -> int:
         f'- Added: {len(added)}',
         f'- Removed: {len(removed)}',
         f'- Changed: {len(changed)}',
+        f'- Moved/Renamed/Refactored: {len(lineage)}',
         '',
     ]
     for label, items in [('Added', added), ('Removed', removed), ('Changed', changed)]:
@@ -555,8 +670,18 @@ def cmd_diff(args: argparse.Namespace) -> int:
             for item in items:
                 report.append(f"- `{item['semantic_id']}` {item['path']}::{item['anchor']}")
         report.append('')
+    report.append('## Moved / Renamed / Refactored')
+    if not lineage:
+        report.append('- None')
+    else:
+        for edge in sorted(lineage, key=lambda e: e['from_loc']):
+            report.append(
+                f"- [{edge['kind']} ~{edge['similarity']}] {edge['from_loc']} -> {edge['to_loc']}"
+            )
+    report.append('')
     Path(args.output).write_text('\n'.join(report), encoding='utf-8')
     print(f'wrote {args.output}')
+    print(f'added={len(added)} removed={len(removed)} changed={len(changed)} lineage={len(lineage)}')
     return 0
 
 
