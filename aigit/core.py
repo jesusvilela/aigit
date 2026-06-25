@@ -20,6 +20,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib import error as urllib_error
+from urllib import parse as urllib_parse
 from urllib import request as urllib_request
 
 SEMANTIC_DIR = Path('.semantic')
@@ -28,6 +29,9 @@ EDGES_FILE = SEMANTIC_DIR / 'edges.jsonl'
 INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
+# Local-only (gitignored) per-file parse cache for incremental chunking.
+CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
+CHUNK_CACHE_VERSION = '1'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 
@@ -517,21 +521,71 @@ def ensure_semantic_scaffold(root: Path | None = None) -> None:
         )
 
 
+def _load_chunk_cache(root: Path) -> dict[str, Any]:
+    path = _repo_semantic_path(root, CHUNK_CACHE_FILE)
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if isinstance(data, dict) and data.get('version') == CHUNK_CACHE_VERSION:
+        files = data.get('files', {})
+        if isinstance(files, dict):
+            return files
+    return {}
+
+
+def _save_chunk_cache(root: Path, files: dict[str, Any]) -> None:
+    path = _repo_semantic_path(root, CHUNK_CACHE_FILE)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps({'version': CHUNK_CACHE_VERSION, 'files': files}), encoding='utf-8'
+        )
+    except OSError:
+        pass  # cache is best-effort; never fail a chunk run over it
+
+
 def build_manifest(
     root: Path, errors: list[dict[str, str]] | None = None
 ) -> tuple[list[Chunk], list[dict[str, Any]]]:
+    """Build the chunk manifest, reusing cached per-file results when a file's
+    content hash is unchanged. Output is byte-identical to a full rebuild; only
+    speed differs (a single-file edit no longer re-parses the whole repo).
+    """
     ensure_semantic_scaffold(root)
     previous = load_previous_index(root)
+    cache = _load_chunk_cache(root)
+    new_cache: dict[str, Any] = {}
+    err_sink: list[dict[str, str]] = errors if errors is not None else []
     chunks: list[Chunk] = []
     edges: list[dict[str, Any]] = []
     for rel in iter_repo_files(root):
-        parsed = parse_file(root / rel, str(rel), errors)
+        rel_str = str(rel)
+        full = root / rel
+        file_hash = hashlib.sha256(full.read_bytes()).hexdigest()
+        cached = cache.get(rel_str)
+        if cached and cached.get('file_hash') == file_hash:
+            parsed = [Chunk(**record) for record in cached['chunks']]
+            entry: dict[str, Any] = {'file_hash': file_hash, 'chunks': cached['chunks']}
+            if cached.get('error'):
+                err_sink.append({'path': rel_str, 'error': cached['error']})
+                entry['error'] = cached['error']
+        else:
+            before = len(err_sink)
+            parsed = parse_file(full, rel_str, err_sink)
+            entry = {'file_hash': file_hash, 'chunks': [chunk.to_dict() for chunk in parsed]}
+            if len(err_sink) > before:
+                entry['error'] = err_sink[-1]['error']
+        new_cache[rel_str] = entry
         for chunk in parsed:
             old_id = match_previous_id(chunk, previous)
             if old_id != chunk.semantic_id:
                 edges.append({'from': old_id, 'to': chunk.semantic_id, 'reason': 'refined-anchor'})
             chunk.semantic_id = old_id
             chunks.append(chunk)
+    _save_chunk_cache(root, new_cache)
     return chunks, edges
 
 
@@ -2361,28 +2415,99 @@ def cmd_admin_ui(args: argparse.Namespace) -> int:
     return 0
 
 
+def _filter_paginate(
+    chunks: list[dict[str, Any]],
+    path_prefix: str | None = None,
+    offset: int = 0,
+    limit: int | None = None,
+) -> tuple[list[dict[str, Any]], int]:
+    """Filter chunks by path prefix and apply offset/limit. Returns (page, total)."""
+    items = (
+        chunks
+        if not path_prefix
+        else [c for c in chunks if str(c.get('path', '')).startswith(path_prefix)]
+    )
+    total = len(items)
+    start = max(offset, 0)
+    page = items[start:] if limit is None else items[start:start + max(limit, 0)]
+    return page, total
+
+
 def serve_api(args: argparse.Namespace) -> int:
     manifest_file = _repo_semantic_path(Path('.').resolve(), MANIFEST_FILE)
+    # Parse the manifest at most once per mtime/size signature; serve many.
+    cache: dict[str, Any] = {'sig': None, 'chunks': None, 'etag': None, 'full_body': None}
+
+    def _load() -> tuple[list[dict[str, Any]], str, bytes]:
+        stat = manifest_file.stat()
+        sig = (stat.st_mtime_ns, stat.st_size)
+        if cache['sig'] != sig:
+            chunks = [
+                json.loads(line)
+                for line in manifest_file.read_text(encoding='utf-8').splitlines()
+                if line
+            ]
+            cache['chunks'] = chunks
+            cache['etag'] = '"' + hashlib.sha256(f'{sig[0]}-{sig[1]}'.encode()).hexdigest()[:16] + '"'
+            # Serialize the full unfiltered response once per change, then serve
+            # the bytes to every polling agent instead of re-dumping per request.
+            cache['full_body'] = json.dumps(
+                {'chunks': chunks, 'total': len(chunks), 'offset': 0, 'limit': None}
+            ).encode('utf-8')
+            cache['sig'] = sig
+        return cache['chunks'], cache['etag'], cache['full_body']
 
     class Handler(BaseHTTPRequestHandler):
-        def _send(self, status: int, payload: dict[str, Any]) -> None:
+        def _send(self, status: int, payload: dict[str, Any], headers: dict[str, str] | None = None) -> None:
             body = json.dumps(payload).encode('utf-8')
             self.send_response(status)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Content-Length', str(len(body)))
+            for key, value in (headers or {}).items():
+                self.send_header(key, value)
             self.end_headers()
             self.wfile.write(body)
 
         def do_GET(self) -> None:  # noqa: N802
-            if self.path == '/healthz':
+            parts = urllib_parse.urlsplit(self.path)
+            if parts.path == '/healthz':
                 self._send(200, {'status': 'ok'})
                 return
-            if self.path.startswith('/chunks'):
+            if parts.path == '/chunks':
                 if not manifest_file.exists():
                     self._send(404, {'error': 'manifest missing'})
                     return
-                chunks = [json.loads(line) for line in manifest_file.read_text(encoding='utf-8').splitlines() if line]
-                self._send(200, {'chunks': chunks})
+                chunks, etag, full_body = _load()
+                if self.headers.get('If-None-Match') == etag:
+                    self.send_response(304)
+                    self.send_header('ETag', etag)
+                    self.end_headers()
+                    return
+                query = urllib_parse.parse_qs(parts.query)
+                path_prefix = query.get('path', [None])[0]
+                try:
+                    offset = int(query.get('offset', ['0'])[0])
+                    limit_raw = query.get('limit', [None])[0]
+                    limit = int(limit_raw) if limit_raw is not None else None
+                except ValueError:
+                    self._send(400, {'error': 'offset and limit must be integers'})
+                    return
+                # Fast path: unfiltered full request serves precomputed bytes.
+                if not path_prefix and offset <= 0 and limit is None:
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.send_header('Content-Length', str(len(full_body)))
+                    self.send_header('ETag', etag)
+                    self.send_header('Cache-Control', 'no-cache')
+                    self.end_headers()
+                    self.wfile.write(full_body)
+                    return
+                page, total = _filter_paginate(chunks, path_prefix, offset, limit)
+                self._send(
+                    200,
+                    {'chunks': page, 'total': total, 'offset': max(offset, 0), 'limit': limit},
+                    headers={'ETag': etag, 'Cache-Control': 'no-cache'},
+                )
                 return
             self._send(404, {'error': 'not found'})
 
