@@ -152,7 +152,11 @@ def parse_python(path: str, text: str) -> list[Chunk]:
     chunks: list[Chunk] = []
     try:
         tree = ast.parse(text)
-    except SyntaxError:
+    except SyntaxError as exc:
+        print(
+            f'warning: skipping {path}: unable to parse as Python ({exc})',
+            file=sys.stderr,
+        )
         return chunks
     lines = text.splitlines()
     for node in tree.body:
@@ -2365,20 +2369,26 @@ def cmd_subagent_scout(args: argparse.Namespace) -> int:
     if not output_file.is_absolute():
         output_file = repo_root / output_file
 
+    def _display(path: Path) -> str:
+        try:
+            return path.relative_to(repo_root).as_posix()
+        except ValueError:
+            return path.as_posix()
+
     print('=== Subagent Scout ===')
     print(f'scanning repository: {repo_root.as_posix()}')
     summary = scout_repo(repo_root)
     report = _render_scout_report(summary)
     output_file.parent.mkdir(parents=True, exist_ok=True)
     output_file.write_text(report, encoding='utf-8')
-    print(f'wrote scout report: {output_file.relative_to(repo_root).as_posix()}')
+    print(f'wrote scout report: {_display(output_file)}')
     if args.json_output:
         json_output = Path(args.json_output)
         if not json_output.is_absolute():
             json_output = repo_root / json_output
         json_output.parent.mkdir(parents=True, exist_ok=True)
         json_output.write_text(json.dumps(_scout_summary_json(summary), indent=2) + '\n', encoding='utf-8')
-        print(f'wrote scout JSON: {json_output.relative_to(repo_root).as_posix()}')
+        print(f'wrote scout JSON: {_display(json_output)}')
 
     if args.bootstrap_tool:
         script_path = repo_root / 'scripts' / 'devx_quickcheck.sh'

@@ -165,7 +165,8 @@ def _run_action(repo_root: Path, command: list[str]) -> str:
     error = proc.stderr.strip()
     combined = '\n'.join(part for part in (output, error) if part)
     status = 'success' if proc.returncode == 0 else f'failed ({proc.returncode})'
-    return f'$ {' '.join(command)}\n[{status}]\n{combined or "no output"}'
+    rendered_command = ' '.join(command)
+    return f'$ {rendered_command}\n[{status}]\n{combined or "no output"}'
 
 
 def _refresh_dashboard(repo_root: Path) -> tuple[str, str, list[list[Any]], str, list[list[Any]], str, list[list[Any]], list[list[Any]], str]:

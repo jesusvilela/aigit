@@ -29,6 +29,39 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Byte-compile all sources (catches version-specific syntax)
+        run: python -m compileall -q aigit tests
+
+      - name: Remove disposable caches
+        run: |
+          find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
+
+      - name: Run tests
+        run: pytest -q
+
+  semantics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Check out repository
@@ -48,9 +81,6 @@ jobs:
       - name: Remove disposable caches
         run: |
           find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
-
-      - name: Run tests
-        run: pytest -q
 
       - name: Rebuild semantic artifacts
         run: python -m aigit.cli chunk --repo .
