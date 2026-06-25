@@ -5,6 +5,7 @@ import ast
 import dataclasses
 import difflib
 import hashlib
+import hmac
 import importlib.util
 import json
 import os
@@ -187,7 +188,7 @@ def _chunk_similarity(a: dict[str, Any], b: dict[str, Any]) -> float:
     return 0.0
 
 
-def parse_python(path: str, text: str) -> list[Chunk]:
+def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = None) -> list[Chunk]:
     chunks: list[Chunk] = []
     try:
         tree = ast.parse(text)
@@ -196,6 +197,8 @@ def parse_python(path: str, text: str) -> list[Chunk]:
             f'warning: skipping {path}: unable to parse as Python ({exc})',
             file=sys.stderr,
         )
+        if errors is not None:
+            errors.append({'path': path, 'error': str(exc)})
         return chunks
     lines = text.splitlines()
     for node in tree.body:
@@ -391,11 +394,11 @@ def parse_typescript(path: str, text: str) -> list[Chunk]:
     return chunks if chunks else parse_text(path, text)
 
 
-def parse_file(full_path: Path, rel_path: str) -> list[Chunk]:
+def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | None = None) -> list[Chunk]:
     text = full_path.read_text(encoding='utf-8', errors='replace')
     suffix = full_path.suffix.lower()
     if suffix == '.py':
-        return parse_python(rel_path, text)
+        return parse_python(rel_path, text, errors)
     if suffix in {'.md', '.markdown'}:
         return parse_markdown(rel_path, text)
     if suffix == '.json':
@@ -514,13 +517,15 @@ def ensure_semantic_scaffold(root: Path | None = None) -> None:
         )
 
 
-def build_manifest(root: Path) -> tuple[list[Chunk], list[dict[str, Any]]]:
+def build_manifest(
+    root: Path, errors: list[dict[str, str]] | None = None
+) -> tuple[list[Chunk], list[dict[str, Any]]]:
     ensure_semantic_scaffold(root)
     previous = load_previous_index(root)
     chunks: list[Chunk] = []
     edges: list[dict[str, Any]] = []
     for rel in iter_repo_files(root):
-        parsed = parse_file(root / rel, str(rel))
+        parsed = parse_file(root / rel, str(rel), errors)
         for chunk in parsed:
             old_id = match_previous_id(chunk, previous)
             if old_id != chunk.semantic_id:
@@ -530,26 +535,61 @@ def build_manifest(root: Path) -> tuple[list[Chunk], list[dict[str, Any]]]:
     return chunks, edges
 
 
-def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path = Path('.')) -> None:
-    manifest_file = _repo_semantic_path(root, MANIFEST_FILE)
-    edges_file = _repo_semantic_path(root, EDGES_FILE)
-    index_file = _repo_semantic_path(root, INDEX_FILE)
+def render_manifest(chunks: list[Chunk], edges: list[dict[str, Any]]) -> tuple[str, str, str]:
+    """Render the (manifest, edges, index) artifact texts deterministically.
+
+    Shared by ``write_manifest`` and ``chunk --check`` so the freshness gate
+    compares exactly the bytes that would be written.
+    """
     manifest_lines = [json.dumps(chunk.to_dict(), sort_keys=True) for chunk in chunks]
-    manifest_file.write_text('\n'.join(manifest_lines) + ('\n' if manifest_lines else ''), encoding='utf-8')
+    manifest_text = '\n'.join(manifest_lines) + ('\n' if manifest_lines else '')
     edge_lines = [json.dumps(edge, sort_keys=True) for edge in edges]
-    edges_file.write_text('\n'.join(edge_lines) + ('\n' if edge_lines else ''), encoding='utf-8')
+    edges_text = '\n'.join(edge_lines) + ('\n' if edge_lines else '')
     index: dict[str, dict[str, Any]] = {}
     for chunk in chunks:
         key = f"{chunk.path}::{chunk.chunk_type}::{chunk.anchor}"
         index[key] = chunk.to_dict()
-    index_file.write_text(json.dumps(index, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    index_text = json.dumps(index, indent=2, sort_keys=True) + '\n'
+    return manifest_text, edges_text, index_text
+
+
+def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path = Path('.')) -> None:
+    manifest_text, edges_text, index_text = render_manifest(chunks, edges)
+    _repo_semantic_path(root, MANIFEST_FILE).write_text(manifest_text, encoding='utf-8')
+    _repo_semantic_path(root, EDGES_FILE).write_text(edges_text, encoding='utf-8')
+    _repo_semantic_path(root, INDEX_FILE).write_text(index_text, encoding='utf-8')
+
+
+def _read_text_or_empty(path: Path) -> str:
+    return path.read_text(encoding='utf-8') if path.exists() else ''
 
 
 def cmd_chunk(args: argparse.Namespace) -> int:
     repo_root = Path(args.repo).resolve()
-    chunks, edges = build_manifest(repo_root)
-    write_manifest(chunks, edges, repo_root)
-    print(f"wrote {len(chunks)} chunks and {len(edges)} lineage edges")
+    strict = getattr(args, 'strict', False)
+    check = getattr(args, 'check', False)
+    errors: list[dict[str, str]] = []
+    chunks, edges = build_manifest(repo_root, errors)
+    manifest_text, edges_text, index_text = render_manifest(chunks, edges)
+
+    if check:
+        stale = (
+            _read_text_or_empty(_repo_semantic_path(repo_root, MANIFEST_FILE)) != manifest_text
+            or _read_text_or_empty(_repo_semantic_path(repo_root, INDEX_FILE)) != index_text
+            or _read_text_or_empty(_repo_semantic_path(repo_root, EDGES_FILE)) != edges_text
+        )
+        if stale:
+            print('semantic artifacts are STALE; re-run `aigit chunk`', file=sys.stderr)
+            return 1
+        print('semantic artifacts are up to date')
+    else:
+        write_manifest(chunks, edges, repo_root)
+        print(f"wrote {len(chunks)} chunks and {len(edges)} lineage edges")
+
+    if strict and errors:
+        for err in errors:
+            print(f"strict: unparseable file {err['path']}: {err['error']}", file=sys.stderr)
+        return 1
     return 0
 
 
@@ -760,21 +800,41 @@ def cmd_merge(args: argparse.Namespace) -> int:
     return 0
 
 
+def _provenance_key() -> str | None:
+    """Secret HMAC key for provenance signing, from AIGIT_PROVENANCE_KEY."""
+    return os.environ.get('AIGIT_PROVENANCE_KEY') or None
+
+
+def _provenance_signature(key: str, commit: str, agent: str, model: str, prompt_hash: str) -> str:
+    """HMAC-SHA256 over the immutable provenance claim, binding it to a commit.
+
+    Without the key the signature cannot be reproduced, so a forged plaintext
+    log row will not validate under ``verify-provenance --require-signature``.
+    """
+    message = '\n'.join([commit, agent, model, prompt_hash]).encode('utf-8')
+    return hmac.new(key.encode('utf-8'), message, hashlib.sha256).hexdigest()
+
+
 def cmd_record_provenance(args: argparse.Namespace) -> int:
     repo_root = Path('.').resolve()
     ensure_semantic_scaffold(repo_root)
     commit = _run_git(['rev-parse', 'HEAD'])
+    prompt_hash = _hash([args.prompt])
     row = {
         'timestamp': datetime.now(timezone.utc).isoformat(),
         'commit': commit,
         'agent': args.agent,
         'model': args.model,
-        'prompt_hash': _hash([args.prompt]),
+        'prompt_hash': prompt_hash,
     }
+    key = _provenance_key()
+    if key:
+        row['signature'] = _provenance_signature(key, commit, args.agent, args.model, prompt_hash)
     path = _repo_semantic_path(repo_root, SEMANTIC_DIR / 'provenance.jsonl')
     with path.open('a', encoding='utf-8') as f:
         f.write(json.dumps(row, sort_keys=True) + '\n')
-    print(f'appended provenance to {path}')
+    signed_note = ' (signed)' if key else ' (unsigned: set AIGIT_PROVENANCE_KEY to sign)'
+    print(f'appended provenance to {path}{signed_note}')
     return 0
 
 
@@ -814,11 +874,25 @@ def verify_provenance(ref: str = 'HEAD', repo_root: Path = Path('.')) -> dict[st
     if trailer_prompt_hash and not prompt_hash.startswith(trailer_prompt_hash):
         raise ValueError(f'provenance trailer does not match log row for commit {commit}')
 
+    key = _provenance_key()
+    signature = matching_row.get('signature')
+    signed = False
+    if key and signature:
+        expected = _provenance_signature(
+            key,
+            commit,
+            str(matching_row.get('agent', '')),
+            str(matching_row.get('model', '')),
+            prompt_hash,
+        )
+        signed = hmac.compare_digest(expected, str(signature))
+
     return {
         'commit': commit,
         'trailer': trailer,
         'log_row': matching_row,
         'provenance_path': str(provenance_path),
+        'signed': signed,
     }
 
 
@@ -827,6 +901,9 @@ def cmd_verify_provenance(args: argparse.Namespace) -> int:
         result = verify_provenance(ref=args.ref, repo_root=Path('.'))
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
+        return 1
+    if getattr(args, 'require_signature', False) and not result.get('signed'):
+        print(f"provenance for {result['commit']} is not validly signed", file=sys.stderr)
         return 1
     print(json.dumps(result, sort_keys=True))
     return 0
@@ -2332,10 +2409,10 @@ def cmd_improve(args: argparse.Namespace) -> int:
 
     # Step 1: rebuild semantic artifacts
     print('\n[1/2] Rebuilding semantic artifacts...')
-    chunk_args = argparse.Namespace(repo=str(repo_root))
+    chunk_args = argparse.Namespace(repo=str(repo_root), strict=True, check=False)
     chunk_rc = cmd_chunk(chunk_args)
     if chunk_rc != 0:
-        print('ERROR: semantic artifact rebuild failed')
+        print('ERROR: semantic rebuild failed (unparseable source under --strict)')
         return chunk_rc
     print('      semantic artifacts up to date')
 
@@ -2709,6 +2786,16 @@ def build_parser() -> argparse.ArgumentParser:
 
     chunk = sub.add_parser('chunk', help='Generate deterministic semantic manifest')
     chunk.add_argument('--repo', default='.')
+    chunk.add_argument(
+        '--strict',
+        action='store_true',
+        help='Exit non-zero if any source file cannot be parsed',
+    )
+    chunk.add_argument(
+        '--check',
+        action='store_true',
+        help='Do not write; exit non-zero if committed artifacts are stale',
+    )
     chunk.set_defaults(func=cmd_chunk)
 
     diff = sub.add_parser('semantic-diff', help='Generate semantic diff report from refs')
@@ -2732,6 +2819,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     verify_prov = sub.add_parser('verify-provenance', help='Verify AI provenance for a commit')
     verify_prov.add_argument('--ref', default='HEAD')
+    verify_prov.add_argument(
+        '--require-signature',
+        dest='require_signature',
+        action='store_true',
+        help='Fail unless the provenance log row carries a valid HMAC signature',
+    )
     verify_prov.set_defaults(func=cmd_verify_provenance)
 
     commit = sub.add_parser('commit', help='Commit with AI provenance trailer')
