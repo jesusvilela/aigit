@@ -8,10 +8,17 @@ version = "0.1.0"
 description = "AI-native semantic version control layer built on Git"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["gradio>=4.44,<6"]
+# The semantic core (chunk/diff/merge/provenance/serve-api) is pure stdlib.
+# Heavy/optional surfaces live behind extras so `pip install aigit` stays light.
+dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]
+# Gradio admin observability UI (`aigit admin-ui`).
+ui = ["gradio>=4.44,<6"]
+# The DeerFlow autonomous harness (`aigit up`/`launch-epics`) additionally
+# requires Docker and a DeerFlow checkout at runtime; it has no extra PyPI deps.
+deerflow = []
 
 [project.scripts]
 aigit = "aigit.cli:main"

@@ -2275,12 +2275,12 @@ def collect_admin_snapshot(repo_root: Path = Path('.')) -> dict[str, Any]:
 def cmd_admin_ui(args: argparse.Namespace) -> int:
     try:
         from aigit.admin_ui import launch_admin_ui
-    except ImportError as exc:
-        print(f'failed to import Gradio admin UI dependencies: {exc}')
-        print('install project dependencies with `python -m pip install -e .` and retry')
-        return 1
 
-    launch_admin_ui(repo_root=Path(args.repo).resolve(), host=args.host, port=args.port, share=args.share)
+        launch_admin_ui(repo_root=Path(args.repo).resolve(), host=args.host, port=args.port, share=args.share)
+    except ImportError as exc:
+        print(f'admin UI requires the optional "ui" extra (Gradio): {exc}', file=sys.stderr)
+        print('install it with:  python -m pip install "aigit[ui]"', file=sys.stderr)
+        return 1
     return 0
 
 

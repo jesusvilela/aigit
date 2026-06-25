@@ -114,11 +114,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "866416f3d4f9a2b9d6ac4d936af2bff716136486d33f5f669666ad71f53502b0",
-    "end_line": 172,
+    "end_line": 184,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_85d49ef5505b69a2",
-    "start_line": 159
+    "start_line": 171
   },
   "README.md::section::At A Glance": {
     "anchor": "At A Glance",
@@ -136,109 +136,120 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "d751a12f3170f354c128eb497143ec2a54d7622cf7d2dc2747d35c7e73de3006",
-    "end_line": 216,
+    "end_line": 228,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_9c45a381999bbd73",
-    "start_line": 187
+    "start_line": 199
   },
   "README.md::section::CLI Surface": {
     "anchor": "CLI Surface",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "70ca8609ec4b50c6d7bf4d7c791456a26b00d4d839f070405109761f30b53f45",
-    "end_line": 105,
+    "end_line": 117,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_60502dfacaf8e129",
-    "start_line": 88
+    "start_line": 100
   },
   "README.md::section::Cycle 1": {
     "anchor": "Cycle 1",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "c133b00256ae5d49f6cda0395cf331b40e8c3c9f9f0d55ac807968fef3d042cc",
-    "end_line": 227,
+    "end_line": 239,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_b007ec9690cfeba5",
-    "start_line": 219
+    "start_line": 231
   },
   "README.md::section::Cycle 2: 10x release wave": {
     "anchor": "Cycle 2: 10x release wave",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "00c3565e143cea8fa4e6c40757f8b3637959f66f09b051e1d988520e0d53d1c7",
-    "end_line": 234,
+    "end_line": 246,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_53702cc6ecda3b7c",
-    "start_line": 228
+    "start_line": 240
   },
   "README.md::section::DeerFlow Operator Loop": {
     "anchor": "DeerFlow Operator Loop",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "6232dc47ec5858451101c918cfa86818f50f7d27c20748d6bd4bfd20d0758f3d",
-    "end_line": 144,
+    "end_line": 156,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_e0f00e57fde0ca91",
-    "start_line": 134
+    "start_line": 146
   },
   "README.md::section::DeerFlow entrypoint": {
     "anchor": "DeerFlow entrypoint",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "5078d3d8f144b66e4cb7ddd320b1a681bf862dd9ecd4db7a7995bfe1a4d37143",
-    "end_line": 186,
+    "end_line": 198,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_799dfbd9a1eff8aa",
-    "start_line": 181
+    "start_line": 193
   },
   "README.md::section::Default model catalog": {
     "anchor": "Default model catalog",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "f8cb2c9ad7edf8bb79b37f8408f6b61871ee2c85f78f25b11e6521aa3e8b3116",
-    "end_line": 180,
+    "end_line": 192,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_fd602ce43a1a7f60",
-    "start_line": 173
+    "start_line": 185
   },
   "README.md::section::Determinism Notes": {
     "anchor": "Determinism Notes",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "19fca5cc4367b8b94b61ecec172b95416db05b011915fc20005d479664b61d00",
-    "end_line": 250,
+    "end_line": 262,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_302b6b6a317c4716",
-    "start_line": 245
+    "start_line": 257
   },
   "README.md::section::Docs Index": {
     "anchor": "Docs Index",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "cf4671a4ce6a42b5c7bf4e80e2565b2a6189f6cb3702680fd7f9d9516a20451c",
-    "end_line": 244,
+    "end_line": 256,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_7d97a383a65dbd44",
-    "start_line": 235
+    "start_line": 247
   },
   "README.md::section::Fast Start": {
     "anchor": "Fast Start",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "18480833bf105eb8cf0c4097589a6eee4f1bc210bfe3571126ee19a19dccf9f3",
-    "end_line": 87,
+    "end_line": 99,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_b9fc101d0bd580c9",
+    "start_line": 78
+  },
+  "README.md::section::Install & Extras": {
+    "anchor": "Install & Extras",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "61d2cce6165e7d65c0269944aa8bbffdaa8623818af24b39a49cf65a8d691da2",
+    "end_line": 77,
+    "fingerprint": "",
+    "path": "README.md",
+    "semantic_id": "sc_f4627af887e2e1b7",
     "start_line": 66
   },
   "README.md::section::Release Status": {
@@ -246,11 +257,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "fe6e838f4c4a7fc1ba55a0841733f6a4b2983a16e207ad2c8b2282b25f1be87e",
-    "end_line": 218,
+    "end_line": 230,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_ac40e0601cab3bc3",
-    "start_line": 217
+    "start_line": 229
   },
   "README.md::section::Repository Contract": {
     "anchor": "Repository Contract",
@@ -268,11 +279,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "32f91980538e7eafcbfce3d74327029a5b82cca254643886aecaa0384a597271",
-    "end_line": 151,
+    "end_line": 163,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_71a7720fddd4ca90",
-    "start_line": 145
+    "start_line": 157
   },
   "README.md::section::Storage Layout": {
     "anchor": "Storage Layout",
@@ -290,22 +301,22 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "de7d032a8848131471c351c0fabd7351d574a237960194a32220b6132da2486b",
-    "end_line": 158,
+    "end_line": 170,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_378c0fb7f02a9629",
-    "start_line": 152
+    "start_line": 164
   },
   "README.md::section::Uv Workflow": {
     "anchor": "Uv Workflow",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "3e7cc0a1df17383b49c2ba7f3dafddae84e6a81333ca6aa72f3e143b4fbaacb5",
-    "end_line": 133,
+    "end_line": 145,
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_439c53b052180fa6",
-    "start_line": 106
+    "start_line": 118
   },
   "README.md::section::What Ships Today": {
     "anchor": "What Ships Today",
@@ -1081,9 +1092,9 @@
     "anchor": "cmd_admin_ui",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "8d043c54963bda8a87da9d41c72847ab429e5236b5904c76b1a5006834e5eff4",
+    "content_hash": "b3a14ba9d3c441d3f23351f3703903fb06d6257537cd2cf2a191e15555554656",
     "end_line": 2284,
-    "fingerprint": "cb71301c98cacbfe",
+    "fingerprint": "0af5313c914a5bbe",
     "path": "aigit/core.py",
     "semantic_id": "sc_417c69deaa7c83e5",
     "start_line": 2275
@@ -2731,8 +2742,8 @@
     "anchor": "file",
     "chunk_type": "file",
     "confidence": "low",
-    "content_hash": "e543fe59f5005956465b169f2b31bc3d72ffbeafd416055b4e9dd94d70235845",
-    "end_line": 24,
+    "content_hash": "e13d9b5070b5381a4774dc40f6f63f96c99db9c13662d2cc6ac0b5626988bec0",
+    "end_line": 31,
     "fingerprint": "",
     "path": "pyproject.toml",
     "semantic_id": "sc_8c66d52c16b5045b",
@@ -3507,6 +3518,28 @@
     "path": "tests/test_lineage.py",
     "semantic_id": "sc_0f5dc1a345a30701",
     "start_line": 65
+  },
+  "tests/test_packaging.py::function::test_admin_ui_without_gradio_is_friendly": {
+    "anchor": "test_admin_ui_without_gradio_is_friendly",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "1c0c5ba5b244b8eb4c0533483e3b462d2e548367365afac809b465fd1f39373a",
+    "end_line": 20,
+    "fingerprint": "aef3c79f505e173e",
+    "path": "tests/test_packaging.py",
+    "semantic_id": "sc_24afff90ed976f2a",
+    "start_line": 13
+  },
+  "tests/test_packaging.py::function::test_core_import_does_not_pull_gradio": {
+    "anchor": "test_core_import_does_not_pull_gradio",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8ed7ab8c8c969fdded3ac9001969c9f5d9b5545d3d65936c8b419199a0fe8904",
+    "end_line": 10,
+    "fingerprint": "3e32250e914a1232",
+    "path": "tests/test_packaging.py",
+    "semantic_id": "sc_909a2aa81a35870b",
+    "start_line": 8
   },
   "tests/test_provenance_verification.py::function::test_cmd_verify_provenance_prints_json": {
     "anchor": "test_cmd_verify_provenance_prints_json",

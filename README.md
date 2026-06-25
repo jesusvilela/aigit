@@ -63,6 +63,18 @@ AIGit keeps the Git object model untouched and layers a deterministic semantic g
   cache/              # local-only, gitignored
 ```
 
+## Install & Extras
+
+The semantic core is dependency-light. Heavy or optional surfaces are split
+into extras so the core stays small for agents and CI:
+
+| Install | Gets you |
+| --- | --- |
+| `pip install aigit` | semantic core: `chunk`, `semantic-diff`, `semantic-merge`, provenance, `serve-api` (pure stdlib) |
+| `pip install "aigit[ui]"` | the Gradio admin observability UI (`aigit admin-ui`) |
+| `pip install "aigit[dev]"` | test dependencies (`pytest`) |
+| `aigit[deerflow]` + Docker | the DeerFlow autonomous harness (`aigit up`, `launch-epics`); requires a DeerFlow checkout and Docker at runtime |
+
 ## Fast Start
 
 Preferred workflow with `uv`:
