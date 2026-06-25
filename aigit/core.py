@@ -560,20 +560,77 @@ def cmd_diff(args: argparse.Namespace) -> int:
     return 0
 
 
+def compute_semantic_conflicts(
+    base: dict[str, dict[str, Any]],
+    ours: dict[str, dict[str, Any]],
+    theirs: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Detect semantic merge conflicts across base/ours/theirs manifests.
+
+    A base-anchored intersection only catches modify/modify and silently
+    passes the conflict classes that matter most for autonomous merges:
+
+    * ``modify/modify`` — both sides edit the same chunk differently.
+    * ``add/add``       — both sides create the same chunk with different bodies
+      (two agents independently writing the same function).
+    * ``modify/delete`` / ``delete/modify`` — one side edits a chunk the other
+      removes.
+
+    Returns one record per conflicting semantic id, sorted for determinism.
+    """
+    conflicts: list[dict[str, Any]] = []
+    for sid in sorted(set(base) | set(ours) | set(theirs)):
+        b = base.get(sid)
+        o = ours.get(sid)
+        t = theirs.get(sid)
+        bh = b['content_hash'] if b else None
+        oh = o['content_hash'] if o else None
+        th = t['content_hash'] if t else None
+        kind: str | None = None
+        if b and o and t:
+            if oh != bh and th != bh and oh != th:
+                kind = 'modify/modify'
+        elif o and t and not b:
+            if oh != th:
+                kind = 'add/add'
+        elif b and o and not t:
+            if oh != bh:
+                kind = 'modify/delete'
+        elif b and t and not o:
+            if th != bh:
+                kind = 'delete/modify'
+        if kind is None:
+            continue
+        ref = o or t or b
+        conflicts.append(
+            {
+                'semantic_id': sid,
+                'kind': kind,
+                'path': ref.get('path', ''),
+                'anchor': ref.get('anchor', ''),
+                'base_hash': bh,
+                'ours_hash': oh,
+                'theirs_hash': th,
+            }
+        )
+    return conflicts
+
+
 def cmd_merge(args: argparse.Namespace) -> int:
     base = _read_manifest_from_ref(args.base)
     ours = _read_manifest_from_ref(args.ours)
     theirs = _read_manifest_from_ref(args.theirs)
-    conflicts = []
-    for sid, b in base.items():
-        o = ours.get(sid)
-        t = theirs.get(sid)
-        if not o or not t:
-            continue
-        if o['content_hash'] != b['content_hash'] and t['content_hash'] != b['content_hash'] and o['content_hash'] != t['content_hash']:
-            conflicts.append(sid)
-    out = {'base': args.base, 'ours': args.ours, 'theirs': args.theirs, 'conflicts': conflicts}
-    Path(args.output).write_text(json.dumps(out, indent=2) + '\n', encoding='utf-8')
+    conflicts = compute_semantic_conflicts(base, ours, theirs)
+    out = {
+        'base': args.base,
+        'ours': args.ours,
+        'theirs': args.theirs,
+        'conflict_count': len(conflicts),
+        'conflicts': conflicts,
+    }
+    Path(args.output).write_text(json.dumps(out, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    for c in conflicts:
+        print(f"  conflict [{c['kind']}] {c['path']}::{c['anchor']} ({c['semantic_id']})")
     print(f'detected {len(conflicts)} semantic conflicts')
     return 0
 
