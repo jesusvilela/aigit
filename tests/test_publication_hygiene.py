@@ -9,6 +9,7 @@ def test_semantic_index_excludes_package_build_outputs(tmp_path: Path) -> None:
     (tmp_path / 'build' / 'generated.py').write_text('x = 1\n', encoding='utf-8')
     (tmp_path / 'dist').mkdir()
     (tmp_path / 'dist' / 'package.whl').write_bytes(b'wheel')
+    (tmp_path / 'brand.png').write_bytes(b'not source')
 
     assert iter_repo_files(tmp_path) == [Path('src.py')]
 

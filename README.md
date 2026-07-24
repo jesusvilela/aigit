@@ -1,5 +1,9 @@
 # AIGit
 
+<p align="center">
+  <img src="assets/brand/aigit-mark.png" width="168" alt="AIGit semantic graph mark">
+</p>
+
 [![CI](https://github.com/jesusvilela/aigit/actions/workflows/ci.yml/badge.svg)](https://github.com/jesusvilela/aigit/actions/workflows/ci.yml)
 [![Semantic Maintenance](https://github.com/jesusvilela/aigit/actions/workflows/semantic-maintenance.yml/badge.svg)](https://github.com/jesusvilela/aigit/actions/workflows/semantic-maintenance.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-111111.svg)](LICENSE)
@@ -205,3 +209,7 @@ The CI matrix tests Python 3.10–3.12, validates the lockfile, and rejects stal
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).
+
+## Brand
+
+The AIGit mark and its usage guidance live in [Brand guidelines](docs/BRAND.md). The transparent PNG is ready for social posts, presentations, and repository use.

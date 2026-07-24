@@ -34,6 +34,10 @@ CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
 CHUNK_CACHE_VERSION = '1'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
+BINARY_ASSET_SUFFIXES = {
+    '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.pdf', '.png', '.svgz', '.tif', '.tiff', '.webp',
+    '.woff', '.woff2', '.zip', '.gz', '.tar', '.whl', '.wasm',
+}
 
 DEERFLOW_VENDOR_DIR = Path('.deerflow/vendor/deer-flow')
 DEERFLOW_VENDOR_ENV_FILE = DEERFLOW_VENDOR_DIR / '.env'
@@ -514,7 +518,7 @@ def iter_repo_files(root: Path) -> list[Path]:
             continue
         if any(part.startswith('.') and part != '.github' for part in rel.parts):
             continue
-        if path.suffix == '.pyc':
+        if path.suffix.lower() in BINARY_ASSET_SUFFIXES:
             continue
         files.append(rel)
     return sorted(files)
