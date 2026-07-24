@@ -96,7 +96,7 @@ jobs:
           subject-path: dist/*
 
       - name: Upload release evidence to this workflow
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aigit-${{ env.RELEASE_TAG }}-release-evidence
           path: |
