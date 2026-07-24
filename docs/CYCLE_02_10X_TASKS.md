@@ -18,9 +18,9 @@ This checklist turns the Cycle 2 charter into independently shippable slices.
 
 ## C2-02 Lineage replay suite
 
-- [ ] add curated refactor fixtures
-- [ ] assert expected semantic ID continuity
-- [ ] expose regressions clearly in CI
+- [x] add curated refactor fixtures (seed corpus)
+- [x] assert expected semantic ID continuity
+- [x] expose regressions clearly in CI
 
 ## C2-03 Semantic PR publishing
 

@@ -131,6 +131,8 @@ aigit commit -m "refactor parser" \
 | Command | Use it when |
 | --- | --- |
 | `aigit chunk` | you need to rebuild semantic state |
+| `aigit validate-ruleset` | you need to confirm the committed parser contract is valid |
+| `aigit eval-lineage --fixtures <file>` | you need reproducible lineage precision and recall evidence |
 | `aigit semantic-diff --base <ref> --head <ref>` | you want an intent-focused comparison |
 | `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` | you need early merge-risk signals |
 | `aigit record-provenance --agent … --model … --prompt …` | you need an auditable record of AI context |
@@ -189,6 +191,10 @@ aigit admin-ui --host 127.0.0.1 --port 7860
 
 Useful references:
 
+- [Beta readiness and release artifacts](docs/BETA_READINESS.md)
+- [Development journal](docs/DEVELOPMENT_JOURNAL.md)
+- [Evaluation program](docs/evals/README.md)
+- [Changelog](CHANGELOG.md)
 - [Release governance](docs/RELEASE_GOVERNANCE.md)
 - [Roadmap](docs/EPICS_ROADMAP.md)
 - [DeerFlow recovery playbook](docs/DEERFLOW_RECOVERY.md)

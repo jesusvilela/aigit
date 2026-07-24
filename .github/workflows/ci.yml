@@ -4,6 +4,13 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   uv-lock:
     runs-on: ubuntu-latest
@@ -85,5 +92,49 @@ jobs:
       - name: Rebuild semantic artifacts
         run: python -m aigit.cli chunk --repo .
 
+      - name: Run lineage replay evidence
+        run: |
+          python -m aigit.cli eval-lineage \
+            --fixtures tests/fixtures/lineage_replay_v1.json \
+            --min-precision 0.95 \
+            --min-recall 0.90 \
+            --output lineage-replay-report.json
+
       - name: Fail on stale semantic artifacts
         run: git diff --exit-code -- .semantic
+
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: uv-lock
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build distribution artifacts
+        run: uv build
+
+      - name: Smoke-test the wheel outside the checkout
+        run: |
+          python -m venv /tmp/aigit-wheel-test
+          /tmp/aigit-wheel-test/bin/python -m pip install --upgrade pip
+          /tmp/aigit-wheel-test/bin/python -m pip install dist/*.whl
+          cd /tmp
+          /tmp/aigit-wheel-test/bin/aigit --help
+
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aigit-distributions
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7

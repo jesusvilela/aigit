@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to release (for example v0.2.0b1)
+        required: true
+        type: string
+      prerelease:
+        description: Mark this GitHub release as a prerelease
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: release-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+      IS_PRERELEASE: ${{ github.event_name == 'workflow_dispatch' && inputs.prerelease || false }}
+
+    steps:
+      - name: Check out the release ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify tag matches package version
+        run: |
+          package_version="$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          test "$RELEASE_TAG" = "v$package_version"
+
+      - name: Verify source and semantic contract
+        run: |
+          uv sync --extra dev --locked
+          uv run pytest -q
+          uv run aigit chunk --repo .
+          uv run aigit eval-lineage \
+            --fixtures tests/fixtures/lineage_replay_v1.json \
+            --min-precision 0.95 \
+            --min-recall 0.90 \
+            --output lineage-replay-report.json
+          git diff --exit-code -- .semantic
+
+      - name: Build distribution artifacts
+        run: uv build
+
+      - name: Smoke-test the wheel outside the checkout
+        run: |
+          python -m venv /tmp/aigit-wheel-test
+          /tmp/aigit-wheel-test/bin/python -m pip install --upgrade pip
+          /tmp/aigit-wheel-test/bin/python -m pip install dist/*.whl
+          cd /tmp
+          /tmp/aigit-wheel-test/bin/aigit --help
+
+      - name: Create release checksums
+        run: |
+          mkdir -p release-artifacts
+          sha256sum dist/* > release-artifacts/SHA256SUMS
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: release-artifacts/aigit-${{ env.RELEASE_TAG }}.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Attest built distributions
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/*
+
+      - name: Upload release evidence to this workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: aigit-${{ env.RELEASE_TAG }}-release-evidence
+          path: |
+            dist/
+            release-artifacts/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release_files=(dist/* release-artifacts/*)
+          prerelease_flag=()
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            prerelease_flag=(--prerelease)
+          fi
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${release_files[@]}" --clobber
+          else
+            gh release create "$RELEASE_TAG" "${release_files[@]}" --generate-notes "${prerelease_flag[@]}"
+          fi

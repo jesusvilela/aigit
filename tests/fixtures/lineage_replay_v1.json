@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "move-and-rename",
+      "base": [{"semantic_id": "old-score", "path": "src/score.py", "anchor": "score", "content": "def score(value):\n    return value * 2\n"}],
+      "head": [{"semantic_id": "new-score", "path": "src/metrics.py", "anchor": "calculate_score", "content": "def score(value):\n    return value * 2\n"}],
+      "expected_lineage": [{"from": "old-score", "to": "new-score", "kind": "moved+renamed"}]
+    },
+    {
+      "id": "rename-in-place",
+      "base": [{"semantic_id": "old-parser", "path": "src/parser.py", "anchor": "parse", "content": "def parse(text):\n    return text.strip()\n"}],
+      "head": [{"semantic_id": "new-parser", "path": "src/parser.py", "anchor": "normalize", "content": "def parse(text):\n    return text.strip()\n"}],
+      "expected_lineage": [{"from": "old-parser", "to": "new-parser", "kind": "renamed"}]
+    },
+    {
+      "id": "small-refactor",
+      "base": [{"semantic_id": "old-handler", "path": "src/handler.py", "anchor": "handle", "content": "def handle(request):\n    return process(request) + 1\n"}],
+      "head": [{"semantic_id": "new-handler", "path": "src/handler.py", "anchor": "handle_request", "content": "def handle_request(request):\n    return process(request) + 1  # guard\n"}],
+      "expected_lineage": [{"from": "old-handler", "to": "new-handler", "kind": "refactored"}]
+    },
+    {
+      "id": "unrelated-change",
+      "base": [{"semantic_id": "old-alpha", "path": "src/alpha.py", "anchor": "alpha", "content": "def alpha():\n    return 1\n"}],
+      "head": [{"semantic_id": "new-beta", "path": "src/beta.py", "anchor": "beta", "content": "def beta(left, right, scale):\n    return (left * right) - scale\n"}],
+      "expected_lineage": []
+    }
+  ]
+}

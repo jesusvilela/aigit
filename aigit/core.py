@@ -480,6 +480,18 @@ def validate_ruleset_file(root: Path | None = None) -> dict[str, Any]:
     return parsed
 
 
+def cmd_validate_ruleset(args: argparse.Namespace) -> int:
+    repo_root = Path(args.repo).resolve()
+    try:
+        parsed = validate_ruleset_file(repo_root)
+    except ValueError as exc:
+        print(f'ruleset is invalid: {exc}', file=sys.stderr)
+        return 1
+    parsers = parsed['parsers']
+    print(f"ruleset is valid: {len(parsers)} parser mappings")
+    return 0
+
+
 def load_previous_index(root: Path) -> dict[str, dict[str, Any]]:
     index_file = _repo_semantic_path(root, INDEX_FILE)
     if not index_file.exists():
@@ -756,6 +768,144 @@ def compute_semantic_diff(
     changed.sort(key=sort_key)
     lineage, removed, added = _detect_lineage(removed, added, lineage_threshold)
     return {'added': added, 'removed': removed, 'changed': changed, 'lineage': lineage}
+
+
+def _normalize_lineage_eval_entry(entry: dict[str, Any], case_id: str) -> dict[str, Any]:
+    required = ('semantic_id', 'path', 'anchor')
+    missing = [field for field in required if not isinstance(entry.get(field), str) or not entry[field]]
+    if missing:
+        raise ValueError(f'{case_id}: fixture entry is missing {", ".join(missing)}')
+    normalized = {field: entry[field] for field in required}
+    content = entry.get('content')
+    if isinstance(content, str):
+        normalized['content_hash'] = _content_hash(content)
+        normalized['fingerprint'] = _simhash(content)
+    elif isinstance(entry.get('content_hash'), str):
+        normalized['content_hash'] = entry['content_hash']
+        normalized['fingerprint'] = str(entry.get('fingerprint', ''))
+    else:
+        raise ValueError(f'{case_id}: fixture entry requires content or content_hash')
+    return normalized
+
+
+def evaluate_lineage_fixtures(fixture_file: Path) -> dict[str, Any]:
+    """Evaluate labeled lineage scenarios without reading Git state.
+
+    Fixture entries use stable semantic IDs plus either ``content`` (preferred)
+    or explicit hashes. This keeps the evaluation corpus readable while making
+    the reported precision and recall reproducible from one JSON file.
+    """
+    try:
+        payload = json.loads(fixture_file.read_text(encoding='utf-8'))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f'invalid JSON fixture: {exc}') from exc
+    if not isinstance(payload, dict) or payload.get('version') != 1:
+        raise ValueError('fixture must be an object with version: 1')
+    cases = payload.get('cases')
+    if not isinstance(cases, list) or not cases:
+        raise ValueError('fixture must define a non-empty cases list')
+
+    all_expected: set[tuple[str, str, str]] = set()
+    all_actual: set[tuple[str, str, str]] = set()
+    case_reports: list[dict[str, Any]] = []
+    for raw_case in cases:
+        if not isinstance(raw_case, dict) or not isinstance(raw_case.get('id'), str):
+            raise ValueError('every fixture case needs a string id')
+        case_id = raw_case['id']
+        raw_base = raw_case.get('base')
+        raw_head = raw_case.get('head')
+        raw_expected = raw_case.get('expected_lineage')
+        if not all(isinstance(value, list) for value in (raw_base, raw_head, raw_expected)):
+            raise ValueError(f'{case_id}: base, head, and expected_lineage must be lists')
+        base = {
+            entry['semantic_id']: _normalize_lineage_eval_entry(entry, case_id)
+            for entry in raw_base
+            if isinstance(entry, dict)
+        }
+        head = {
+            entry['semantic_id']: _normalize_lineage_eval_entry(entry, case_id)
+            for entry in raw_head
+            if isinstance(entry, dict)
+        }
+        if len(base) != len(raw_base) or len(head) != len(raw_head):
+            raise ValueError(f'{case_id}: base and head entries must be objects with unique semantic_id values')
+        expected = {
+            (edge.get('from'), edge.get('to'), edge.get('kind'))
+            for edge in raw_expected
+            if isinstance(edge, dict)
+        }
+        if len(expected) != len(raw_expected) or any(not all(isinstance(part, str) for part in edge) for edge in expected):
+            raise ValueError(f'{case_id}: expected_lineage entries require string from, to, and kind values')
+        actual = {
+            (edge['from'], edge['to'], edge['kind'])
+            for edge in compute_semantic_diff(base, head)['lineage']
+        }
+        prefixed_expected = {(case_id, *edge) for edge in expected}
+        prefixed_actual = {(case_id, *edge) for edge in actual}
+        all_expected.update(prefixed_expected)
+        all_actual.update(prefixed_actual)
+        case_reports.append(
+            {
+                'id': case_id,
+                'expected': [
+                    {'from': edge[0], 'to': edge[1], 'kind': edge[2]}
+                    for edge in sorted(expected)
+                ],
+                'actual': [
+                    {'from': edge[0], 'to': edge[1], 'kind': edge[2]}
+                    for edge in sorted(actual)
+                ],
+                'missing': [
+                    {'from': edge[1], 'to': edge[2], 'kind': edge[3]}
+                    for edge in sorted(prefixed_expected - prefixed_actual)
+                ],
+                'unexpected': [
+                    {'from': edge[1], 'to': edge[2], 'kind': edge[3]}
+                    for edge in sorted(prefixed_actual - prefixed_expected)
+                ],
+            }
+        )
+    true_positive = len(all_expected & all_actual)
+    false_positive = len(all_actual - all_expected)
+    false_negative = len(all_expected - all_actual)
+    precision = true_positive / (true_positive + false_positive) if true_positive + false_positive else 1.0
+    recall = true_positive / (true_positive + false_negative) if true_positive + false_negative else 1.0
+    return {
+        'fixture': fixture_file.as_posix(),
+        'case_count': len(case_reports),
+        'metrics': {
+            'true_positive': true_positive,
+            'false_positive': false_positive,
+            'false_negative': false_negative,
+            'precision': round(precision, 6),
+            'recall': round(recall, 6),
+        },
+        'cases': case_reports,
+    }
+
+
+def cmd_eval_lineage(args: argparse.Namespace) -> int:
+    fixture_file = Path(args.fixtures).resolve()
+    try:
+        report = evaluate_lineage_fixtures(fixture_file)
+    except (OSError, ValueError) as exc:
+        print(f'lineage evaluation failed: {exc}', file=sys.stderr)
+        return 2
+    output = json.dumps(report, indent=2, sort_keys=True) + '\n'
+    if args.output:
+        Path(args.output).write_text(output, encoding='utf-8')
+        print(f'lineage evaluation written to {args.output}')
+    else:
+        print(output, end='')
+    metrics = report['metrics']
+    if metrics['precision'] < args.min_precision or metrics['recall'] < args.min_recall:
+        print(
+            'lineage evaluation did not meet thresholds: '
+            f"precision={metrics['precision']:.3f}, recall={metrics['recall']:.3f}",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
 
 
 def cmd_diff(args: argparse.Namespace) -> int:
@@ -2944,6 +3094,17 @@ def build_parser() -> argparse.ArgumentParser:
         help='Do not write; exit non-zero if committed artifacts are stale',
     )
     chunk.set_defaults(func=cmd_chunk)
+
+    validate_ruleset = sub.add_parser('validate-ruleset', help='Validate the committed semantic ruleset')
+    validate_ruleset.add_argument('--repo', default='.')
+    validate_ruleset.set_defaults(func=cmd_validate_ruleset)
+
+    eval_lineage = sub.add_parser('eval-lineage', help='Evaluate labeled lineage fixtures')
+    eval_lineage.add_argument('--fixtures', required=True, help='Path to a version-1 lineage fixture JSON file')
+    eval_lineage.add_argument('--output', help='Write the deterministic JSON report to this path')
+    eval_lineage.add_argument('--min-precision', type=float, default=0.0)
+    eval_lineage.add_argument('--min-recall', type=float, default=0.0)
+    eval_lineage.set_defaults(func=cmd_eval_lineage)
 
     diff = sub.add_parser('semantic-diff', help='Generate semantic diff report from refs')
     diff.add_argument('--base', required=True)

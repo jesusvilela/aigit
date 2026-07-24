@@ -1,4 +1,5 @@
 # Logs and local runtime state
+.DS_Store
 logs
 *.log
 pids
