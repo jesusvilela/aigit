@@ -34,7 +34,7 @@ Issues = "https://github.com/jesusvilela/aigit/issues"
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]
 # Gradio admin observability UI (`aigit admin-ui`).
-ui = ["gradio>=4.44,<6"]
+ui = ["gradio>=6.20.0,<7"]
 # The DeerFlow autonomous harness (`aigit up`/`launch-epics`) additionally
 # requires Docker and a DeerFlow checkout at runtime; it has no extra PyPI deps.
 deerflow = []
