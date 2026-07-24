@@ -2667,6 +2667,7 @@ def _render_scout_report(summary: RepoScoutSummary) -> str:
             '',
             f'- recommended_tool: **{summary.recommended_tool}**',
             '- proposed_tool_location: `scripts/devx_quickcheck.sh`',
+            '- proposed_tool_goal: run semantic rebuild, optional lint, and tests in one command.',
             '- proposed_tool_goal: run AIGit-first quality loops through one command.',
             '',
             '## AIGit Developer Interfaces',
@@ -2710,6 +2711,7 @@ def _bootstrap_devx_quickcheck(repo_root: Path, script_path: Path) -> None:
         '#!/usr/bin/env bash\n'
         'set -euo pipefail\n\n'
         'echo "[devx-quickcheck] starting"\n'
+        'python -m aigit.cli chunk --repo .\n\n'
         'if command -v aigit >/dev/null 2>&1; then\n'
         '  AIGIT_BIN="aigit"\n'
         'else\n'

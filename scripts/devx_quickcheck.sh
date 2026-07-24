@@ -2,6 +2,8 @@
 set -euo pipefail
 
 echo "[devx-quickcheck] starting"
+python -m aigit.cli chunk --repo .
+
 if command -v aigit >/dev/null 2>&1; then
   AIGIT_BIN="aigit"
 else

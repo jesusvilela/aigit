@@ -47,6 +47,10 @@ def test_cmd_subagent_scout_writes_report_and_bootstraps_tool(tmp_path: Path, mo
     report_text = report.read_text(encoding='utf-8')
     assert '# Subagent Scout Report' in report_text
     assert 'recommended_tool' in report_text
+
+    tool_script = Path('scripts/devx_quickcheck.sh')
+    assert tool_script.exists()
+    assert 'python -m aigit.cli chunk --repo .' in tool_script.read_text(encoding='utf-8')
     assert 'AIGit Developer Interfaces' in report_text
 
     json_report = Path('.aigit/runtime/subagent_scout_report.json')
