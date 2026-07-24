@@ -5,12 +5,31 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "aigit"
 version = "0.1.0"
-description = "AI-native semantic version control layer built on Git"
+description = "A deterministic semantic version-control layer for people, agents, and CI"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{name = "Jesús Vilela Jato"}]
+keywords = ["ai", "agents", "developer-tools", "git", "provenance", "semantic-diff", "version-control"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Version Control :: Git",
+]
 # The semantic core (chunk/diff/merge/provenance/serve-api) is pure stdlib.
 # Heavy/optional surfaces live behind extras so `pip install aigit` stays light.
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/jesusvilela/aigit"
+Repository = "https://github.com/jesusvilela/aigit"
+Issues = "https://github.com/jesusvilela/aigit/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]

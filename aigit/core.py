@@ -73,12 +73,17 @@ DEERFLOW_SYNC_SKIP_NAMES = {
 }
 
 SCOUT_SKIP_DIRS = {
+    '.aigit',
+    '.deerflow',
     '.git',
+    '.semantic',
     '.venv',
     '.mypy_cache',
     '.pytest_cache',
     '.ruff_cache',
     '__pycache__',
+    'build',
+    'dist',
     'node_modules',
 }
 
@@ -231,7 +236,15 @@ def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = Non
 def parse_markdown(path: str, text: str) -> list[Chunk]:
     chunks: list[Chunk] = []
     lines = text.splitlines()
-    header_idxs = [i for i, line in enumerate(lines) if line.lstrip().startswith('#')]
+    header_idxs: list[int] = []
+    in_fence = False
+    for index, line in enumerate(lines):
+        stripped = line.lstrip()
+        if stripped.startswith(('```', '~~~')):
+            in_fence = not in_fence
+            continue
+        if not in_fence and re.match(r'^#{1,6}(?:\s+|$)', stripped):
+            header_idxs.append(index)
     for idx, header_idx in enumerate(header_idxs):
         start = header_idx + 1
         end = header_idxs[idx + 1] if idx + 1 < len(header_idxs) else len(lines)
@@ -495,7 +508,9 @@ def iter_repo_files(root: Path) -> list[Path]:
         rel = path.relative_to(root)
         if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
             continue
-        if any(part == '__pycache__' or part.endswith('.egg-info') for part in rel.parts):
+        # Build products are reproducible local artifacts, not source intent.
+        # Never let a package build perturb the committed semantic graph.
+        if any(part in {'__pycache__', 'build', 'dist'} or part.endswith('.egg-info') for part in rel.parts):
             continue
         if any(part.startswith('.') and part != '.github' for part in rel.parts):
             continue
@@ -2710,12 +2725,13 @@ def _bootstrap_devx_quickcheck(repo_root: Path, script_path: Path) -> None:
     script = (
         '#!/usr/bin/env bash\n'
         'set -euo pipefail\n\n'
+        'PYTHON_BIN="${PYTHON:-python3}"\n\n'
         'echo "[devx-quickcheck] starting"\n'
-        'python -m aigit.cli chunk --repo .\n\n'
+        '"${PYTHON_BIN}" -m aigit.cli chunk --repo .\n\n'
         'if command -v aigit >/dev/null 2>&1; then\n'
         '  AIGIT_BIN="aigit"\n'
         'else\n'
-        '  AIGIT_BIN="python -m aigit.cli"\n'
+        '  AIGIT_BIN="${PYTHON_BIN} -m aigit.cli"\n'
         'fi\n\n'
         'echo "[devx-quickcheck] refreshing semantic state"\n'
         '${AIGIT_BIN} chunk --repo .\n\n'
@@ -2730,13 +2746,13 @@ def _bootstrap_devx_quickcheck(repo_root: Path, script_path: Path) -> None:
         'else\n'
         '  echo "[devx-quickcheck] ruff not found, skipping lint"\n'
         'fi\n\n'
-        'if python - <<\'PY\'\n'
+        'if "${PYTHON_BIN}" - <<\'PY\'\n'
         'import importlib.util\n'
         'raise SystemExit(0 if importlib.util.find_spec("pytest") else 1)\n'
         'PY\n'
         'then\n'
         '  echo "[devx-quickcheck] running pytest"\n'
-        '  python -m pytest --tb=short -q "${1:-tests}"\n'
+        '  "${PYTHON_BIN}" -m pytest --tb=short -q "${1:-tests}"\n'
         'else\n'
         '  echo "[devx-quickcheck] pytest missing, skipping tests"\n'
         'fi\n\n'

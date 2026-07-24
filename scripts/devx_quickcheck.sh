@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PYTHON_BIN="${PYTHON:-python3}"
+
 echo "[devx-quickcheck] starting"
-python -m aigit.cli chunk --repo .
+"${PYTHON_BIN}" -m aigit.cli chunk --repo .
 
 if command -v aigit >/dev/null 2>&1; then
   AIGIT_BIN="aigit"
 else
-  AIGIT_BIN="python -m aigit.cli"
+  AIGIT_BIN="${PYTHON_BIN} -m aigit.cli"
 fi
 
 echo "[devx-quickcheck] refreshing semantic state"
@@ -26,13 +28,13 @@ else
   echo "[devx-quickcheck] ruff not found, skipping lint"
 fi
 
-if python - <<'PY'
+if "${PYTHON_BIN}" - <<'PY'
 import importlib.util
 raise SystemExit(0 if importlib.util.find_spec("pytest") else 1)
 PY
 then
   echo "[devx-quickcheck] running pytest"
-  python -m pytest --tb=short -q "${1:-tests}"
+  "${PYTHON_BIN}" -m pytest --tb=short -q "${1:-tests}"
 else
   echo "[devx-quickcheck] pytest missing, skipping tests"
 fi

@@ -3,6 +3,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+python_bin="${PYTHON:-python3}"
 
 cleanup_caches() {
 	find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
@@ -20,8 +21,8 @@ cd "$repo_root"
 baseline_nonsemantic_changes="$(list_nonsemantic_changes)"
 
 cleanup_caches
-pytest -q
-python -m aigit.cli chunk --repo .
+"$python_bin" -m pytest -q
+"$python_bin" -m aigit.cli chunk --repo .
 cleanup_caches
 
 baseline_file="$(mktemp)"
