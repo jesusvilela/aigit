@@ -30,3 +30,22 @@ def test_check_detects_stale_after_edit(tmp_path):
     assert _chunk(tmp_path, check=True) == 1  # stale: forgot to re-chunk
     assert _chunk(tmp_path) == 0              # re-chunk
     assert _chunk(tmp_path, check=True) == 0  # fresh again
+
+
+def test_chunk_preflight_rejects_invalid_ruleset(tmp_path, capsys):
+    core.ensure_semantic_scaffold(tmp_path)
+    (tmp_path / '.semantic/ruleset.yaml').write_text(
+        'version: 99\nparsers:\n  default: file\n',
+        encoding='utf-8',
+    )
+
+    assert _chunk(tmp_path) == 1
+    assert 'ruleset preflight failed' in capsys.readouterr().err
+
+
+def test_chunk_preflight_rejects_incompatible_semantic_schema(tmp_path, capsys):
+    core.ensure_semantic_scaffold(tmp_path)
+    (tmp_path / '.semantic/schema_version').write_text('2\n', encoding='utf-8')
+
+    assert _chunk(tmp_path) == 1
+    assert 'unsupported semantic schema version' in capsys.readouterr().err

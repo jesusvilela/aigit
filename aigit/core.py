@@ -638,6 +638,8 @@ def semantic_build_context(root: Path) -> dict[str, str]:
     from . import __version__
 
     schema_version = _repo_semantic_path(root, SCHEMA_FILE).read_text(encoding='utf-8').strip()
+    if schema_version != SUPPORTED_RULESET_VERSION:
+        raise ValueError(f'unsupported semantic schema version: {schema_version}')
     return {
         'aigit_version': __version__,
         'canonicalizer_version': CANONICALIZER_VERSION,
