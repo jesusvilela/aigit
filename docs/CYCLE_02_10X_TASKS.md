@@ -21,6 +21,9 @@ This checklist turns the Cycle 2 charter into independently shippable slices.
 - [x] add curated refactor fixtures (seed corpus)
 - [x] assert expected semantic ID continuity
 - [x] expose regressions clearly in CI
+- [ ] add preregistered design-partner scenarios
+- [ ] reach the required coverage for every supported parser family
+- [ ] publish per-family results without pooling away failures
 
 ## C2-03 Semantic PR publishing
 
