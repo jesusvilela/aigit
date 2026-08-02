@@ -29,11 +29,17 @@ EDGES_FILE = SEMANTIC_DIR / 'edges.jsonl'
 INDEX_FILE = SEMANTIC_DIR / 'chunk_index.json'
 RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
+BUILD_CONTEXT_FILE = SEMANTIC_DIR / 'build_context.json'
 # Local-only (gitignored) per-file parse cache for incremental chunking.
 CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
-CHUNK_CACHE_VERSION = '1'
+CHUNK_CACHE_VERSION = '2'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
+SUPPORTED_RULESET_VERSION = '1'
+SUPPORTED_IDENTITY_STRATEGIES = {'path+anchor+type'}
+SUPPORTED_FALSE_POSITIVE_POLICIES = {'prefer-new-node'}
+PARSER_REGISTRY_VERSION = '1'
+CANONICALIZER_VERSION = '1'
 BINARY_ASSET_SUFFIXES = {
     '.bmp', '.gif', '.ico', '.jpeg', '.jpg', '.pdf', '.png', '.svgz', '.tif', '.tiff', '.webp',
     '.woff', '.woff2', '.zip', '.gz', '.tar', '.whl', '.wasm',
@@ -415,18 +421,34 @@ def parse_typescript(path: str, text: str) -> list[Chunk]:
     return chunks if chunks else parse_text(path, text)
 
 
-def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | None = None) -> list[Chunk]:
+def _canonicalize_parser_input(text: str, ruleset: dict[str, Any]) -> str:
+    canonicalization = ruleset['canonicalization']
+    if canonicalization['line_endings'] == 'lf':
+        text = text.replace('\r\n', '\n').replace('\r', '\n')
+    if canonicalization['trim_trailing_whitespace'] == 'true':
+        text = '\n'.join(line.rstrip() for line in text.split('\n'))
+    return text
+
+
+def parse_file(
+    full_path: Path,
+    rel_path: str,
+    ruleset: dict[str, Any],
+    errors: list[dict[str, str]] | None = None,
+) -> list[Chunk]:
     text = full_path.read_text(encoding='utf-8', errors='replace')
     suffix = full_path.suffix.lower()
-    if suffix == '.py':
+    backend = ruleset['parsers'].get(suffix, ruleset['parsers']['default'])
+    text = _canonicalize_parser_input(text, ruleset)
+    if backend == 'python-ast':
         return parse_python(rel_path, text, errors)
-    if suffix in {'.md', '.markdown'}:
+    if backend == 'markdown-headings':
         return parse_markdown(rel_path, text)
-    if suffix == '.json':
+    if backend == 'json-keys':
         return parse_json(rel_path, text)
-    if suffix in {'.yaml', '.yml'}:
+    if backend == 'yaml-keys':
         return parse_yaml(rel_path, text)
-    if suffix in {'.ts', '.tsx'}:
+    if backend == 'typescript-ast':
         return parse_typescript(rel_path, text)
     return parse_text(rel_path, text)
 
@@ -451,6 +473,8 @@ def _parse_simple_yaml(text: str) -> dict[str, Any]:
         while len(section_stack) > 1 and indent <= section_stack[-1][0]:
             section_stack.pop()
         current = section_stack[-1][1]
+        if key in current:
+            raise ValueError(f'duplicate ruleset key: {key}')
 
         if value:
             current[key] = value
@@ -468,6 +492,12 @@ def validate_ruleset_file(root: Path | None = None) -> dict[str, Any]:
     if not ruleset_file.is_file():
         raise ValueError(f'ruleset does not exist: {ruleset_file}')
     parsed = _parse_simple_yaml(ruleset_file.read_text(encoding='utf-8'))
+    allowed_top_level = {'version', 'parsers', 'identity', 'canonicalization'}
+    unknown_top_level = set(parsed) - allowed_top_level
+    if unknown_top_level:
+        raise ValueError(f"unknown ruleset field: {sorted(unknown_top_level)[0]}")
+    if parsed.get('version') != SUPPORTED_RULESET_VERSION:
+        raise ValueError(f"unsupported ruleset version: {parsed.get('version')}")
     parsers = parsed.get('parsers')
     if parsers is None:
         raise ValueError('ruleset must define a parsers mapping')
@@ -478,6 +508,33 @@ def validate_ruleset_file(root: Path | None = None) -> dict[str, Any]:
             raise ValueError(f'unsupported parser backend: {backend}')
         if suffix != 'default' and not suffix.startswith('.'):
             raise ValueError(f'invalid ruleset parser key: {suffix}')
+    if 'default' not in parsers:
+        raise ValueError('ruleset parsers must define default')
+
+    identity = parsed.get('identity')
+    if not isinstance(identity, dict):
+        raise ValueError('ruleset must define an identity mapping')
+    if set(identity) != {'strategy', 'false_positive_policy'}:
+        raise ValueError('ruleset identity must define only strategy and false_positive_policy')
+    if identity['strategy'] not in SUPPORTED_IDENTITY_STRATEGIES:
+        raise ValueError(f"unsupported identity strategy: {identity['strategy']}")
+    if identity['false_positive_policy'] not in SUPPORTED_FALSE_POSITIVE_POLICIES:
+        raise ValueError(f"unsupported false-positive policy: {identity['false_positive_policy']}")
+
+    canonicalization = parsed.get('canonicalization')
+    if not isinstance(canonicalization, dict):
+        raise ValueError('ruleset must define a canonicalization mapping')
+    if set(canonicalization) != {'line_endings', 'trim_trailing_whitespace'}:
+        raise ValueError(
+            'ruleset canonicalization must define only line_endings and trim_trailing_whitespace'
+        )
+    if canonicalization['line_endings'] != 'lf':
+        raise ValueError(f"unsupported line-ending policy: {canonicalization['line_endings']}")
+    if canonicalization['trim_trailing_whitespace'] != 'true':
+        raise ValueError(
+            'unsupported trailing-whitespace policy: '
+            f"{canonicalization['trim_trailing_whitespace']}"
+        )
     return parsed
 
 
@@ -548,12 +605,54 @@ def ensure_semantic_scaffold(root: Path | None = None) -> None:
         schema_file.write_text('1\n', encoding='utf-8')
     if not ruleset_file.exists():
         ruleset_file.write_text(
-            'version: 1\nparsers:\n  .py: python-ast\n  .md: markdown-headings\n  .json: json-keys\n  .yaml: yaml-keys\n  .yml: yaml-keys\n  .ts: typescript-ast\n  .tsx: typescript-ast\n  default: file\n',
+            'version: 1\n'
+            'parsers:\n'
+            '  .py: python-ast\n'
+            '  .md: markdown-headings\n'
+            '  .json: json-keys\n'
+            '  .yaml: yaml-keys\n'
+            '  .yml: yaml-keys\n'
+            '  .ts: typescript-ast\n'
+            '  .tsx: typescript-ast\n'
+            '  default: file\n'
+            'identity:\n'
+            '  strategy: path+anchor+type\n'
+            '  false_positive_policy: prefer-new-node\n'
+            'canonicalization:\n'
+            '  line_endings: lf\n'
+            '  trim_trailing_whitespace: true\n',
             encoding='utf-8',
         )
 
 
-def _load_chunk_cache(root: Path) -> dict[str, Any]:
+def _ruleset_digest(root: Path) -> str:
+    return hashlib.sha256(_repo_semantic_path(root, RULESET_FILE).read_bytes()).hexdigest()
+
+
+def _parser_registry_digest() -> str:
+    registry = '\n'.join(sorted(SUPPORTED_PARSER_BACKENDS))
+    return hashlib.sha256(f'{PARSER_REGISTRY_VERSION}\n{registry}'.encode('utf-8')).hexdigest()
+
+
+def semantic_build_context(root: Path) -> dict[str, str]:
+    from . import __version__
+
+    schema_version = _repo_semantic_path(root, SCHEMA_FILE).read_text(encoding='utf-8').strip()
+    return {
+        'aigit_version': __version__,
+        'canonicalizer_version': CANONICALIZER_VERSION,
+        'parser_registry_digest': _parser_registry_digest(),
+        'ruleset_digest': _ruleset_digest(root),
+        'semantic_schema': schema_version,
+    }
+
+
+def _constitution_digest(context: dict[str, str]) -> str:
+    payload = json.dumps(context, sort_keys=True, separators=(',', ':'))
+    return hashlib.sha256(payload.encode('utf-8')).hexdigest()
+
+
+def _load_chunk_cache(root: Path, constitution_digest: str) -> dict[str, Any]:
     path = _repo_semantic_path(root, CHUNK_CACHE_FILE)
     if not path.exists():
         return {}
@@ -561,19 +660,31 @@ def _load_chunk_cache(root: Path) -> dict[str, Any]:
         data = json.loads(path.read_text(encoding='utf-8'))
     except (json.JSONDecodeError, OSError):
         return {}
-    if isinstance(data, dict) and data.get('version') == CHUNK_CACHE_VERSION:
+    if (
+        isinstance(data, dict)
+        and data.get('version') == CHUNK_CACHE_VERSION
+        and data.get('constitution_digest') == constitution_digest
+    ):
         files = data.get('files', {})
         if isinstance(files, dict):
             return files
     return {}
 
 
-def _save_chunk_cache(root: Path, files: dict[str, Any]) -> None:
+def _save_chunk_cache(root: Path, constitution_digest: str, files: dict[str, Any]) -> None:
     path = _repo_semantic_path(root, CHUNK_CACHE_FILE)
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(
-            json.dumps({'version': CHUNK_CACHE_VERSION, 'files': files}), encoding='utf-8'
+            json.dumps(
+                {
+                    'version': CHUNK_CACHE_VERSION,
+                    'constitution_digest': constitution_digest,
+                    'files': files,
+                },
+                sort_keys=True,
+            ),
+            encoding='utf-8',
         )
     except OSError:
         pass  # cache is best-effort; never fail a chunk run over it
@@ -587,14 +698,16 @@ def build_manifest(
     speed differs (a single-file edit no longer re-parses the whole repo).
     """
     ensure_semantic_scaffold(root)
-    previous = load_previous_index(root)
-    cache = _load_chunk_cache(root)
+    ruleset = validate_ruleset_file(root)
+    context = semantic_build_context(root)
+    constitution_digest = _constitution_digest(context)
+    cache = _load_chunk_cache(root, constitution_digest)
     new_cache: dict[str, Any] = {}
     err_sink: list[dict[str, str]] = errors if errors is not None else []
     chunks: list[Chunk] = []
     edges: list[dict[str, Any]] = []
     for rel in iter_repo_files(root):
-        rel_str = str(rel)
+        rel_str = rel.as_posix()
         full = root / rel
         file_hash = hashlib.sha256(full.read_bytes()).hexdigest()
         cached = cache.get(rel_str)
@@ -606,18 +719,14 @@ def build_manifest(
                 entry['error'] = cached['error']
         else:
             before = len(err_sink)
-            parsed = parse_file(full, rel_str, err_sink)
+            parsed = parse_file(full, rel_str, ruleset, err_sink)
             entry = {'file_hash': file_hash, 'chunks': [chunk.to_dict() for chunk in parsed]}
             if len(err_sink) > before:
                 entry['error'] = err_sink[-1]['error']
         new_cache[rel_str] = entry
         for chunk in parsed:
-            old_id = match_previous_id(chunk, previous)
-            if old_id != chunk.semantic_id:
-                edges.append({'from': old_id, 'to': chunk.semantic_id, 'reason': 'refined-anchor'})
-            chunk.semantic_id = old_id
             chunks.append(chunk)
-    _save_chunk_cache(root, new_cache)
+    _save_chunk_cache(root, constitution_digest, new_cache)
     return chunks, edges
 
 
@@ -644,6 +753,8 @@ def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path 
     _repo_semantic_path(root, MANIFEST_FILE).write_text(manifest_text, encoding='utf-8')
     _repo_semantic_path(root, EDGES_FILE).write_text(edges_text, encoding='utf-8')
     _repo_semantic_path(root, INDEX_FILE).write_text(index_text, encoding='utf-8')
+    context_text = json.dumps(semantic_build_context(root), indent=2, sort_keys=True) + '\n'
+    _repo_semantic_path(root, BUILD_CONTEXT_FILE).write_text(context_text, encoding='utf-8')
 
 
 def _read_text_or_empty(path: Path) -> str:
@@ -655,14 +766,20 @@ def cmd_chunk(args: argparse.Namespace) -> int:
     strict = getattr(args, 'strict', False)
     check = getattr(args, 'check', False)
     errors: list[dict[str, str]] = []
-    chunks, edges = build_manifest(repo_root, errors)
+    try:
+        chunks, edges = build_manifest(repo_root, errors)
+    except ValueError as exc:
+        print(f'ruleset preflight failed: {exc}', file=sys.stderr)
+        return 1
     manifest_text, edges_text, index_text = render_manifest(chunks, edges)
+    context_text = json.dumps(semantic_build_context(repo_root), indent=2, sort_keys=True) + '\n'
 
     if check:
         stale = (
             _read_text_or_empty(_repo_semantic_path(repo_root, MANIFEST_FILE)) != manifest_text
             or _read_text_or_empty(_repo_semantic_path(repo_root, INDEX_FILE)) != index_text
             or _read_text_or_empty(_repo_semantic_path(repo_root, EDGES_FILE)) != edges_text
+            or _read_text_or_empty(_repo_semantic_path(repo_root, BUILD_CONTEXT_FILE)) != context_text
         )
         if stale:
             print('semantic artifacts are STALE; re-run `aigit chunk`', file=sys.stderr)
