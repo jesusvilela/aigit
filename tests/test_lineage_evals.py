@@ -2,6 +2,8 @@ import argparse
 import json
 from pathlib import Path
 
+import pytest
+
 from aigit.core import cmd_eval_lineage, cmd_validate_ruleset, evaluate_lineage_fixtures
 
 
@@ -38,6 +40,44 @@ def test_cmd_eval_lineage_fails_closed_on_unmet_threshold(tmp_path: Path) -> Non
     assert cmd_eval_lineage(args) == 1
 
 
-def test_validate_ruleset_command_accepts_default_ruleset(tmp_path: Path) -> None:
+def test_validate_ruleset_command_rejects_missing_ruleset(tmp_path: Path) -> None:
     args = argparse.Namespace(repo=str(tmp_path))
-    assert cmd_validate_ruleset(args) == 0
+    assert cmd_validate_ruleset(args) == 1
+    assert not (tmp_path / '.semantic').exists()
+
+
+def test_lineage_replay_rejects_corpus_without_positive_edges(tmp_path: Path) -> None:
+    fixture = tmp_path / 'negative-only.json'
+    fixture.write_text(
+        json.dumps(
+            {
+                'version': 1,
+                'cases': [
+                    {
+                        'id': 'negative-only',
+                        'base': [
+                            {
+                                'semantic_id': 'old',
+                                'path': 'old.py',
+                                'anchor': 'old',
+                                'content': 'def old(): return 1',
+                            }
+                        ],
+                        'head': [
+                            {
+                                'semantic_id': 'new',
+                                'path': 'new.py',
+                                'anchor': 'new',
+                                'content': 'def new(value): return value * 2',
+                            }
+                        ],
+                        'expected_lineage': [],
+                    }
+                ],
+            }
+        ),
+        encoding='utf-8',
+    )
+
+    with pytest.raises(ValueError, match='at least one expected lineage edge'):
+        evaluate_lineage_fixtures(fixture)

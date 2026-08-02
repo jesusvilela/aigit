@@ -46,7 +46,7 @@ Cycle 2 builds on the existing epics instead of replacing them. The objective is
 | Track | Scope | Status | First milestone |
 | --- | --- | --- | --- |
 | C2-01 | ruleset policy packs | chartered | repo-class presets and compatibility contracts |
-| C2-02 | lineage replay suite | chartered | deterministic regression fixture matrix |
+| C2-02 | lineage replay suite | seed landed; expansion pending | design-partner fixture matrix by parser family |
 | C2-03 | semantic PR publishing | chartered | PR-ready semantic summary generation |
 | C2-04 | merge rehearsal mode | chartered | pre-merge semantic conflict preview |
 | C2-05 | provenance verification | chartered | proof checks in CLI and CI |
@@ -57,3 +57,5 @@ Cycle 2 builds on the existing epics instead of replacing them. The objective is
 | C2-10 | adoption rails | chartered | rollout scorecards and release templates |
 
 Cycle 2 charter: `docs/CYCLE_02_10X_RELEASE.md`
+
+The seed replay validates the evaluation mechanism, not the full C2-02 claim. Expansion remains open until the preregistered parser-family and design-partner coverage is published. The ten forward evidence questions are recorded in the [development journal](DEVELOPMENT_JOURNAL.md).

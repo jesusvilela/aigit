@@ -464,8 +464,9 @@ def _parse_simple_yaml(text: str) -> dict[str, Any]:
 
 def validate_ruleset_file(root: Path | None = None) -> dict[str, Any]:
     repo_root = root.resolve() if root is not None else Path('.').resolve()
-    ensure_semantic_scaffold(repo_root)
     ruleset_file = _repo_semantic_path(repo_root, RULESET_FILE)
+    if not ruleset_file.is_file():
+        raise ValueError(f'ruleset does not exist: {ruleset_file}')
     parsed = _parse_simple_yaml(ruleset_file.read_text(encoding='utf-8'))
     parsers = parsed.get('parsers')
     if parsers is None:
@@ -868,6 +869,8 @@ def evaluate_lineage_fixtures(fixture_file: Path) -> dict[str, Any]:
     true_positive = len(all_expected & all_actual)
     false_positive = len(all_actual - all_expected)
     false_negative = len(all_expected - all_actual)
+    if not all_expected:
+        raise ValueError('fixture must define at least one expected lineage edge')
     precision = true_positive / (true_positive + false_positive) if true_positive + false_positive else 1.0
     recall = true_positive / (true_positive + false_negative) if true_positive + false_negative else 1.0
     return {
