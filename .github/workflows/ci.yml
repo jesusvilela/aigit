@@ -132,7 +132,7 @@ jobs:
           /tmp/aigit-wheel-test/bin/aigit --help
 
       - name: Upload distribution artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: aigit-distributions
           path: dist/
