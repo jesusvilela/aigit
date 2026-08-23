@@ -317,11 +317,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "26a58c13eebbb01cfab7ff14386c85bc290ac9a63f38be665daea26b4eb32156",
-    "end_line": 52,
+    "end_line": 57,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_838db1ff2ca9dfab",
-    "start_line": 46
+    "start_line": 51
   },
   "CHANGELOG.md::section::Changed": {
     "anchor": "Changed",
@@ -352,8 +352,8 @@
     "body_fingerprint": "",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "41c5b12d181f17f4c9655d8d8bd3a837cc7b07165e48634c175d7718f11be45e",
-    "end_line": 43,
+    "content_hash": "38c00435c8f0b65a41218164cf1483cddb38eb45991c0eb366fec66dbdbc9fd0",
+    "end_line": 48,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_e4910f51bba6a36a",
@@ -365,11 +365,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "5e5d121a15da8da630a8a5ae708d4bdcb191a78e6b39d186432d2acdbd757209",
-    "end_line": 45,
+    "end_line": 50,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_387ec8df715097b1",
-    "start_line": 44
+    "start_line": 49
   },
   "CHANGELOG.md::section::[Unreleased]": {
     "anchor": "[Unreleased]",
