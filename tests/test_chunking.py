@@ -223,3 +223,49 @@ def test_setup_storage_lfs_writes_gitattributes(tmp_path: Path, monkeypatch) -> 
     assert 'manifest.jsonl' in content
     assert 'filter=lfs' in content
 
+
+
+def test_repeated_anchors_in_one_file_get_distinct_ids(tmp_path: Path) -> None:
+    # Python allows redefinition; both defs must stay independently tracked.
+    (tmp_path / 'shadow.py').write_text(
+        'def f():\n    return 1\n\n\ndef f():\n    return 2\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    f_chunks = [c for c in chunks if c.path.endswith('shadow.py')]
+    assert [c.anchor for c in f_chunks] == ['f', 'f#2']
+    assert len({c.semantic_id for c in f_chunks}) == 2
+
+
+def test_repeated_markdown_headers_get_distinct_ids(tmp_path: Path) -> None:
+    (tmp_path / 'doc.md').write_text(
+        '# Usage\nfirst\n# Setup\nmid\n# Usage\nsecond\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    anchors = [c.anchor for c in chunks if c.path.endswith('doc.md')]
+    assert anchors == ['Usage', 'Setup', 'Usage#2']
+    ids = [c.semantic_id for c in chunks if c.path.endswith('doc.md')]
+    assert len(set(ids)) == 3
+
+
+def test_repeated_anchors_survive_the_manifest_round_trip(tmp_path: Path) -> None:
+    # the index is keyed path::type::anchor -- collisions used to drop a chunk
+    (tmp_path / 'shadow.py').write_text(
+        'def f():\n    return 1\n\n\ndef f():\n    return 2\n', encoding='utf-8'
+    )
+    chunks, edges = build_manifest(tmp_path)
+    write_manifest(chunks, edges, tmp_path)
+    import json
+
+    index = json.loads((tmp_path / '.semantic' / 'chunk_index.json').read_text(encoding='utf-8'))
+    assert len([k for k in index if k.endswith('shadow.py::function::f')]) == 1
+    assert len([k for k in index if 'shadow.py::function::f' in k]) == 2
+
+
+def test_unique_anchors_keep_their_original_ids(tmp_path: Path) -> None:
+    # backward compatibility: files without repeats are unchanged
+    from aigit.core import _chunk_id
+
+    (tmp_path / 'plain.py').write_text('def solo():\n    return 1\n', encoding='utf-8')
+    chunks, _ = build_manifest(tmp_path)
+    (chunk,) = [c for c in chunks if c.path.endswith('plain.py')]
+    assert chunk.semantic_id == _chunk_id('plain.py', 'solo', 'function')

@@ -415,20 +415,45 @@ def parse_typescript(path: str, text: str) -> list[Chunk]:
     return chunks if chunks else parse_text(path, text)
 
 
+def _disambiguate_anchors(chunks: list[Chunk]) -> list[Chunk]:
+    """Give repeated ``(anchor, chunk_type)`` pairs within one file distinct ids.
+
+    Python allows redefining a name and Markdown repeats headers freely, so one
+    file can yield several chunks sharing an anchor. Chunk identity is
+    ``hash(path, anchor, chunk_type)``, so those chunks collided: the manifest
+    index and every semantic-id-keyed consumer (diff, merge) silently kept only
+    the last occurrence, hiding the others from the merge gate entirely.
+
+    The first occurrence keeps its original id -- manifests for files without
+    repeats are byte-identical to before -- and later ones become ``anchor#2``,
+    ``anchor#3``, ... so each definition is independently tracked.
+    """
+    seen: dict[tuple[str, str], int] = {}
+    for chunk in chunks:
+        key = (chunk.anchor, chunk.chunk_type)
+        count = seen[key] = seen.get(key, 0) + 1
+        if count > 1:
+            chunk.anchor = f'{chunk.anchor}#{count}'
+            chunk.semantic_id = _chunk_id(chunk.path, chunk.anchor, chunk.chunk_type)
+    return chunks
+
+
 def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | None = None) -> list[Chunk]:
     text = full_path.read_text(encoding='utf-8', errors='replace')
     suffix = full_path.suffix.lower()
     if suffix == '.py':
-        return parse_python(rel_path, text, errors)
-    if suffix in {'.md', '.markdown'}:
-        return parse_markdown(rel_path, text)
-    if suffix == '.json':
-        return parse_json(rel_path, text)
-    if suffix in {'.yaml', '.yml'}:
-        return parse_yaml(rel_path, text)
-    if suffix in {'.ts', '.tsx'}:
-        return parse_typescript(rel_path, text)
-    return parse_text(rel_path, text)
+        parsed = parse_python(rel_path, text, errors)
+    elif suffix in {'.md', '.markdown'}:
+        parsed = parse_markdown(rel_path, text)
+    elif suffix == '.json':
+        parsed = parse_json(rel_path, text)
+    elif suffix in {'.yaml', '.yml'}:
+        parsed = parse_yaml(rel_path, text)
+    elif suffix in {'.ts', '.tsx'}:
+        parsed = parse_typescript(rel_path, text)
+    else:
+        parsed = parse_text(rel_path, text)
+    return _disambiguate_anchors(parsed)
 
 def _repo_semantic_path(root: Path, path: Path) -> Path:
     return root / path
@@ -951,10 +976,102 @@ def cmd_diff(args: argparse.Namespace) -> int:
     return 0
 
 
+# Matches the lineage threshold: both answer "is this the same unit of work
+# under a different name?", so they are calibrated together. Measured on this
+# repo, a genuine name-only duplicate scores ~0.89 -- see the precision note in
+# detect_duplicate_work.
+DUPLICATE_WORK_THRESHOLD = 0.85
+DUPLICATE_WORK_MIN_LINES = 3
+
+
+def _span_lines(record: dict[str, Any]) -> int:
+    try:
+        return int(record.get('end_line', 0)) - int(record.get('start_line', 0)) + 1
+    except (TypeError, ValueError):
+        return 0
+
+
+def detect_duplicate_work(
+    base: dict[str, dict[str, Any]],
+    ours: dict[str, dict[str, Any]],
+    theirs: dict[str, dict[str, Any]],
+    threshold: float = DUPLICATE_WORK_THRESHOLD,
+    min_lines: int = DUPLICATE_WORK_MIN_LINES,
+) -> list[dict[str, Any]]:
+    """Flag work both branches added that differs in *name* but not in substance.
+
+    ``add/add`` is keyed on ``hash(path, anchor, chunk_type)``, so it only fires
+    when two agents pick the same name. Two agents solving the same ticket in
+    parallel routinely pick different names -- ``pick_provider`` vs
+    ``choose_provider`` -- and that duplicate work sails through the gate.
+
+    This compares chunks *added* on both sides by content instead of by name:
+
+    * identical bodies under different names are always reported (unambiguous
+      duplicate work, wherever they live);
+    * near-identical bodies (SimHash similarity >= ``threshold``) are reported
+      only within the same file and above ``min_lines``, because SimHash over a
+      one-liner carries too little signal to accuse two agents of duplication.
+
+    Pairing is greedy by descending similarity and each chunk is used at most
+    once, so N added chunks yield at most N reports.
+
+    Precision, measured over this repo's own chunks: a true name-only duplicate
+    scores ~0.89, while mirror-image siblings that are *not* duplicates (say
+    ``import_repo_...`` next to ``export_repo_...``) can score higher still.
+    SimHash cannot fully separate those, so near-match reports are advisory --
+    they stop a merge for review the way a textual conflict does, rather than
+    proving duplication. ``--no-duplicate-work`` turns the near-match pass off.
+    """
+    ours_added = [r for sid, r in ours.items() if sid not in base and sid not in theirs]
+    theirs_added = [r for sid, r in theirs.items() if sid not in base and sid not in ours]
+    scored: list[tuple[float, str, str, dict[str, Any], dict[str, Any]]] = []
+    for o in ours_added:
+        for t in theirs_added:
+            if o.get('chunk_type') != t.get('chunk_type'):
+                continue
+            similarity = _chunk_similarity(o, t)
+            exact = similarity >= 1.0
+            if not exact:
+                same_file = o.get('path') == t.get('path')
+                big_enough = min(_span_lines(o), _span_lines(t)) >= min_lines
+                if not (same_file and big_enough and similarity >= threshold):
+                    continue
+            scored.append((similarity, o['semantic_id'], t['semantic_id'], o, t))
+    # Highest similarity first; semantic ids break ties so output is deterministic.
+    scored.sort(key=lambda row: (-row[0], row[1], row[2]))
+    used_ours: set[str] = set()
+    used_theirs: set[str] = set()
+    duplicates: list[dict[str, Any]] = []
+    for similarity, o_sid, t_sid, o, t in scored:
+        if o_sid in used_ours or t_sid in used_theirs:
+            continue
+        used_ours.add(o_sid)
+        used_theirs.add(t_sid)
+        duplicates.append(
+            {
+                'semantic_id': o_sid,
+                'kind': 'duplicate-work',
+                'path': o.get('path', ''),
+                'anchor': o.get('anchor', ''),
+                'base_hash': None,
+                'ours_hash': o.get('content_hash'),
+                'theirs_hash': t.get('content_hash'),
+                'theirs_semantic_id': t_sid,
+                'theirs_path': t.get('path', ''),
+                'theirs_anchor': t.get('anchor', ''),
+                'similarity': round(similarity, 4),
+            }
+        )
+    duplicates.sort(key=lambda row: (row['semantic_id'], row['theirs_semantic_id']))
+    return duplicates
+
+
 def compute_semantic_conflicts(
     base: dict[str, dict[str, Any]],
     ours: dict[str, dict[str, Any]],
     theirs: dict[str, dict[str, Any]],
+    include_duplicate_work: bool = True,
 ) -> list[dict[str, Any]]:
     """Detect semantic merge conflicts across base/ours/theirs manifests.
 
@@ -966,6 +1083,9 @@ def compute_semantic_conflicts(
       (two agents independently writing the same function).
     * ``modify/delete`` / ``delete/modify`` — one side edits a chunk the other
       removes.
+    * ``duplicate-work`` — both sides added the same work under *different*
+      names (see :func:`detect_duplicate_work`); pass
+      ``include_duplicate_work=False`` to restrict the gate to name-keyed kinds.
 
     Returns one record per conflicting semantic id, sorted for determinism.
     """
@@ -1004,6 +1124,8 @@ def compute_semantic_conflicts(
                 'theirs_hash': th,
             }
         )
+    if include_duplicate_work:
+        conflicts.extend(detect_duplicate_work(base, ours, theirs))
     return conflicts
 
 
@@ -1011,7 +1133,10 @@ def cmd_merge(args: argparse.Namespace) -> int:
     base = _read_manifest_from_ref(args.base)
     ours = _read_manifest_from_ref(args.ours)
     theirs = _read_manifest_from_ref(args.theirs)
-    conflicts = compute_semantic_conflicts(base, ours, theirs)
+    include_duplicate_work = not getattr(args, 'no_duplicate_work', False)
+    conflicts = compute_semantic_conflicts(
+        base, ours, theirs, include_duplicate_work=include_duplicate_work
+    )
     out = {
         'base': args.base,
         'ours': args.ours,
@@ -1021,7 +1146,13 @@ def cmd_merge(args: argparse.Namespace) -> int:
     }
     Path(args.output).write_text(json.dumps(out, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     for c in conflicts:
-        print(f"  conflict [{c['kind']}] {c['path']}::{c['anchor']} ({c['semantic_id']})")
+        if c['kind'] == 'duplicate-work':
+            print(
+                f"  conflict [duplicate-work] {c['path']}::{c['anchor']} duplicates "
+                f"{c['theirs_path']}::{c['theirs_anchor']} (similarity {c['similarity']})"
+            )
+        else:
+            print(f"  conflict [{c['kind']}] {c['path']}::{c['anchor']} ({c['semantic_id']})")
     print(f'detected {len(conflicts)} semantic conflicts')
     return 0
 
@@ -3120,6 +3251,11 @@ def build_parser() -> argparse.ArgumentParser:
     merge.add_argument('--ours', required=True)
     merge.add_argument('--theirs', required=True)
     merge.add_argument('--output', default='semantic_merge.json')
+    merge.add_argument(
+        '--no-duplicate-work',
+        action='store_true',
+        help='Only report name-keyed conflicts; skip cross-name duplicate-work detection',
+    )
     merge.set_defaults(func=cmd_merge)
 
     prov = sub.add_parser('record-provenance', help='Attach AI provenance to HEAD')
