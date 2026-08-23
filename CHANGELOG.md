@@ -28,6 +28,11 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Fixed
 
+- The incremental chunk cache is invalidated when the chunk schema changes.
+  Cached entries are rehydrated with `Chunk(**record)`, so after a field is
+  added a stale entry silently backfilled it with its default -- producing a
+  manifest that differed from a clean rebuild and quietly degrading everything
+  computed from that field.
 - `duplicate-work` no longer misses pure renames. The identifier lives inside
   the hashed text, so scoring the whole chunk put a genuine name-only duplicate
   at 0.84 -- under the 0.85 gate. Matching on `body_fingerprint` scores that

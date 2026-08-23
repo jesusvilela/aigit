@@ -31,7 +31,10 @@ RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
 # Local-only (gitignored) per-file parse cache for incremental chunking.
 CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
-CHUNK_CACHE_VERSION = '1'
+# Bump whenever Chunk gains or changes a field: cached entries are rehydrated
+# with ``Chunk(**record)``, so a stale entry silently backfills new fields with
+# their defaults and quietly degrades everything computed from them.
+CHUNK_CACHE_VERSION = '2'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 BINARY_ASSET_SUFFIXES = {
