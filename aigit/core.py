@@ -112,6 +112,7 @@ class Chunk:
     end_line: int
     confidence: str
     fingerprint: str = ''
+    body_fingerprint: str = ''
 
     def to_dict(self) -> dict[str, Any]:
         return dataclasses.asdict(self)
@@ -186,6 +187,30 @@ def _simhash(text: str) -> str:
     return f'{out:016x}'
 
 
+def _body_text(segment: str) -> str:
+    """The chunk body with its declaration line removed.
+
+    A function's own name sits in its ``def`` line, so renaming a function
+    changes its fingerprint even when the logic is untouched. Dropping that
+    line yields a name-independent view, which is what duplicate-work
+    detection needs to see past two agents' differing identifiers.
+    """
+    _, _, rest = segment.partition('\n')
+    return rest
+
+
+def _body_similarity(a: dict[str, Any], b: dict[str, Any]) -> float:
+    """Similarity ignoring declaration lines, falling back when unavailable."""
+    fa, fb = a.get('body_fingerprint'), b.get('body_fingerprint')
+    if fa and fb:
+        try:
+            dist = bin(int(fa, 16) ^ int(fb, 16)).count('1')
+        except ValueError:
+            return _chunk_similarity(a, b)
+        return 1.0 - dist / 64.0
+    return _chunk_similarity(a, b)
+
+
 def _chunk_similarity(a: dict[str, Any], b: dict[str, Any]) -> float:
     """Similarity in [0,1] between two chunk records: exact content first,
     then SimHash Hamming distance as a fallback."""
@@ -232,6 +257,7 @@ def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = Non
                     end_line=end,
                     confidence='high',
                     fingerprint=_simhash(segment),
+                    body_fingerprint=_simhash(_body_text(segment)),
                 )
             )
     return chunks
@@ -977,9 +1003,9 @@ def cmd_diff(args: argparse.Namespace) -> int:
 
 
 # Matches the lineage threshold: both answer "is this the same unit of work
-# under a different name?", so they are calibrated together. Measured on this
-# repo, a genuine name-only duplicate scores ~0.89 -- see the precision note in
-# detect_duplicate_work.
+# under a different name?", so they are calibrated together. Applies only to
+# bodies that differ; a rename alone scores 1.0 once declaration lines are
+# excluded -- see the precision note in detect_duplicate_work.
 DUPLICATE_WORK_THRESHOLD = 0.85
 DUPLICATE_WORK_MIN_LINES = 3
 
@@ -1005,23 +1031,27 @@ def detect_duplicate_work(
     parallel routinely pick different names -- ``pick_provider`` vs
     ``choose_provider`` -- and that duplicate work sails through the gate.
 
-    This compares chunks *added* on both sides by content instead of by name:
+    This compares chunks *added* on both sides by content instead of by name,
+    over :func:`_body_similarity` so that the identifier each agent chose does
+    not itself depress the score:
 
-    * identical bodies under different names are always reported (unambiguous
-      duplicate work, wherever they live);
-    * near-identical bodies (SimHash similarity >= ``threshold``) are reported
-      only within the same file and above ``min_lines``, because SimHash over a
-      one-liner carries too little signal to accuse two agents of duplication.
+    * a verbatim copy (identical ``content_hash``) is always reported;
+    * otherwise the chunks must span at least ``min_lines`` -- SimHash over a
+      one-liner carries too little signal to accuse two agents of duplication --
+      and then either share a body exactly (a pure rename, reported wherever the
+      copies live) or sit in one file and score at least ``threshold``.
 
     Pairing is greedy by descending similarity and each chunk is used at most
     once, so N added chunks yield at most N reports.
 
-    Precision, measured over this repo's own chunks: a true name-only duplicate
-    scores ~0.89, while mirror-image siblings that are *not* duplicates (say
-    ``import_repo_...`` next to ``export_repo_...``) can score higher still.
-    SimHash cannot fully separate those, so near-match reports are advisory --
-    they stop a merge for review the way a textual conflict does, rather than
-    proving duplication. ``--no-duplicate-work`` turns the near-match pass off.
+    Precision, measured over this repo's own chunks: excluding declaration
+    lines takes a true name-only duplicate from 0.84 -- under the gate, missed
+    -- to 1.0, without a meaningful change in false pairs. What it cannot fix
+    is that mirror-image siblings which are *not* duplicates (say
+    ``import_repo_...`` beside ``export_repo_...``) still score highly on body
+    alone. Near-match reports are therefore advisory: they stop a merge for
+    review the way a textual conflict does, rather than proving duplication.
+    ``--no-duplicate-work`` turns the whole pass off.
     """
     ours_added = [r for sid, r in ours.items() if sid not in base and sid not in theirs]
     theirs_added = [r for sid, r in theirs.items() if sid not in base and sid not in ours]
@@ -1030,12 +1060,15 @@ def detect_duplicate_work(
         for t in theirs_added:
             if o.get('chunk_type') != t.get('chunk_type'):
                 continue
-            similarity = _chunk_similarity(o, t)
-            exact = similarity >= 1.0
-            if not exact:
+            similarity = _body_similarity(o, t)
+            if o.get('content_hash') != t.get('content_hash'):
+                # Not a verbatim copy. Require enough substance to accuse, and
+                # keep merely-similar bodies inside one file; an identical body
+                # under a different name is strong enough to report anywhere.
+                if min(_span_lines(o), _span_lines(t)) < min_lines:
+                    continue
                 same_file = o.get('path') == t.get('path')
-                big_enough = min(_span_lines(o), _span_lines(t)) >= min_lines
-                if not (same_file and big_enough and similarity >= threshold):
+                if not (similarity >= 1.0 or (same_file and similarity >= threshold)):
                     continue
             scored.append((similarity, o['semantic_id'], t['semantic_id'], o, t))
     # Highest similarity first; semantic ids break ties so output is deterministic.

@@ -1,5 +1,6 @@
 """Tests for semantic merge conflict detection."""
 from aigit.core import (
+    _body_text,
     _content_hash,
     _simhash,
     compute_semantic_conflicts,
@@ -21,8 +22,9 @@ def _real(sid, body, path="m.py", anchor="f", chunk_type="function"):
             "chunk_type": chunk_type,
             "content_hash": _content_hash(body),
             "fingerprint": _simhash(body),
+            "body_fingerprint": _simhash(_body_text(body)),
             "start_line": 1,
-            "end_line": 1 + len(body.splitlines()),
+            "end_line": len(body.splitlines()),
         }
     }
 
@@ -108,15 +110,17 @@ BODY = _body("pick_provider")
 
 
 def test_same_work_under_two_names_is_flagged():
-    """The real CC1 case: two agents, one ticket, different identifiers. The
-    differing ``def`` line means this is a near-match, never an exact one."""
+    """The real CC1 case: two agents, one ticket, different identifiers.
+
+    Scored on the whole chunk this pair reached only 0.84 and slipped under the
+    gate; excluding the differing ``def`` line shows the bodies are identical."""
     ours = _real("s1", _body("pick_provider"), anchor="pick_provider")
     theirs = _real("s2", _body("choose_provider"), anchor="choose_provider")
     (c,) = compute_semantic_conflicts({}, ours, theirs)
     assert c["kind"] == "duplicate-work"
     assert c["anchor"] == "pick_provider"
     assert c["theirs_anchor"] == "choose_provider"
-    assert 0.85 <= c["similarity"] < 1.0
+    assert c["similarity"] == 1.0
 
 
 def test_verbatim_copy_under_a_different_name_is_flagged():
@@ -179,4 +183,11 @@ def test_duplicate_work_detection_can_be_disabled():
 def test_different_chunk_types_are_never_duplicates():
     ours = _real("s1", BODY, anchor="pick_provider", chunk_type="function")
     theirs = _real("s2", BODY, anchor="pick_provider", chunk_type="section")
+    assert detect_duplicate_work({}, ours, theirs) == []
+
+
+def test_one_line_bodies_are_never_accused_even_when_identical():
+    """Guard the widened rule: an identical one-liner is too weak to accuse."""
+    ours = _real("s1", "def a(x):\n    return x\n", path="a.py", anchor="a")
+    theirs = _real("s2", "def b(x):\n    return x\n", path="b.py", anchor="b")
     assert detect_duplicate_work({}, ours, theirs) == []
