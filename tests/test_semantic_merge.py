@@ -1,9 +1,30 @@
 """Tests for semantic merge conflict detection."""
-from aigit.core import compute_semantic_conflicts
+from aigit.core import (
+    _content_hash,
+    _simhash,
+    compute_semantic_conflicts,
+    detect_duplicate_work,
+)
 
 
 def _c(sid, h, path="m.py", anchor="f"):
     return {sid: {"content_hash": h, "path": path, "anchor": anchor}}
+
+
+def _real(sid, body, path="m.py", anchor="f", chunk_type="function"):
+    """A manifest record with hashes/fingerprints computed from real text."""
+    return {
+        sid: {
+            "semantic_id": sid,
+            "path": path,
+            "anchor": anchor,
+            "chunk_type": chunk_type,
+            "content_hash": _content_hash(body),
+            "fingerprint": _simhash(body),
+            "start_line": 1,
+            "end_line": 1 + len(body.splitlines()),
+        }
+    }
 
 
 def _kinds(conflicts):
@@ -65,3 +86,97 @@ def test_conflict_record_carries_metadata():
     assert c["path"] == "aigit/handlers.py"
     assert c["anchor"] == "handler"
     assert c["ours_hash"] == "hA" and c["theirs_hash"] == "hB" and c["base_hash"] is None
+
+
+# --------------------------------------------------------------------------- #
+# duplicate work: same behaviour, different name (add/add is name-keyed and
+# cannot see it -- two agents on one ticket rarely pick the same identifier).
+# --------------------------------------------------------------------------- #
+def _body(name):
+    """A chunk body as the chunker really sees it: the ``def`` line -- and so
+    the function name -- is part of the hashed text."""
+    return (
+        f"def {name}(model):\n"
+        "    for provider in _PROVIDERS:\n"
+        "        if model in provider['models']:\n"
+        "            return provider['name']\n"
+        "    return 'fallback'\n"
+    )
+
+
+BODY = _body("pick_provider")
+
+
+def test_same_work_under_two_names_is_flagged():
+    """The real CC1 case: two agents, one ticket, different identifiers. The
+    differing ``def`` line means this is a near-match, never an exact one."""
+    ours = _real("s1", _body("pick_provider"), anchor="pick_provider")
+    theirs = _real("s2", _body("choose_provider"), anchor="choose_provider")
+    (c,) = compute_semantic_conflicts({}, ours, theirs)
+    assert c["kind"] == "duplicate-work"
+    assert c["anchor"] == "pick_provider"
+    assert c["theirs_anchor"] == "choose_provider"
+    assert 0.85 <= c["similarity"] < 1.0
+
+
+def test_verbatim_copy_under_a_different_name_is_flagged():
+    ours = _real("s1", BODY, anchor="pick_provider")
+    theirs = _real("s2", BODY, anchor="choose_provider")
+    (c,) = detect_duplicate_work({}, ours, theirs)
+    assert c["similarity"] == 1.0
+
+
+def test_short_near_matches_are_not_accused_of_duplication():
+    # one-liners carry too little SimHash signal to call duplicate work
+    ours = _real("s1", "def a():\n    return 1\n", anchor="a")
+    theirs = _real("s2", "def b():\n    return 2\n", anchor="b")
+    assert detect_duplicate_work({}, ours, theirs) == []
+
+
+def test_unrelated_additions_stay_clean():
+    ours = _real("s1", BODY, anchor="pick_provider")
+    theirs = _real(
+        "s2",
+        "def allow_request(bucket, cost=1):\n"
+        "    bucket['tokens'] -= cost\n"
+        "    return bucket['tokens'] >= 0\n",
+        anchor="allow_request",
+    )
+    assert detect_duplicate_work({}, ours, theirs) == []
+
+
+def test_cross_file_exact_copy_is_flagged_but_near_match_is_not():
+    ours = _real("s1", BODY, path="a.py", anchor="pick_provider")
+    exact = _real("s2", BODY, path="b.py", anchor="choose_provider")
+    assert len(detect_duplicate_work({}, ours, exact)) == 1
+    near = _real("s3", BODY.replace("'fallback'", "'default'"), path="b.py", anchor="choose")
+    assert detect_duplicate_work({}, ours, near) == []
+
+
+def test_pre_existing_chunk_is_not_duplicate_work():
+    # both sides carry a chunk that already existed on base -> not new work
+    base = _real("s1", BODY, anchor="pick_provider")
+    theirs = _real("s2", BODY, anchor="choose_provider")
+    assert detect_duplicate_work(base, base, theirs) == []
+
+
+def test_each_chunk_is_paired_at_most_once():
+    ours = {**_real("s1", BODY, anchor="pick_provider")}
+    theirs = {
+        **_real("s2", BODY, anchor="choose_provider"),
+        **_real("s3", BODY, anchor="select_provider"),
+    }
+    dupes = detect_duplicate_work({}, ours, theirs)
+    assert len(dupes) == 1
+
+
+def test_duplicate_work_detection_can_be_disabled():
+    ours = _real("s1", BODY, anchor="pick_provider")
+    theirs = _real("s2", BODY, anchor="choose_provider")
+    assert compute_semantic_conflicts({}, ours, theirs, include_duplicate_work=False) == []
+
+
+def test_different_chunk_types_are_never_duplicates():
+    ours = _real("s1", BODY, anchor="pick_provider", chunk_type="function")
+    theirs = _real("s2", BODY, anchor="pick_provider", chunk_type="section")
+    assert detect_duplicate_work({}, ours, theirs) == []
