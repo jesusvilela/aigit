@@ -10,7 +10,8 @@ gates behave correctly when they write it *concurrently and imperfectly*:
     P2  the merge queue blocks duplicate work, whether the duplicate shares a
         name (add/add) or hides behind a different one (duplicate-work)
     P3  a rename lands as lineage, not delete + add
-    P4  integrated commits carry signed provenance; a forgery is rejected
+    P4  a signed commit verifies, and an unsigned one is rejected when a
+        signature is required
     P5  a commit that forgot to re-chunk is caught by the freshness gate
 
 Run deterministically (the default -- no network, no weights):
@@ -102,6 +103,10 @@ SEED_FILES = {
 }
 
 
+#: HMAC key the simulated organisation signs provenance with
+SIGNING_KEY = 'crew-simulation-signing-key'
+
+
 def banner(title: str) -> None:
     print('\n' + '=' * 72 + f'\n{title}\n' + '=' * 72)
 
@@ -117,15 +122,31 @@ class Repo:
             ['git', *args], cwd=self.root, check=True, text=True, capture_output=True
         ).stdout.strip()
 
-    def aigit(self, *args: str) -> tuple[int, str]:
+    def aigit(self, *args: str, sign: bool = True) -> tuple[int, str]:
+        env = {
+            **os.environ,
+            'PYTHONPATH': str(Path(__file__).resolve().parents[2]),
+            'AIGIT_PROVENANCE_KEY': SIGNING_KEY,
+        }
+        if not sign:
+            # an agent that never had the key: its rows go in unsigned
+            env.pop('AIGIT_PROVENANCE_KEY')
         proc = subprocess.run(
             [sys.executable, '-m', 'aigit.cli', *args],
             cwd=self.root,
             text=True,
             capture_output=True,
-            env={**os.environ, 'PYTHONPATH': str(Path(__file__).resolve().parents[2])},
+            env=env,
         )
         return proc.returncode, proc.stdout + proc.stderr
+
+    def aigit_ok(self, *args: str, sign: bool = True) -> str:
+        """Run a command that must succeed; a silent failure here would make a
+        downstream assertion pass for the wrong reason."""
+        code, output = self.aigit(*args, sign=sign)
+        if code != 0:
+            raise RuntimeError(f'aigit {" ".join(args)} failed ({code}):\n{output}')
+        return output
 
     def chunk(self) -> None:
         self.aigit('chunk', '--repo', '.')
@@ -162,10 +183,10 @@ def agent_branch(
     trunk: str,
     func_override: str | None = None,
     broken_first: bool = False,
-) -> tuple[str, bool, str]:
+) -> tuple[str, bool, str, str]:
     """One agent: draft, gate the draft, then publish a branch.
 
-    Returns ``(branch, accepted, note)``. A draft that fails the strict gate is
+    Returns ``(branch, accepted, note, feature_sha)``. A draft that fails the strict gate is
     never committed -- the agent retries, exactly as a CI-gated crew would.
     """
     task = dict(TASKS[task_id], impl_key=TASKS[task_id]['func'])
@@ -185,19 +206,37 @@ def agent_branch(
             continue  # strict gate would reject this; agent retries
         append_function(repo, task, code)
         repo.chunk()
-        head = repo.commit(f'feat({agent}): {task["func"]}')
-        repo.aigit(
-            'record-provenance',
-            '--agent',
-            agent,
-            '--model',
-            getattr(backend, 'name', 'unknown'),
-            '--prompt-hash',
-            core._hash([agent, task_id, candidate_variant])[:16],
+        head = attest(
+            repo,
+            agent=agent,
+            model=getattr(backend, 'name', 'unknown'),
+            prompt=f'{agent}:{task_id}:{candidate_variant}',
+            message=f'feat({agent}): {task["func"]}',
         )
-        head = repo.git('rev-parse', 'HEAD')
-        return branch, True, f'branch ready (attempts={attempts}, {head[:9]})'
-    return branch, False, f'no parseable draft after {attempts} attempts'
+        return branch, True, f'branch ready (attempts={attempts}, {head[:9]})', head
+    return branch, False, f'no parseable draft after {attempts} attempts', ''
+
+
+def attest(repo: Repo, agent: str, model: str, prompt: str, message: str, sign: bool = True) -> str:
+    """Commit staged work as an attested change, and return its sha.
+
+    ``verify-provenance`` needs both halves and checks they agree: an
+    ``AI-Provenance`` trailer on the commit, and a log row for that same sha
+    whose prompt hash the trailer prefixes. The row can only be written once the
+    commit exists, so it lands in a follow-up commit -- which also puts it on the
+    branch, where a merge can carry it to trunk.
+    """
+    repo.git('add', '-A')
+    repo.aigit_ok(
+        'commit', '-m', message, '--agent', agent, '--model', model, '--prompt', prompt
+    )
+    head = repo.git('rev-parse', 'HEAD')
+    repo.aigit_ok(
+        'record-provenance', '--agent', agent, '--model', model, '--prompt', prompt, sign=sign
+    )
+    repo.git('add', '.semantic')
+    repo.git('commit', '-qm', f'chore({agent}): record provenance for {head[:9]}')
+    return head
 
 
 @contextlib.contextmanager
@@ -243,6 +282,16 @@ def merge_queue(repo: Repo, trunk: str, branches: list[tuple[str, str, str]]) ->
     return results
 
 
+def _union_jsonl(ours: str, theirs: str) -> str:
+    """Merge two append-only JSONL logs, keeping every distinct row once."""
+    seen: dict[str, None] = {}
+    for side in (ours, theirs):
+        for line in side.splitlines():
+            if line.strip():
+                seen.setdefault(line, None)
+    return ''.join(f'{line}\n' for line in seen)
+
+
 def land(repo: Repo, branch: str) -> tuple[bool, str]:
     """Merge a branch that already cleared the semantic gate.
 
@@ -265,7 +314,15 @@ def land(repo: Repo, branch: str) -> tuple[bool, str]:
         repo.git('merge', '--abort')
         return False, f'textual conflict in {", ".join(outside)}'
     for path in conflicted:
-        repo.git('checkout', '--ours', '--', path)
+        if path.endswith('provenance.jsonl'):
+            # An append-only attestation log, not a derived file: taking one
+            # side would silently drop the other branch's provenance.
+            union = _union_jsonl(
+                repo.git('show', f':2:{path}'), repo.git('show', f':3:{path}')
+            )
+            (repo.root / path).write_text(union, encoding='utf-8')
+        else:
+            repo.git('checkout', '--ours', '--', path)
     repo.git('add', '.semantic')
     repo.git('commit', '-q', '--no-edit')
     repo.chunk()
@@ -325,9 +382,10 @@ def main() -> int:
         # ---- P1 fan-out under the strict gate ------------------------------
         banner('P1  Async fan-out  (strict draft gate + signed provenance)')
         branches: list[tuple[str, str, str]] = []
+        feature_shas: dict[tuple[str, str], str] = {}
         notes: list[str] = []
         for _utc, agent, task_id, variant, override, broken in timeline:
-            branch, ok, note = agent_branch(
+            branch, ok, note, sha = agent_branch(
                 repo, backend, agent, task_id, variant, trunk_seed,
                 func_override=override, broken_first=broken,
             )
@@ -335,6 +393,7 @@ def main() -> int:
             print(f'  {agent:<6} {task_id:<14} -> {"ACCEPTED" if ok else "REJECTED"}  ({note})')
             if ok:
                 branches.append((agent, task_id, branch))
+                feature_shas[(agent, task_id)] = sha
         retried = [n for n in notes if 'attempts=2' in n]
         scores['strict_gate_blocks_broken_draft'] = (
             f'PASS ({len(retried)} unparseable draft(s) caught before commit)'
@@ -349,6 +408,11 @@ def main() -> int:
         for row in results:
             verdict = 'INTEGRATED' if row['integrated'] else f'BLOCKED ({row["kinds"]})'
             print(f'  {row["agent"]:<6} {row["task"]:<14} -> {verdict}')
+        integrated_shas = [
+            feature_shas[(row['agent'], row['task'])]
+            for row in results
+            if row['integrated'] and (row['agent'], row['task']) in feature_shas
+        ]
         blocked_kinds = {k for row in results if not row['integrated']
                          for k in row['kinds'].split(', ') if k}
         for kind, key in (('add/add', 'merge_queue_blocks_same_name_duplicate'),
@@ -390,30 +454,42 @@ def main() -> int:
         repo.git('checkout', '-q', 'trunk')
 
         # ---- P4 provenance --------------------------------------------------
-        banner('P4  Supply chain  (signed provenance vs a forged commit)')
-        signing_key = 'crew-simulation-key'
-        env = {**os.environ, 'AIGIT_PROVENANCE_KEY': signing_key}
-        head = repo.git('rev-parse', 'HEAD')
-        verify = subprocess.run(
-            [sys.executable, '-m', 'aigit.cli', 'verify-provenance', '--commit', head],
-            cwd=repo.root, text=True, capture_output=True, env=env,
-        )
-        print(f'  verify-provenance on integrated trunk: exit={verify.returncode}')
+        banner('P4  Supply chain  (a signed commit vs an unsigned one)')
+        # An agent's own commit, attested and signed, that reached trunk.
+        signed_sha = integrated_shas[0]
+        code, output = repo.aigit('verify-provenance', '--ref', signed_sha, '--require-signature')
+        signed_ok = code == 0 and json.loads(output.splitlines()[-1]).get('signed') is True
+        print(f'  signed agent commit {signed_sha[:9]}: '
+              f'{"VERIFIED" if signed_ok else "FAILED -> " + output.strip()}')
+        if signed_ok:
+            scores['signed_commit_verifies'] = 'PASS (attested commit verifies under --require-signature)'
+        else:
+            scores['signed_commit_verifies'] = 'FAIL (a legitimately signed commit did not verify)'
+            failures.append('signed_commit_verifies')
+
+        # An intruder who can write commits and provenance rows but lacks the
+        # signing key. Giving it a valid trailer and a log row isolates the
+        # *signature* gate -- a commit with no trailer at all would be rejected
+        # by the earlier checks, and would prove nothing about signing.
         (repo.root / 'agentmesh/backdoor.py').write_text(
             'def exfiltrate(secrets):\n    return secrets\n', encoding='utf-8'
         )
         repo.chunk()
-        forged = repo.commit('feat: totally legitimate change')
-        forged_check = subprocess.run(
-            [sys.executable, '-m', 'aigit.cli', 'verify-provenance',
-             '--commit', forged, '--require-signature'],
-            cwd=repo.root, text=True, capture_output=True, env=env,
+        forged = attest(
+            repo, agent='mallory', model='unknown',
+            prompt='mallory:backdoor', message='feat: harmless cleanup', sign=False,
         )
-        if forged_check.returncode != 0:
-            print('  forged unsigned commit: REJECTED')
-            scores['unsigned_commit_rejected'] = 'PASS (forgery rejected under --require-signature)'
+        unsigned_code, _ = repo.aigit('verify-provenance', '--ref', forged)
+        gated_code, _ = repo.aigit('verify-provenance', '--ref', forged, '--require-signature')
+        if unsigned_code == 0 and gated_code != 0:
+            print(f'  unsigned commit {forged[:9]}: passes plain verify, REJECTED when a '
+                  'signature is required')
+            scores['unsigned_commit_rejected'] = 'PASS (signature gate rejects the unsigned commit)'
         else:
-            scores['unsigned_commit_rejected'] = 'FAIL (forged commit accepted)'
+            scores['unsigned_commit_rejected'] = (
+                f'FAIL (plain verify={unsigned_code}, --require-signature={gated_code}; '
+                'expected 0 then non-zero)'
+            )
             failures.append('unsigned_commit_rejected')
 
         # ---- P5 drift gate ---------------------------------------------------

@@ -304,8 +304,8 @@
     "body_fingerprint": "",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "798975cb467ca3f879ba2d3a7a1c3ffb2393467a15d59a3daad8123aee948bc5",
-    "end_line": 24,
+    "content_hash": "d1addca3167aaac55644b4fec5d53832fcf1cca3e9969b01a9571f0ff9ded2df",
+    "end_line": 26,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_a4967d82ed26ac9d",
@@ -317,11 +317,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "26a58c13eebbb01cfab7ff14386c85bc290ac9a63f38be665daea26b4eb32156",
-    "end_line": 57,
+    "end_line": 59,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_838db1ff2ca9dfab",
-    "start_line": 51
+    "start_line": 53
   },
   "CHANGELOG.md::section::Changed": {
     "anchor": "Changed",
@@ -329,11 +329,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "83504db3677427a9a95c7d68352e540e0b08a99e72dd4bee6a1ec8fa56566706",
-    "end_line": 28,
+    "end_line": 30,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_7b83933cef22491e",
-    "start_line": 25
+    "start_line": 27
   },
   "CHANGELOG.md::section::Changelog": {
     "anchor": "Changelog",
@@ -353,11 +353,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "38c00435c8f0b65a41218164cf1483cddb38eb45991c0eb366fec66dbdbc9fd0",
-    "end_line": 48,
+    "end_line": 50,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_e4910f51bba6a36a",
-    "start_line": 29
+    "start_line": 31
   },
   "CHANGELOG.md::section::[0.1.0] - 2026-07-24": {
     "anchor": "[0.1.0] - 2026-07-24",
@@ -365,11 +365,11 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "5e5d121a15da8da630a8a5ae708d4bdcb191a78e6b39d186432d2acdbd757209",
-    "end_line": 50,
+    "end_line": 52,
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_387ec8df715097b1",
-    "start_line": 49
+    "start_line": 51
   },
   "CHANGELOG.md::section::[Unreleased]": {
     "anchor": "[Unreleased]",
@@ -4223,17 +4223,29 @@
     "semantic_id": "sc_edf79fb3bfa17ffc",
     "start_line": 1
   },
+  "examples/crew_sim/README.md::section::Merging `.semantic/` needs two different rules": {
+    "anchor": "Merging `.semantic/` needs two different rules",
+    "body_fingerprint": "",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "c1b8ca0f4d804b75ef1cbb2110b0ae013733cce8ab3736596b2f8d77b37948f2",
+    "end_line": 89,
+    "fingerprint": "",
+    "path": "examples/crew_sim/README.md",
+    "semantic_id": "sc_ed805527c9709a12",
+    "start_line": 77
+  },
   "examples/crew_sim/README.md::section::Notes from running this against real models": {
     "anchor": "Notes from running this against real models",
     "body_fingerprint": "",
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "968c3e2373e45442a236fbec1fb160c5ec7d7faf7d29f85e3518a36ca8eb163d",
-    "end_line": 75,
+    "end_line": 76,
     "fingerprint": "",
     "path": "examples/crew_sim/README.md",
     "semantic_id": "sc_ed6a26aa119b5ce7",
-    "start_line": 56
+    "start_line": 57
   },
   "examples/crew_sim/README.md::section::Running it against a real model": {
     "anchor": "Running it against a real model",
@@ -4241,35 +4253,35 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "0f428b6e2d5ad9d132ad4237dd93c44f2c9f6044ea6314deb20d4edc1bc1bd3b",
-    "end_line": 55,
+    "end_line": 56,
     "fingerprint": "",
     "path": "examples/crew_sim/README.md",
     "semantic_id": "sc_1d8cffab6e868a99",
-    "start_line": 33
-  },
-  "examples/crew_sim/README.md::section::Semantic artifacts conflict textually": {
-    "anchor": "Semantic artifacts conflict textually",
-    "body_fingerprint": "",
-    "chunk_type": "section",
-    "confidence": "high",
-    "content_hash": "52dc6ad60c6b0ca38d2970720851b76ee02d61877da7ab11701b22e1b201b498",
-    "end_line": 81,
-    "fingerprint": "",
-    "path": "examples/crew_sim/README.md",
-    "semantic_id": "sc_3ac7211fe25f2623",
-    "start_line": 76
+    "start_line": 34
   },
   "examples/crew_sim/README.md::section::What it checks": {
     "anchor": "What it checks",
     "body_fingerprint": "",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "e6126b15c5ab0a68c3600cb32c363a65d7ebd31cc8e2e8360f55245824df0014",
-    "end_line": 32,
+    "content_hash": "e1638d55728dfaef9c612e7e19d8437159f2c72658cb32032f0bcb9b00260238",
+    "end_line": 33,
     "fingerprint": "",
     "path": "examples/crew_sim/README.md",
     "semantic_id": "sc_9d743604ef22e936",
     "start_line": 16
+  },
+  "examples/crew_sim/README.md::section::Why P4 asserts two things": {
+    "anchor": "Why P4 asserts two things",
+    "body_fingerprint": "",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "f803e83fe72727a1eeb55fa9e145db2982643568c92ee5ebad523a725f7e4708",
+    "end_line": 97,
+    "fingerprint": "",
+    "path": "examples/crew_sim/README.md",
+    "semantic_id": "sc_60a584ee256f61cb",
+    "start_line": 90
   },
   "examples/crew_sim/backend.py::class::DeterministicBackend": {
     "anchor": "DeterministicBackend",
@@ -4345,27 +4357,39 @@
   },
   "examples/crew_sim/run_crew.py::class::Repo": {
     "anchor": "Repo",
-    "body_fingerprint": "a5b1b3ca2366777f",
+    "body_fingerprint": "25b1b7c92366d77f",
     "chunk_type": "class",
     "confidence": "high",
-    "content_hash": "21e85610a4bac8d4d77e71a58b874ffacff634ad71c9803e17140fb38bf1f936",
-    "end_line": 148,
-    "fingerprint": "a5b1b3ca2366777f",
+    "content_hash": "0a3eb84709b885253628d79f21f057588563ba85cb09f0b2348d32eff50b49be",
+    "end_line": 169,
+    "fingerprint": "25b1b3c92366d77f",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_ba7aba447bc6b4d4",
-    "start_line": 109
+    "start_line": 114
+  },
+  "examples/crew_sim/run_crew.py::function::_union_jsonl": {
+    "anchor": "_union_jsonl",
+    "body_fingerprint": "7fe91b873518c6f2",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9e8106eb4d9fb7c856c377b198f11c6eee7024d05dfa6433d72837af45aa968f",
+    "end_line": 292,
+    "fingerprint": "7fe93b87353cc672",
+    "path": "examples/crew_sim/run_crew.py",
+    "semantic_id": "sc_ff9ab0d7af22968a",
+    "start_line": 285
   },
   "examples/crew_sim/run_crew.py::function::agent_branch": {
     "anchor": "agent_branch",
-    "body_fingerprint": "9efa7ccf3853ccff",
+    "body_fingerprint": "9efafdcf3857ccff",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "6bb55acc8caed7b2403d5bffd08829152bff73e2f5ad0474ed67bde05856c833",
-    "end_line": 200,
-    "fingerprint": "defa7ccf3853ccff",
+    "content_hash": "52b04f7d8fb66c464e2d907e44cabc02d9fdb65903fd6508b5f510fbe756a39c",
+    "end_line": 217,
+    "fingerprint": "9efafdcf3857ccff",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_42ab736963e22c90",
-    "start_line": 156
+    "start_line": 177
   },
   "examples/crew_sim/run_crew.py::function::append_function": {
     "anchor": "append_function",
@@ -4373,11 +4397,23 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "02ee06078d7d2743f2921abb0ae8079b9f07586fcb88bc7fef0538d0993d0ab2",
-    "end_line": 153,
+    "end_line": 174,
     "fingerprint": "cf7333c6585646be",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_16daafe59fc501c3",
-    "start_line": 151
+    "start_line": 172
+  },
+  "examples/crew_sim/run_crew.py::function::attest": {
+    "anchor": "attest",
+    "body_fingerprint": "76fa5ccb60980a1f",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "2e9a11c529505ed26de5ec518ecfdc7ec64e104591e23b73d692bddd594a3191",
+    "end_line": 239,
+    "fingerprint": "5ef85ccb60b84a1f",
+    "path": "examples/crew_sim/run_crew.py",
+    "semantic_id": "sc_8fdec1c480ec7fc7",
+    "start_line": 220
   },
   "examples/crew_sim/run_crew.py::function::banner": {
     "anchor": "banner",
@@ -4385,11 +4421,11 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e6f84c63dd113bbd5606c4a1d5851c23feecbea1d1fa355e0abe98da4b17ea4a",
-    "end_line": 106,
+    "end_line": 111,
     "fingerprint": "0bbe2187b656887c",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_53bbe1182ee7ec53",
-    "start_line": 105
+    "start_line": 110
   },
   "examples/crew_sim/run_crew.py::function::chdir": {
     "anchor": "chdir",
@@ -4397,35 +4433,35 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "30aed93a3032fa8d118b0dd4700b09b2e84638678b3eec57c6acab227a156eb2",
-    "end_line": 211,
+    "end_line": 250,
     "fingerprint": "e62405449c061211",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_bcb4295d3efb7bd9",
-    "start_line": 204
+    "start_line": 243
   },
   "examples/crew_sim/run_crew.py::function::land": {
     "anchor": "land",
-    "body_fingerprint": "7e901188116c565e",
+    "body_fingerprint": "7e9221c8106856ce",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "90c17e0e8218d34257799e5ae6eb223f7a91699eac53bedfb28fea3e54e13244",
-    "end_line": 274,
-    "fingerprint": "7ef03188116c565e",
+    "content_hash": "13966049bb83ed295281e94bb39e92f193de0b31dd7d00adb570d1f0aa64e8d9",
+    "end_line": 331,
+    "fingerprint": "7eb231c8306c56ce",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_8b9749a12fb45cdd",
-    "start_line": 246
+    "start_line": 295
   },
   "examples/crew_sim/run_crew.py::function::main": {
     "anchor": "main",
-    "body_fingerprint": "5f7a5ccd38e14eff",
+    "body_fingerprint": "5f7a5ccf38f10a7e",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "c8913a34051e124935d8e3ec7f9c09cd2828552292a6fb476648e56dedd56747",
-    "end_line": 448,
-    "fingerprint": "5f7a5ccd38e14eff",
+    "content_hash": "c657439a6da252f9d98e833135fe61d6325cbc788361f52123a1040ac133e4a0",
+    "end_line": 524,
+    "fingerprint": "5f7a5ccf38f14afe",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_af947080f20e1edc",
-    "start_line": 277
+    "start_line": 334
   },
   "examples/crew_sim/run_crew.py::function::merge_queue": {
     "anchor": "merge_queue",
@@ -4433,11 +4469,11 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b9fb356fdceab1d52df8251edcf2cf3db8d16eb195046f3c044ed89416a6a5e9",
-    "end_line": 243,
+    "end_line": 282,
     "fingerprint": "7e7abb4f18150e2f",
     "path": "examples/crew_sim/run_crew.py",
     "semantic_id": "sc_5f42f20152b1e5eb",
-    "start_line": 214
+    "start_line": 253
   },
   "pyproject.toml::file::file": {
     "anchor": "file",
@@ -5153,11 +5189,11 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "fd998261b96dd0781464193a094ed576a9cb6819b06b3f14236ef37dc5c9e5bb",
-    "end_line": 53,
+    "end_line": 54,
     "fingerprint": "3fa60ac81086147f",
     "path": "tests/test_crew_sim.py",
     "semantic_id": "sc_ab006aac296ca6b3",
-    "start_line": 49
+    "start_line": 50
   },
   "tests/test_crew_sim.py::function::test_property_is_reported": {
     "anchor": "test_property_is_reported",
@@ -5165,11 +5201,11 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "16afc18062f2176fbf16d81f535d55e4f4eff64f3f8f208103645ff30a601dc4",
-    "end_line": 46,
+    "end_line": 47,
     "fingerprint": "0eab296e51c44677",
     "path": "tests/test_crew_sim.py",
     "semantic_id": "sc_527e9e72d45ef617",
-    "start_line": 44
+    "start_line": 45
   },
   "tests/test_crew_sim.py::function::test_runs_without_network_or_model_weights": {
     "anchor": "test_runs_without_network_or_model_weights",
@@ -5177,11 +5213,23 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "913e3a0ce7382a0a68746f800ffee290faaf056028e9357550faabb5c6a936b8",
-    "end_line": 57,
+    "end_line": 67,
     "fingerprint": "03e6cada5aa0107f",
     "path": "tests/test_crew_sim.py",
     "semantic_id": "sc_10faeafbf1c0668f",
-    "start_line": 56
+    "start_line": 66
+  },
+  "tests/test_crew_sim.py::function::test_signature_gate_is_not_vacuous": {
+    "anchor": "test_signature_gate_is_not_vacuous",
+    "body_fingerprint": "03384b3b6050723e",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8acbc0dba80e68bea89846234f8d03f4180a8d1070659dfdaedd77b1e552f1b0",
+    "end_line": 63,
+    "fingerprint": "03384bbb7050527f",
+    "path": "tests/test_crew_sim.py",
+    "semantic_id": "sc_047c0c191c0f4f1c",
+    "start_line": 57
   },
   "tests/test_crew_sim.py::function::test_simulation_holds_every_property": {
     "anchor": "test_simulation_holds_every_property",

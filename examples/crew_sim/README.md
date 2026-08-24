@@ -22,6 +22,7 @@ Exit status is `0` only if every property holds, so it doubles as a test
 | `merge_queue_blocks_same_name_duplicate` | two agents shipping `pick_provider` twice (`add/add`) |
 | `merge_queue_blocks_renamed_duplicate` | the same work landing as `choose_provider` (`duplicate-work`) |
 | `rename_lands_as_lineage` | a refactor reading as delete + add, destroying history |
+| `signed_commit_verifies` | attestation that cannot actually validate a legitimate commit |
 | `unsigned_commit_rejected` | an unsigned commit slipping into an attested trunk |
 | `drift_gate_blocks_stale_state` | a commit whose `.semantic` state was never regenerated |
 
@@ -73,9 +74,24 @@ These are observations from specific runs, not benchmarks.
   merge risk — rises with sampling temperature and with mixing model families.
   Use `AIGIT_CREW_SAMPLE=1` when you want to exercise the conflict paths.
 
-## Semantic artifacts conflict textually
+## Merging `.semantic/` needs two different rules
 
 Every branch regenerates `.semantic/`, so concurrent branches always collide
-there even when their code does not. `land()` resolves this the way a real
-merge queue should: derived artifacts are **rebuilt, not merged**. A conflict
-anywhere outside `.semantic/` is treated as a genuine one and stops the queue.
+there even when their code does not — and the right resolution differs by file:
+
+- **Derived artifacts** (`manifest.jsonl`, `chunk_index.json`) are *rebuilt, not
+  merged*: take one side, then re-run the chunker.
+- **`provenance.jsonl` is an append-only log**, not derived. Taking one side
+  silently discards the other branch's attestation, so the queue unions the rows
+  instead.
+
+A conflict anywhere outside `.semantic/` is treated as genuine and stops the queue.
+
+## Why P4 asserts two things
+
+Rejecting a commit that simply has no provenance trailer proves nothing about
+signing — every commit in a fresh repository would be rejected, so the check
+could never fail. The unsigned commit here is written by an "intruder" that can
+produce commits and log rows but lacks the key: it carries a valid trailer and a
+matching row, passes plain `verify-provenance`, and is rejected only under
+`--require-signature`. That isolates the signature gate from the trailer gate.

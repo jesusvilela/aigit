@@ -7,7 +7,9 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 ### Added
 
 - `examples/crew_sim/`: a six-agent, six-timezone crew simulation that lands
-  work through a trunk merge queue and asserts every semantic gate holds.
+  work through a trunk merge queue and asserts eight semantic-gate properties,
+  including that a signed commit verifies and an unsigned one is rejected only
+  once a signature is required.
   Deterministic by default (no network, no weights) so CI runs it; point it at
   any OpenAI-compatible API or local transformers checkpoint to drive it with a
   real model.

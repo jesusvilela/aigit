@@ -37,6 +37,7 @@ def test_simulation_holds_every_property(simulation: str) -> None:
         'merge_queue_blocks_same_name_duplicate',
         'merge_queue_blocks_renamed_duplicate',
         'rename_lands_as_lineage',
+        'signed_commit_verifies',
         'unsigned_commit_rejected',
         'drift_gate_blocks_stale_state',
     ],
@@ -51,6 +52,15 @@ def test_both_duplicate_gates_fire(simulation: str) -> None:
     that picked the same name (add/add) and one that renamed (duplicate-work)."""
     assert 'BLOCKED (add/add)' in simulation
     assert 'BLOCKED (duplicate-work)' in simulation
+
+
+def test_signature_gate_is_not_vacuous(simulation: str) -> None:
+    """Both halves must be exercised. Rejecting a commit that simply lacks a
+    provenance trailer would pass for any commit at all and prove nothing about
+    signing, so the unsigned commit here carries a valid trailer and log row and
+    is rejected only once a signature is required."""
+    assert 'VERIFIED' in simulation
+    assert 'passes plain verify, REJECTED when a signature is required' in simulation
 
 
 def test_runs_without_network_or_model_weights(simulation: str) -> None:
