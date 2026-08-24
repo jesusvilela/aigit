@@ -30,6 +30,10 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Fixed
 
+- `duplicate-work` no longer reports two body-less chunks as identical. An
+  empty body hashes to all zeros, and that value was treated as a fingerprint,
+  so any two stubs spanning enough lines matched at 1.0. An absent body is now
+  an absence of evidence and falls back to whole-chunk comparison.
 - The incremental chunk cache is invalidated when the chunk schema changes.
   Cached entries are rehydrated with `Chunk(**record)`, so after a field is
   added a stale entry silently backfilled it with its default -- producing a

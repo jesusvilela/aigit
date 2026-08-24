@@ -29,7 +29,6 @@ Run against a real model:
 from __future__ import annotations
 
 import argparse
-import ast
 import contextlib
 import json
 import os
@@ -169,6 +168,24 @@ class Repo:
         return self.commit('seed: agentmesh skeleton')
 
 
+def strict_gate_rejects(repo: Repo, path: str) -> tuple[bool, str]:
+    """Run the real freshness/strict gate over the working tree.
+
+    ``chunk --strict`` exits non-zero when a file cannot be parsed. A rejected
+    draft is rolled back so the agent's next attempt starts from a clean tree,
+    and the artifacts are rebuilt either way.
+    """
+    code, output = repo.aigit('chunk', '--repo', '.', '--strict')
+    if code == 0:
+        return False, ''
+    reason = next(
+        (line.strip() for line in output.splitlines() if 'strict:' in line), output.strip()
+    )
+    repo.git('checkout', '--', path)
+    repo.aigit('chunk', '--repo', '.')
+    return True, reason
+
+
 def append_function(repo: Repo, task: dict, code: str) -> None:
     path = repo.root / task['file']
     path.write_text(path.read_text(encoding='utf-8') + '\n\n' + code, encoding='utf-8')
@@ -200,12 +217,14 @@ def agent_branch(
     for candidate_variant in (['broken'] if broken_first else []) + [variant]:
         attempts += 1
         code = backend.write_function(task, candidate_variant)
-        try:
-            ast.parse(code)
-        except SyntaxError:
-            continue  # strict gate would reject this; agent retries
         append_function(repo, task, code)
-        repo.chunk()
+        # Put the draft in front of the real gate rather than judging it here:
+        # a harness-side ast.parse would report this property green even if
+        # `chunk --strict` stopped rejecting anything.
+        rejected, reason = strict_gate_rejects(repo, task['file'])
+        if rejected:
+            print(f'      strict gate rejected {agent}\'s draft: {reason}')
+            continue  # agent retries rather than committing it
         head = attest(
             repo,
             agent=agent,
@@ -396,7 +415,7 @@ def main() -> int:
                 feature_shas[(agent, task_id)] = sha
         retried = [n for n in notes if 'attempts=2' in n]
         scores['strict_gate_blocks_broken_draft'] = (
-            f'PASS ({len(retried)} unparseable draft(s) caught before commit)'
+            f'PASS (chunk --strict rejected {len(retried)} draft(s) before commit)'
             if retried
             else 'n/a this run (every draft parsed; gate exercised by tests/test_chunk_gates.py)'
         )

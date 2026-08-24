@@ -202,10 +202,20 @@ def _body_text(segment: str) -> str:
     return rest
 
 
+def _has_body_signal(fingerprint: Any) -> bool:
+    """A body fingerprint is only evidence when the body had tokens to hash.
+
+    ``_simhash('')`` is all zeros, and two chunks with no body at all -- stubs,
+    or the declaration-only chunks the TypeScript parser emits -- would then
+    compare as identical. That is an absence of signal, not a match.
+    """
+    return bool(fingerprint) and set(str(fingerprint)) != {'0'}
+
+
 def _body_similarity(a: dict[str, Any], b: dict[str, Any]) -> float:
     """Similarity ignoring declaration lines, falling back when unavailable."""
     fa, fb = a.get('body_fingerprint'), b.get('body_fingerprint')
-    if fa and fb:
+    if _has_body_signal(fa) and _has_body_signal(fb):
         try:
             dist = bin(int(fa, 16) ^ int(fb, 16)).count('1')
         except ValueError:

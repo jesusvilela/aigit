@@ -54,6 +54,15 @@ def test_both_duplicate_gates_fire(simulation: str) -> None:
     assert 'BLOCKED (duplicate-work)' in simulation
 
 
+def test_the_real_strict_gate_rejects_the_broken_draft(simulation: str) -> None:
+    """The rejection must come from `chunk --strict`, not from the harness.
+
+    A harness-side ast.parse would keep reporting this property green even if
+    the gate stopped rejecting anything, so assert on the tool's own message."""
+    assert 'strict gate rejected' in simulation
+    assert 'strict: unparseable file' in simulation
+
+
 def test_signature_gate_is_not_vacuous(simulation: str) -> None:
     """Both halves must be exercised. Rejecting a commit that simply lacks a
     provenance trailer would pass for any commit at all and prove nothing about

@@ -191,3 +191,28 @@ def test_one_line_bodies_are_never_accused_even_when_identical():
     ours = _real("s1", "def a(x):\n    return x\n", path="a.py", anchor="a")
     theirs = _real("s2", "def b(x):\n    return x\n", path="b.py", anchor="b")
     assert detect_duplicate_work({}, ours, theirs) == []
+
+
+def test_bodyless_chunks_are_not_treated_as_identical():
+    """An empty body hashes to all zeros. Two chunks with nothing in them are
+    an absence of evidence, not a match -- otherwise every stub in a codebase
+    duplicates every other stub."""
+    from aigit.core import _body_similarity
+
+    ours = _real("s1", "def stub_a():\n    ...\n    ...\n", path="a.py", anchor="stub_a")
+    theirs = _real("s2", "def stub_b():\n    ...\n    ...\n", path="b.py", anchor="stub_b")
+    assert ours["s1"]["body_fingerprint"] == "0" * 16
+    assert _body_similarity(ours["s1"], theirs["s2"]) < 1.0
+    assert detect_duplicate_work({}, ours, theirs) == []
+
+
+def test_chunks_without_body_fingerprints_fall_back_rather_than_match():
+    """Not every parser produces a body: the TypeScript parser chunks
+    declarations only. Those must compare on the whole chunk, not silently
+    match each other."""
+    from aigit.core import _body_similarity
+
+    ours = _real("s1", BODY, anchor="pick_provider")
+    theirs = _real("s2", _body("choose_provider"), anchor="choose_provider")
+    del ours["s1"]["body_fingerprint"], theirs["s2"]["body_fingerprint"]
+    assert 0.0 < _body_similarity(ours["s1"], theirs["s2"]) < 1.0

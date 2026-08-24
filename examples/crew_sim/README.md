@@ -87,6 +87,17 @@ there even when their code does not — and the right resolution differs by file
 
 A conflict anywhere outside `.semantic/` is treated as genuine and stops the queue.
 
+## Properties are asserted against the tool, not the harness
+
+Two of these could easily have been self-fulfilling, so they are deliberately
+wired through the real commands:
+
+- **`strict_gate_blocks_broken_draft`** writes the bad draft to disk and runs
+  `aigit chunk --strict`, asserting on its error text. Judging the draft with a
+  harness-side `ast.parse` would report the property green even if the gate
+  stopped rejecting anything.
+- **`unsigned_commit_rejected`** — see below.
+
 ## Why P4 asserts two things
 
 Rejecting a commit that simply has no provenance trailer proves nothing about
