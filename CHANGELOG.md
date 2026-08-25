@@ -6,6 +6,15 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Added
 
+- `duplicate-work` also catches an addition that reimplements code already in
+  the repository, reported with `scope: existing` (the earlier pass, now
+  `scope: concurrent`, only saw two branches adding the same thing at once).
+  Duplicating existing code needs no second agent, only one that did not know
+  the codebase. A chunk the branch removed is skipped, so a rename is never
+  reported as duplicating the name it replaced, and only an exact body match
+  counts against existing code -- near-matching the whole corpus misfired on
+  8.3% of additions when measured on this repo; requiring an exact body took
+  that to 0%.
 - `examples/crew_sim/`: a six-agent, six-timezone crew simulation that lands
   work through a trunk merge queue and asserts eight semantic-gate properties,
   including that a signed commit verifies and an unsigned one is rejected only

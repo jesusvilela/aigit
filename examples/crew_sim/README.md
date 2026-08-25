@@ -21,12 +21,19 @@ Exit status is `0` only if every property holds, so it doubles as a test
 | `strict_gate_blocks_broken_draft` | an unparseable model draft reaching a branch |
 | `merge_queue_blocks_same_name_duplicate` | two agents shipping `pick_provider` twice (`add/add`) |
 | `merge_queue_blocks_renamed_duplicate` | the same work landing as `choose_provider` (`duplicate-work`) |
+| `queue_blocks_reimplementation_of_existing_code` | an agent re-adding what the codebase already had (`duplicate-work`, scope `existing`) |
 | `rename_lands_as_lineage` | a refactor reading as delete + add, destroying history |
 | `signed_commit_verifies` | attestation that cannot actually validate a legitimate commit |
 | `unsigned_commit_rejected` | an unsigned commit slipping into an attested trunk |
 | `drift_gate_blocks_stale_state` | a commit whose `.semantic` state was never regenerated |
 
-The two duplicate gates are deliberately separate. `add/add` is keyed on the
+Duplicate work arrives in three shapes and each needs its own check. `add/add`
+is keyed on the identifier, so it only fires when two agents pick the *same*
+name. `duplicate-work` with scope `concurrent` catches them picking different
+names. Scope `existing` catches the commonest case of all — one agent adding
+what the codebase already had, with no second agent involved.
+
+The two name-keyed gates are deliberately separate. `add/add` is keyed on the
 identifier, so it only fires when two agents pick the *same* name; agents
 working one ticket in parallel frequently don't, which is what `duplicate-work`
 is for.

@@ -36,6 +36,7 @@ def test_simulation_holds_every_property(simulation: str) -> None:
         'strict_gate_blocks_broken_draft',
         'merge_queue_blocks_same_name_duplicate',
         'merge_queue_blocks_renamed_duplicate',
+        'queue_blocks_reimplementation_of_existing_code',
         'rename_lands_as_lineage',
         'signed_commit_verifies',
         'unsigned_commit_rejected',
@@ -52,6 +53,13 @@ def test_both_duplicate_gates_fire(simulation: str) -> None:
     that picked the same name (add/add) and one that renamed (duplicate-work)."""
     assert 'BLOCKED (add/add)' in simulation
     assert 'BLOCKED (duplicate-work)' in simulation
+
+
+def test_reimplementation_of_existing_code_is_blocked(simulation: str) -> None:
+    """The commonest duplicate: not two agents colliding, but one agent adding
+    what the codebase already had. No concurrent addition exists to pair with,
+    so this exercises the `existing` scope specifically."""
+    assert 'reimplements' in simulation
 
 
 def test_the_real_strict_gate_rejects_the_broken_draft(simulation: str) -> None:
