@@ -39,6 +39,14 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Fixed
 
+- Decorators are part of the definition they decorate. `node.lineno` is the
+  `def`/`class` line, so decorators sat outside the chunk entirely: rewriting
+  `@app.route("/users")` to `@app.route("/admin")` left the content hash
+  untouched, `semantic-diff` reported no change, and two branches editing the
+  same decorator differently never raised `modify/modify`. Python chunks now
+  start at the first decorator, and take their `body_fingerprint` span from the
+  AST so that decorators and multi-line signatures stay out of it -- the two
+  fingerprints answer different questions and must not be confused.
 - `duplicate-work` no longer reports two body-less chunks as identical. An
   empty body hashes to all zeros, and that value was treated as a fingerprint,
   so any two stubs spanning enough lines matched at 1.0. An absent body is now

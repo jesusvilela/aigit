@@ -34,7 +34,7 @@ CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
 # Bump whenever Chunk gains or changes a field: cached entries are rehydrated
 # with ``Chunk(**record)``, so a stale entry silently backfills new fields with
 # their defaults and quietly degrades everything computed from them.
-CHUNK_CACHE_VERSION = '2'
+CHUNK_CACHE_VERSION = '3'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 BINARY_ASSET_SUFFIXES = {
@@ -193,6 +193,10 @@ def _simhash(text: str) -> str:
 def _body_text(segment: str) -> str:
     """The chunk body with its declaration line removed.
 
+    A text-only approximation for callers that have no parse tree; Python
+    chunks take their body span from the AST instead, which also excludes
+    decorators and multi-line signatures.
+
     A function's own name sits in its ``def`` line, so renaming a function
     changes its fingerprint even when the logic is untouched. Dropping that
     line yields a name-independent view, which is what duplicate-work
@@ -254,9 +258,22 @@ def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = Non
     lines = text.splitlines()
     for node in tree.body:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            start = getattr(node, 'lineno', 1)
-            end = getattr(node, 'end_lineno', start)
+            declaration = getattr(node, 'lineno', 1)
+            end = getattr(node, 'end_lineno', declaration)
+            # ``node.lineno`` is the ``def``/``class`` line, so decorators sat
+            # outside the chunk entirely: rewriting @app.route("/users") to
+            # @app.route("/admin") left the content hash untouched and the diff
+            # reported no change at all. They belong to the definition.
+            start = min(
+                [d.lineno for d in getattr(node, 'decorator_list', [])] + [declaration]
+            )
             segment = '\n'.join(lines[start - 1 : end])
+            # Fingerprint the body from the AST rather than by dropping the
+            # first line: decorators and a signature spanning several lines
+            # would otherwise leak into it, and the point of this fingerprint is
+            # to be independent of the name the author chose.
+            body_start = node.body[0].lineno if node.body else declaration
+            body_segment = '\n'.join(lines[body_start - 1 : end])
             chunk_type = type(node).__name__.replace('Def', '').lower()
             anchor = node.name
             chunks.append(
@@ -270,7 +287,7 @@ def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = Non
                     end_line=end,
                     confidence='high',
                     fingerprint=_simhash(segment),
-                    body_fingerprint=_simhash(_body_text(segment)),
+                    body_fingerprint=_simhash(body_segment),
                 )
             )
     return chunks
