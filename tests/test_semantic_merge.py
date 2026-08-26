@@ -216,3 +216,56 @@ def test_chunks_without_body_fingerprints_fall_back_rather_than_match():
     theirs = _real("s2", _body("choose_provider"), anchor="choose_provider")
     del ours["s1"]["body_fingerprint"], theirs["s2"]["body_fingerprint"]
     assert 0.0 < _body_similarity(ours["s1"], theirs["s2"]) < 1.0
+
+
+# --------------------------------------------------------------------------- #
+# scope="existing": one agent reimplements what is already in the codebase.
+# No second agent required -- only one that did not know the code was there.
+# --------------------------------------------------------------------------- #
+def test_reimplementing_existing_code_under_a_new_name_is_flagged():
+    base = _real("s1", _body("pick_provider"), anchor="pick_provider")
+    branch = {**base, **_real("s2", _body("choose_provider"), anchor="choose_provider")}
+    (c,) = detect_duplicate_work(base, dict(base), branch)
+    assert c["scope"] == "existing"
+    assert c["anchor"] == "choose_provider"
+    assert c["theirs_anchor"] == "pick_provider"
+
+
+def test_a_rename_is_never_reported_as_duplicating_the_old_name():
+    """The trap in comparing additions against pre-existing code: a rename adds
+    a chunk that matches one in base. It is only duplication if the original is
+    still there, so a base chunk the side removed is skipped."""
+    base = _real("s1", _body("pick_provider"), anchor="pick_provider")
+    renamed = _real("s2", _body("lookup_provider"), anchor="lookup_provider")
+    assert detect_duplicate_work(base, dict(base), renamed) == []
+
+
+def test_near_matches_against_existing_code_are_not_reported():
+    """Measured on this repo, near-matching every addition against the whole
+    corpus misfired on 8.3% of additions -- mirror-image siblings score above
+    the true near-match band. Only an exact body counts against existing code."""
+    base = _real("s1", _body("pick_provider"), anchor="pick_provider")
+    edited = _body("choose_provider").replace("'fallback'", "'default'")
+    branch = {**base, **_real("s2", edited, anchor="choose_provider")}
+    assert detect_duplicate_work(base, dict(base), branch) == []
+
+
+def test_concurrent_scope_still_allows_near_matches():
+    """The other pass keeps its near-match sensitivity: only a few simultaneous
+    additions are compared, so the base rate of coincidence is low."""
+    ours = _real("s1", _body("pick_provider"), anchor="pick_provider")
+    theirs = _real("s2", _body("choose_provider"), anchor="choose_provider")
+    (c,) = detect_duplicate_work({}, ours, theirs)
+    assert c["scope"] == "concurrent"
+
+
+def test_unrelated_addition_against_existing_code_stays_clean():
+    base = _real("s1", _body("pick_provider"), anchor="pick_provider")
+    other = _real(
+        "s2",
+        "def allow_request(bucket, cost=1):\n"
+        "    bucket['tokens'] -= cost\n"
+        "    return bucket['tokens'] >= 0\n",
+        anchor="allow_request",
+    )
+    assert detect_duplicate_work(base, dict(base), {**base, **other}) == []

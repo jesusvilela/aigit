@@ -34,7 +34,7 @@ CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
 # Bump whenever Chunk gains or changes a field: cached entries are rehydrated
 # with ``Chunk(**record)``, so a stale entry silently backfills new fields with
 # their defaults and quietly degrades everything computed from them.
-CHUNK_CACHE_VERSION = '2'
+CHUNK_CACHE_VERSION = '3'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 BINARY_ASSET_SUFFIXES = {
@@ -193,6 +193,10 @@ def _simhash(text: str) -> str:
 def _body_text(segment: str) -> str:
     """The chunk body with its declaration line removed.
 
+    A text-only approximation for callers that have no parse tree; Python
+    chunks take their body span from the AST instead, which also excludes
+    decorators and multi-line signatures.
+
     A function's own name sits in its ``def`` line, so renaming a function
     changes its fingerprint even when the logic is untouched. Dropping that
     line yields a name-independent view, which is what duplicate-work
@@ -254,9 +258,22 @@ def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = Non
     lines = text.splitlines()
     for node in tree.body:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-            start = getattr(node, 'lineno', 1)
-            end = getattr(node, 'end_lineno', start)
+            declaration = getattr(node, 'lineno', 1)
+            end = getattr(node, 'end_lineno', declaration)
+            # ``node.lineno`` is the ``def``/``class`` line, so decorators sat
+            # outside the chunk entirely: rewriting @app.route("/users") to
+            # @app.route("/admin") left the content hash untouched and the diff
+            # reported no change at all. They belong to the definition.
+            start = min(
+                [d.lineno for d in getattr(node, 'decorator_list', [])] + [declaration]
+            )
             segment = '\n'.join(lines[start - 1 : end])
+            # Fingerprint the body from the AST rather than by dropping the
+            # first line: decorators and a signature spanning several lines
+            # would otherwise leak into it, and the point of this fingerprint is
+            # to be independent of the name the author chose.
+            body_start = node.body[0].lineno if node.body else declaration
+            body_segment = '\n'.join(lines[body_start - 1 : end])
             chunk_type = type(node).__name__.replace('Def', '').lower()
             anchor = node.name
             chunks.append(
@@ -270,7 +287,7 @@ def parse_python(path: str, text: str, errors: list[dict[str, str]] | None = Non
                     end_line=end,
                     confidence='high',
                     fingerprint=_simhash(segment),
-                    body_fingerprint=_simhash(_body_text(segment)),
+                    body_fingerprint=_simhash(body_segment),
                 )
             )
     return chunks
@@ -1030,6 +1047,28 @@ def _span_lines(record: dict[str, Any]) -> int:
         return 0
 
 
+def _duplicate_score(
+    a: dict[str, Any], b: dict[str, Any], threshold: float, min_lines: int
+) -> float | None:
+    """Score a candidate duplicate pair, or ``None`` when it fails the guards.
+
+    A verbatim copy always counts. Otherwise the pair must carry enough
+    substance to accuse, and then either share a body exactly (a pure rename,
+    which counts wherever the copies live) or sit in one file and clear
+    ``threshold``.
+    """
+    if a.get('chunk_type') != b.get('chunk_type'):
+        return None
+    similarity = _body_similarity(a, b)
+    if a.get('content_hash') != b.get('content_hash'):
+        if min(_span_lines(a), _span_lines(b)) < min_lines:
+            return None
+        same_file = a.get('path') == b.get('path')
+        if not (similarity >= 1.0 or (same_file and similarity >= threshold)):
+            return None
+    return similarity
+
+
 def detect_duplicate_work(
     base: dict[str, dict[str, Any]],
     ours: dict[str, dict[str, Any]],
@@ -1044,9 +1083,25 @@ def detect_duplicate_work(
     parallel routinely pick different names -- ``pick_provider`` vs
     ``choose_provider`` -- and that duplicate work sails through the gate.
 
-    This compares chunks *added* on both sides by content instead of by name,
-    over :func:`_body_similarity` so that the identifier each agent chose does
-    not itself depress the score:
+    Two passes, deliberately held to different standards because their base
+    rates differ. ``scope`` on each record says which one fired.
+
+    ``concurrent`` -- both sides added it. The comparison space is a handful of
+    simultaneous additions, so near-matches are informative and are reported.
+
+    ``existing`` -- one side added work that duplicates a chunk already present
+    and *still present alongside it*. This needs no second agent, only one that
+    did not know the codebase, which is the more common case. A chunk the side
+    removed was renamed or moved, not duplicated, so pairing against it is
+    skipped -- otherwise every rename would be reported. Only an exact body
+    match counts here: measured on this repo, allowing near-matches against the
+    whole corpus misfired on 8.3% of additions, because comparing against
+    thousands of chunks turns up coincidental similarity far more often than
+    comparing a few simultaneous ones. Requiring an exact body took that to 0%.
+
+    Both passes compare by content rather than by name, over
+    :func:`_body_similarity`, so that the identifier each agent chose does not
+    itself depress the score:
 
     * a verbatim copy (identical ``content_hash``) is always reported;
     * otherwise the chunks must span at least ``min_lines`` -- SimHash over a
@@ -1068,36 +1123,54 @@ def detect_duplicate_work(
     """
     ours_added = [r for sid, r in ours.items() if sid not in base and sid not in theirs]
     theirs_added = [r for sid, r in theirs.items() if sid not in base and sid not in ours]
-    scored: list[tuple[float, str, str, dict[str, Any], dict[str, Any]]] = []
+    scored: list[tuple[float, str, str, dict[str, Any], dict[str, Any], str]] = []
     for o in ours_added:
         for t in theirs_added:
-            if o.get('chunk_type') != t.get('chunk_type'):
-                continue
-            similarity = _body_similarity(o, t)
-            if o.get('content_hash') != t.get('content_hash'):
-                # Not a verbatim copy. Require enough substance to accuse, and
-                # keep merely-similar bodies inside one file; an identical body
-                # under a different name is strong enough to report anywhere.
-                if min(_span_lines(o), _span_lines(t)) < min_lines:
-                    continue
-                same_file = o.get('path') == t.get('path')
-                if not (similarity >= 1.0 or (same_file and similarity >= threshold)):
-                    continue
-            scored.append((similarity, o['semantic_id'], t['semantic_id'], o, t))
+            similarity = _duplicate_score(o, t, threshold, min_lines)
+            if similarity is not None:
+                scored.append((similarity, o['semantic_id'], t['semantic_id'], o, t, 'concurrent'))
+
+    # Duplicating code that was already there needs no second agent: it only
+    # needs one that did not know the codebase, which is the common case. Each
+    # side's additions are therefore also compared against the chunks that
+    # predate them *and are still present on that side* -- a chunk the side
+    # removed was renamed or moved, and pairing with it would report every
+    # rename as duplicate work.
+    for added, side in ((ours_added, ours), (theirs_added, theirs)):
+        survivors = [r for sid, r in base.items() if sid in side]
+        for new in added:
+            for old in survivors:
+                # Only an exact body match counts here. Measured on this repo,
+                # allowing near-matches against the whole existing corpus
+                # misfired on 8.3% of additions -- mirror-image siblings like
+                # import_repo_/export_repo_ score 0.94, above the true
+                # near-match band, so no threshold separates them. Comparing
+                # against thousands of chunks has a far higher base rate of
+                # coincidental similarity than comparing a handful of
+                # simultaneous additions, so the bar has to be higher.
+                similarity = _duplicate_score(new, old, 1.0, min_lines)
+                if similarity is not None and similarity >= 1.0:
+                    scored.append(
+                        (similarity, new['semantic_id'], old['semantic_id'], new, old, 'existing')
+                    )
     # Highest similarity first; semantic ids break ties so output is deterministic.
     scored.sort(key=lambda row: (-row[0], row[1], row[2]))
-    used_ours: set[str] = set()
-    used_theirs: set[str] = set()
+    used_new: set[str] = set()
+    used_match: set[str] = set()
     duplicates: list[dict[str, Any]] = []
-    for similarity, o_sid, t_sid, o, t in scored:
-        if o_sid in used_ours or t_sid in used_theirs:
+    for similarity, o_sid, t_sid, o, t, scope in scored:
+        # One report per chunk: a new chunk that duplicates both a teammate's
+        # addition and something already on trunk is still one piece of
+        # duplicated work, reported against its closest match.
+        if o_sid in used_new or t_sid in used_match:
             continue
-        used_ours.add(o_sid)
-        used_theirs.add(t_sid)
+        used_new.add(o_sid)
+        used_match.add(t_sid)
         duplicates.append(
             {
                 'semantic_id': o_sid,
                 'kind': 'duplicate-work',
+                'scope': scope,
                 'path': o.get('path', ''),
                 'anchor': o.get('anchor', ''),
                 'base_hash': None,
@@ -1193,8 +1266,11 @@ def cmd_merge(args: argparse.Namespace) -> int:
     Path(args.output).write_text(json.dumps(out, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     for c in conflicts:
         if c['kind'] == 'duplicate-work':
+            relation = (
+                'reimplements existing' if c.get('scope') == 'existing' else 'duplicates'
+            )
             print(
-                f"  conflict [duplicate-work] {c['path']}::{c['anchor']} duplicates "
+                f"  conflict [duplicate-work] {c['path']}::{c['anchor']} {relation} "
                 f"{c['theirs_path']}::{c['theirs_anchor']} (similarity {c['similarity']})"
             )
         else:

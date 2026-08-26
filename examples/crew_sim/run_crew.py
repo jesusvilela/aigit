@@ -442,6 +442,42 @@ def main() -> int:
                 scores[key] = f'FAIL ({kind} not raised)'
                 failures.append(key)
 
+        # ---- P2b reimplementation of code already on trunk -------------------
+        banner('P2b  A newcomer reimplements code that is already on trunk')
+        trunk_head = repo.git('rev-parse', 'trunk')
+        repo.git('checkout', '-q', '-b', 'feat/newcomer-route')
+        router = repo.root / 'agentmesh/router.py'
+        existing = router.read_text(encoding='utf-8')
+        # An agent that never read router.py writes the same behaviour again,
+        # under its own name. Nobody else is working on it -- there is no
+        # concurrent addition to collide with, only the code already there.
+        after_signature = existing.split('def route(', 1)[1]
+        router.write_text(
+            f'{existing}\n\ndef dispatch({after_signature}', encoding='utf-8'
+        )
+        repo.chunk()
+        attest(repo, agent='newcomer', model='deterministic',
+               prompt='newcomer:dispatch', message='feat(newcomer): dispatch')
+        report = repo.root / 'newcomer-merge.json'
+        repo.aigit_ok('semantic-merge', '--base', trunk_head, '--ours', 'trunk',
+                      '--theirs', 'feat/newcomer-route', '--output', str(report))
+        conflicts = json.loads(report.read_text(encoding='utf-8'))['conflicts']
+        report.unlink(missing_ok=True)
+        existing_scope = [c for c in conflicts if c.get('scope') == 'existing']
+        if existing_scope:
+            c = existing_scope[0]
+            print(f'  BLOCKED: {c["anchor"]} reimplements {c["theirs_anchor"]} '
+                  f'(similarity {c["similarity"]})')
+            scores['queue_blocks_reimplementation_of_existing_code'] = (
+                'PASS (duplicate-work/existing blocked the newcomer)'
+            )
+        else:
+            scores['queue_blocks_reimplementation_of_existing_code'] = (
+                'FAIL (reimplementation of existing code merged clean)'
+            )
+            failures.append('queue_blocks_reimplementation_of_existing_code')
+        repo.git('checkout', '-q', 'trunk')
+
         # ---- P3 lineage on rename ------------------------------------------
         banner('P3  Refactor lineage  (rename must not read as delete + add)')
         before = repo.git('rev-parse', 'HEAD')

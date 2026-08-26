@@ -269,3 +269,58 @@ def test_unique_anchors_keep_their_original_ids(tmp_path: Path) -> None:
     chunks, _ = build_manifest(tmp_path)
     (chunk,) = [c for c in chunks if c.path.endswith('plain.py')]
     assert chunk.semantic_id == _chunk_id('plain.py', 'solo', 'function')
+
+
+def test_decorators_are_part_of_the_definition(tmp_path: Path) -> None:
+    """Editing a decorator is a behaviour change and must move the hash.
+
+    ``node.lineno`` is the ``def`` line, so decorators used to sit outside the
+    chunk: rewriting a route left the content hash untouched and semantic-diff
+    reported no change at all.
+    """
+    (tmp_path / 'routes.py').write_text(
+        '@app.route("/users")\ndef handler():\n    return fetch(1)\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    (before,) = [c for c in chunks if c.anchor == 'handler']
+    assert before.start_line == 1, 'the decorator line belongs to the chunk'
+
+    (tmp_path / 'routes.py').write_text(
+        '@app.route("/admin")\ndef handler():\n    return fetch(1)\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    (after,) = [c for c in chunks if c.anchor == 'handler']
+    assert after.content_hash != before.content_hash
+
+
+def test_body_fingerprint_ignores_decorators_and_signature(tmp_path: Path) -> None:
+    """The two fingerprints answer different questions: content_hash asks
+    whether the definition changed, body_fingerprint whether it is the same
+    work under another name."""
+    (tmp_path / 'a.py').write_text(
+        '@app.route("/users")\ndef handler():\n    return fetch(1)\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    (decorated,) = [c for c in chunks if c.anchor == 'handler']
+
+    (tmp_path / 'a.py').write_text(
+        '@app.route("/admin")\ndef renamed_handler():\n    return fetch(1)\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    (renamed,) = [c for c in chunks if c.anchor == 'renamed_handler']
+    assert renamed.body_fingerprint == decorated.body_fingerprint
+    assert renamed.content_hash != decorated.content_hash
+
+
+def test_multi_line_signatures_stay_out_of_the_body_fingerprint(tmp_path: Path) -> None:
+    (tmp_path / 'm.py').write_text(
+        'def wide(\n    alpha,\n    beta,\n):\n    return alpha + beta\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    (wide,) = [c for c in chunks if c.anchor == 'wide']
+    (tmp_path / 'm.py').write_text(
+        'def narrow(\n    alpha,\n    beta,\n):\n    return alpha + beta\n', encoding='utf-8'
+    )
+    chunks, _ = build_manifest(tmp_path)
+    (narrow,) = [c for c in chunks if c.anchor == 'narrow']
+    assert narrow.body_fingerprint == wide.body_fingerprint
