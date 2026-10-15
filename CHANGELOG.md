@@ -6,6 +6,11 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Added
 
+- Merge driver evaluation (`docs/evals/results/2026-10-15-merge-driver/`,
+  exploratory): replayed concurrent changes, `merge-file` vs ort divergence, a
+  32-scenario corner-case sweep and a cost curve, with trial-level CSV data,
+  light and dark SVG figures rendered from it (a test keeps them in sync), and
+  `make merge-driver-eval` to reproduce. The README leads with the results.
 - `aigit merge-driver` / `install-merge-driver`: a Git merge driver for
   `.semantic/` artifacts. Chunk artifacts merge per source file instead of per
   line; a file both sides changed is re-chunked from the merged source,

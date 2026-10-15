@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430" role="img" aria-label="Outcome of 150 replayed concurrent changes, Git text merge vs AIGit driver" font-family="system-ui, -apple-system, &#x27;Segoe UI&#x27;, sans-serif">
+<title>Outcome of 150 replayed concurrent changes, Git text merge vs AIGit driver</title>
+<rect width="760" height="430" rx="8" fill="#fcfcfb"/>
+<text x="24.0" y="36.0" font-size="18" font-weight="600" fill="#0b0b0b" text-anchor="start">What happens to .semantic/ when two branches meet</text>
+<text x="24.0" y="58.0" font-size="13" font-weight="400" fill="#52514e" text-anchor="start">150 replayed pairs of concurrent changes on this repository, each combined three ways</text>
+<rect x="24.0" y="77.0" width="10" height="10" rx="2" fill="#2a78d6"/>
+<text x="40.0" y="86.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="start">Merged; artifacts match a rebuild</text>
+<rect x="299.6" y="77.0" width="10" height="10" rx="2" fill="#898781"/>
+<text x="315.6" y="86.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="start">Stopped: the source conflicts</text>
+<rect x="546.4" y="77.0" width="10" height="10" rx="2" fill="#c3c2b7"/>
+<text x="562.4" y="86.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="start">Stopped: nothing left to apply</text>
+<rect x="24.0" y="95.0" width="10" height="10" rx="2" fill="#eda100"/>
+<text x="40.0" y="104.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="start">Stopped needlessly on .semantic/</text>
+<rect x="292.4" y="95.0" width="10" height="10" rx="2" fill="#d03b3b"/>
+<text x="308.4" y="104.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="start">Merged; artifacts silently wrong</text>
+<text x="24.0" y="138.0" font-size="13" font-weight="600" fill="#0b0b0b" text-anchor="start">git merge</text>
+<text x="126.0" y="162.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">Git text merge</text>
+<rect x="138.0" y="146.0" width="314.2" height="22.0" fill="#2a78d6"/>
+<text x="295.1" y="161.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">85</text>
+<rect x="454.2" y="146.0" width="91.0" height="22.0" fill="#898781"/>
+<text x="499.7" y="161.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">25</text>
+<path d="M547.2,146.0 H692.0 Q696.0,146.0 696.0,150.0 V164.0 Q696.0,168.0 692.0,168.0 H547.2 Z" fill="#eda100"/>
+<text x="620.6" y="161.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">40</text>
+<text x="704.0" y="162.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">0 stale</text>
+<text x="126.0" y="192.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">AIGit driver</text>
+<rect x="138.0" y="176.0" width="463.0" height="22.0" fill="#2a78d6"/>
+<text x="369.5" y="191.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">125</text>
+<path d="M603.0,176.0 H692.0 Q696.0,176.0 696.0,180.0 V194.0 Q696.0,198.0 692.0,198.0 H603.0 Z" fill="#898781"/>
+<text x="648.5" y="191.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">25</text>
+<text x="704.0" y="192.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">0 stale</text>
+<text x="24.0" y="230.0" font-size="13" font-weight="600" fill="#0b0b0b" text-anchor="start">git rebase</text>
+<text x="126.0" y="254.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">Git text merge</text>
+<rect x="138.0" y="238.0" width="314.2" height="22.0" fill="#2a78d6"/>
+<text x="295.1" y="253.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">85</text>
+<rect x="454.2" y="238.0" width="91.0" height="22.0" fill="#898781"/>
+<text x="499.7" y="253.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">25</text>
+<path d="M547.2,238.0 H692.0 Q696.0,238.0 696.0,242.0 V256.0 Q696.0,260.0 692.0,260.0 H547.2 Z" fill="#eda100"/>
+<text x="620.6" y="253.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">40</text>
+<text x="704.0" y="254.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">0 stale</text>
+<text x="126.0" y="284.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">AIGit driver</text>
+<rect x="138.0" y="268.0" width="463.0" height="22.0" fill="#2a78d6"/>
+<text x="369.5" y="283.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">125</text>
+<path d="M603.0,268.0 H692.0 Q696.0,268.0 696.0,272.0 V286.0 Q696.0,290.0 692.0,290.0 H603.0 Z" fill="#898781"/>
+<text x="648.5" y="283.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">25</text>
+<text x="704.0" y="284.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">0 stale</text>
+<text x="24.0" y="322.0" font-size="13" font-weight="600" fill="#0b0b0b" text-anchor="start">git cherry-pick</text>
+<text x="126.0" y="346.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">Git text merge</text>
+<rect x="138.0" y="330.0" width="303.0" height="22.0" fill="#2a78d6"/>
+<text x="289.5" y="345.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">82</text>
+<rect x="443.0" y="330.0" width="91.0" height="22.0" fill="#898781"/>
+<text x="488.5" y="345.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">25</text>
+<rect x="536.0" y="330.0" width="9.2" height="22.0" fill="#c3c2b7"/>
+<path d="M547.2,330.0 H692.0 Q696.0,330.0 696.0,334.0 V348.0 Q696.0,352.0 692.0,352.0 H547.2 Z" fill="#eda100"/>
+<text x="620.6" y="345.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">40</text>
+<text x="704.0" y="346.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">0 stale</text>
+<text x="126.0" y="376.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">AIGit driver</text>
+<rect x="138.0" y="360.0" width="451.8" height="22.0" fill="#2a78d6"/>
+<text x="363.9" y="375.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">122</text>
+<rect x="591.8" y="360.0" width="91.0" height="22.0" fill="#898781"/>
+<text x="637.3" y="375.0" font-size="11" font-weight="600" fill="#0b0b0b" text-anchor="middle">25</text>
+<path d="M684.8,360.0 H692.0 Q696.0,360.0 696.0,364.0 V378.0 Q696.0,382.0 692.0,382.0 H684.8 Z" fill="#c3c2b7"/>
+<text x="704.0" y="376.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">0 stale</text>
+<text x="24.0" y="416.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">Git 2.34.1 · AIGit 25dae73 · seed 4 · data: replay.csv</text>
+</svg>

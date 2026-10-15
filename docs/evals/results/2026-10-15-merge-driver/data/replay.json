@@ -1,0 +1,53 @@
+{
+  "experiment": "replay",
+  "trials": 150,
+  "seed": 4,
+  "aigit_commit": "25dae73262aa51874a3ee0a5c21556175bff4391",
+  "git": "2.34.1",
+  "python": "3.10.12",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "summary": {
+    "merge/text": {
+      "fresh": 85,
+      "source": 25,
+      "metadata-only": 40,
+      "other-stop": 0,
+      "stale": 0
+    },
+    "merge/driver": {
+      "fresh": 125,
+      "source": 25,
+      "metadata-only": 0,
+      "other-stop": 0,
+      "stale": 0
+    },
+    "rebase/text": {
+      "fresh": 85,
+      "source": 25,
+      "metadata-only": 40,
+      "other-stop": 0,
+      "stale": 0
+    },
+    "rebase/driver": {
+      "fresh": 125,
+      "source": 25,
+      "metadata-only": 0,
+      "other-stop": 0,
+      "stale": 0
+    },
+    "cherry-pick/text": {
+      "fresh": 82,
+      "source": 25,
+      "metadata-only": 40,
+      "other-stop": 3,
+      "stale": 0
+    },
+    "cherry-pick/driver": {
+      "fresh": 122,
+      "source": 25,
+      "metadata-only": 0,
+      "other-stop": 3,
+      "stale": 0
+    }
+  }
+}

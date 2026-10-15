@@ -1,0 +1,8 @@
+{
+  "experiment": "scaling",
+  "repeats": 3,
+  "aigit_commit": "25dae73262aa51874a3ee0a5c21556175bff4391",
+  "git": "2.34.1",
+  "python": "3.10.12",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.35"
+}

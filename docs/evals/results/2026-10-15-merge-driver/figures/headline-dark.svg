@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="168" viewBox="0 0 760 168" role="img" aria-label="AIGit merge driver results" font-family="system-ui, -apple-system, &#x27;Segoe UI&#x27;, sans-serif">
+<title>AIGit merge driver results</title>
+<rect width="760" height="168" rx="8" fill="#1a1a19"/>
+<rect x="24.0" y="16" width="226.7" height="136" rx="8" fill="none" stroke="#2c2c2a"/>
+<text x="42.0" y="66.0" font-size="40" font-weight="600" fill="#ffffff" text-anchor="start">0</text>
+<text x="42.0" y="92.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="start">stale merges</text>
+<text x="42.0" y="116.0" font-size="11" font-weight="400" fill="#c3c2b7" text-anchor="start">across 450 replayed merges,</text>
+<text x="42.0" y="132.0" font-size="11" font-weight="400" fill="#c3c2b7" text-anchor="start">rebases and cherry-picks</text>
+<rect x="266.7" y="16" width="226.7" height="136" rx="8" fill="none" stroke="#2c2c2a"/>
+<text x="284.7" y="66.0" font-size="40" font-weight="600" fill="#ffffff" text-anchor="start">0</text>
+<text x="284.7" y="92.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="start">needless .semantic/ conflicts</text>
+<text x="284.7" y="116.0" font-size="11" font-weight="400" fill="#c3c2b7" text-anchor="start">Git&#x27;s text merge stopped 120 times</text>
+<text x="284.7" y="132.0" font-size="11" font-weight="400" fill="#c3c2b7" text-anchor="start">on the same changes</text>
+<rect x="509.3" y="16" width="226.7" height="136" rx="8" fill="none" stroke="#2c2c2a"/>
+<text x="527.3" y="66.0" font-size="40" font-weight="600" fill="#ffffff" text-anchor="start">32/32</text>
+<text x="527.3" y="92.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="start">corner cases handled</text>
+<text x="527.3" y="116.0" font-size="11" font-weight="400" fill="#c3c2b7" text-anchor="start">merge queues, reverts, stash,</text>
+<text x="527.3" y="132.0" font-size="11" font-weight="400" fill="#c3c2b7" text-anchor="start">renames, symlinks, worktrees</text>
+</svg>

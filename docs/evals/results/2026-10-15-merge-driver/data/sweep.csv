@@ -1,0 +1,33 @@
+scenario,command,description,outcome,expected,as_expected,seconds
+plain_merge,git merge,Same file edited on both sides,fresh,fresh,1,1.17
+squash_merge,git merge --squash,Squash merge,fresh,fresh,1,1.21
+octopus,git merge b1 b2,Three heads in one merge (octopus),metadata-only,stop,1,0.34
+criss_cross,git merge,Two merge bases (criss-cross history),fresh,fresh,1,2.22
+first_adoption,git merge,Both branches adopted AIGit separately,fresh,fresh,1,1.29
+theirs_stale,git merge,Other branch's artifacts already stale,metadata-only,stop,1,0.98
+ours_stale,git merge,This branch's artifacts already stale,metadata-only,stop,1,1.11
+symlink,git merge,Symlink to a file both sides edit,fresh,fresh,1,1.38
+latin1_file,git merge,Source file that is not UTF-8,fresh,fresh,1,1.34
+odd_path_rename,git merge,Edit vs rename of a path with spaces and accents,fresh,fresh,1,1.42
+renamed_out_of_layer,git merge,Edit vs rename to a type outside the layer (.png),fresh,fresh,1,0.89
+rename_both_sides,git merge,Both sides rename one file differently,source,source,1,1.03
+semantic_deleted,git merge,.semantic/ deleted on one side,metadata-only,stop,1,0.11
+merge_makes_syntax_error,git merge,Merge result no longer parses,fresh,fresh,1,1.3
+empty_file,git merge,Empty file filled on one side,fresh,fresh,1,1.04
+many_contested_files,git merge,100 files edited on both sides,fresh,fresh,1,10.97
+from_subdirectory,git merge,Merge run from a subdirectory,fresh,fresh,1,1.3
+linked_worktree,git merge,Merge inside a linked worktree,fresh,fresh,1,0.99
+renormalize,git -c merge.renormalize=true merge,Option that changes how Git merges files,metadata-only,stop,1,0.96
+rebase,git rebase,Rebase a branch,fresh,fresh,1,1.15
+interactive_rebase,git rebase -i,Reorder commits interactively,fresh,fresh,1,2.3
+rebase_merges,git rebase --rebase-merges,Rebase that replays a merge,fresh,fresh,1,4.17
+rebase_onto,git rebase --onto,Transplant a branch,fresh,fresh,1,1.33
+rebase_autostash,git rebase --autostash,Rebase over uncommitted work,fresh,fresh,1,1.35
+pull_rebase,git pull --rebase,Pull with rebase from a remote,fresh,fresh,1,1.36
+cherry_pick,git cherry-pick,Cherry-pick one commit,fresh,fresh,1,1.34
+cherry_pick_range,git cherry-pick A..B,Cherry-pick a range,fresh,fresh,1,2.47
+crlf_cherry_pick,git cherry-pick,File stored with CRLF line endings,fresh,fresh,1,1.27
+revert_older_commit,git revert,Revert a commit older than HEAD,fresh,fresh,1,1.15
+stash_pop,git stash pop,Pop work stashed before a newer commit,fresh,fresh,1,5.3
+am_three_way,git am -3,Apply an emailed patch,fresh,fresh,1,1.3
+checkout_merge,git checkout -m,Switch branches carrying uncommitted work,metadata-only,stop,1,1.08
