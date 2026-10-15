@@ -8,16 +8,15 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 - `aigit merge-driver` / `install-merge-driver`: a Git merge driver for
   `.semantic/` artifacts. Chunk artifacts merge per source file instead of per
-  line; immutable records (`provenance.jsonl`, `edges.jsonl`) merge as sets.
-  Replaying concurrent edits on this repository: of 300 merges where two
-  branches edited one file and Git merged the source cleanly, a text merge
-  conflicted on the artifacts 284 times and produced wrong line numbers without
-  a conflict 2 times -- two edits that each shift a chunk by one line agree on
-  "+1", and Git keeps one. The driver never produces a wrong result in the
-  replay (0 of 1,800 merges); it asks for `aigit chunk` whenever a file's
-  chunks changed on both sides, because only the merged source can say what
-  they are. Two branches recording provenance always conflicted at end of file;
-  they now merge cleanly.
+  line; a file both sides changed is re-chunked from the merged source
+  (following renames), so the only merges that stop are those whose source
+  conflicts. Immutable records (`provenance.jsonl`, `edges.jsonl`) merge as
+  sets. Replaying 150 pairs of concurrent edits, adds, deletes and renames on
+  this repository through real `git merge` and `git rebase`: the text merge
+  stopped 39 times on artifacts alone; the driver never did, and all 129 merges
+  whose source merged cleanly matched a rebuild exactly. The 21 genuine source
+  conflicts are unchanged.
+
 - `duplicate-work` also catches an addition that reimplements code already in
   the repository, reported with `scope: existing` (the earlier pass, now
   `scope: concurrent`, only saw two branches adding the same thing at once).
@@ -47,7 +46,34 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Changed
 
+- Every chunk records `file_hash`, the SHA-256 of its whole file, making a
+  file's records a one-to-one function of its bytes. Git calls a merge driver
+  only when the two sides' artifacts differ, and when two branches each
+  inserted a line above every chunk of a file, both recorded the same +1 shift:
+  Git kept it, and the merged file -- shifted by two -- had stale artifacts.
+  Now two versions of a file never share records, so even a plain text merge
+  either conflicts or is exact.
+  The field is additive, so `schema_version` is unchanged; artifacts written
+  before it merge as before until rebuilt.
+- A file a parser finds no chunks in (a Python module of imports and
+  constants, an empty Markdown file) is chunked as one opaque `file` chunk.
+  Edits to it used to be invisible to `semantic-diff` and `semantic-merge`. A
+  file that fails to parse is still reported as an error, and now appears this
+  way rather than not at all.
+- `aigit chunk` lists files through Git (tracked, plus untracked files that are
+  not ignored), so ignored local state -- logs, coverage reports -- no longer
+  leaks into the manifest and makes one commit chunk differently on two
+  machines. Outside a Git work tree it walks the directory as before.
+
 - CI now smoke-tests the built wheel outside the source checkout.
+
+### Removed
+
+- Identity carry-over from the previous `chunk_index.json`. Chunk ids have
+  always been a pure hash of path, anchor and type, and the index is keyed by
+  the same triple, so the carried id always equalled the computed one and the
+  `refined-anchor` edges it was meant to emit never appeared. A build now
+  depends on the source alone.
 
 ### Fixed
 

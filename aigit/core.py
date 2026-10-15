@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import ast
 import dataclasses
-import difflib
 import hashlib
 import hmac
 import importlib.util
@@ -15,11 +14,12 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 import time
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib import error as urllib_error
 from urllib import parse as urllib_parse
 from urllib import request as urllib_request
@@ -35,7 +35,7 @@ CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
 # Bump whenever Chunk gains or changes a field: cached entries are rehydrated
 # with ``Chunk(**record)``, so a stale entry silently backfills new fields with
 # their defaults and quietly degrades everything computed from them.
-CHUNK_CACHE_VERSION = '3'
+CHUNK_CACHE_VERSION = '4'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 BINARY_ASSET_SUFFIXES = {
@@ -117,6 +117,10 @@ class Chunk:
     confidence: str
     fingerprint: str = ''
     body_fingerprint: str = ''
+    # SHA-256 of the whole source file. Makes a file's records differ whenever
+    # its bytes do, so Git hands every divergent file to the merge driver
+    # instead of trivially keeping one side's records (see parse_file).
+    file_hash: str = ''
 
     def to_dict(self) -> dict[str, Any]:
         return dataclasses.asdict(self)
@@ -496,7 +500,20 @@ def _disambiguate_anchors(chunks: list[Chunk]) -> list[Chunk]:
 
 
 def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | None = None) -> list[Chunk]:
+    """Chunk one file. Every file yields at least one chunk, and every chunk
+    carries the file's hash, so the records are a one-to-one function of the
+    bytes: two versions of a file never share records.
+
+    Without that, Git merges the artifacts wrongly where no merge driver can
+    intervene. Git calls a driver only when both sides' artifact blobs differ
+    from each other and from the base; if two branches each insert a line
+    above every chunk, both sides record the same +1 shift, Git keeps it as
+    is, and the merged source -- shifted by two -- no longer matches. Likewise
+    an edit a parser cannot see (an import in a file without definitions) let
+    one side's records stand for a merged file they did not describe.
+    """
     text = full_path.read_text(encoding='utf-8', errors='replace')
+    file_hash = hashlib.sha256(full_path.read_bytes()).hexdigest()
     suffix = full_path.suffix.lower()
     if suffix == '.py':
         parsed = parse_python(rel_path, text, errors)
@@ -510,6 +527,10 @@ def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | No
         parsed = parse_typescript(rel_path, text)
     else:
         parsed = parse_text(rel_path, text)
+    if not parsed:
+        parsed = parse_text(rel_path, text)
+    for chunk in parsed:
+        chunk.file_hash = file_hash
     return _disambiguate_anchors(parsed)
 
 def _repo_semantic_path(root: Path, path: Path) -> Path:
@@ -575,33 +596,33 @@ def cmd_validate_ruleset(args: argparse.Namespace) -> int:
     return 0
 
 
-def load_previous_index(root: Path) -> dict[str, dict[str, Any]]:
-    index_file = _repo_semantic_path(root, INDEX_FILE)
-    if not index_file.exists():
-        return {}
+def _candidate_files(root: Path) -> list[Path]:
+    """Files under ``root`` that a commit could contain.
+
+    In a Git work tree that is what Git lists: tracked files plus untracked
+    ones that are not ignored. Walking the directory instead let ignored local
+    state -- logs, coverage reports, scratch files -- into the manifest, so
+    the same commit chunked differently on different machines and the
+    freshness gate failed for reasons no commit could fix.
+    """
     try:
-        return json.loads(index_file.read_text(encoding='utf-8'))
-    except json.JSONDecodeError:
-        return {}
-
-
-def match_previous_id(chunk: Chunk, previous: dict[str, dict[str, Any]]) -> str:
-    key = f"{chunk.path}::{chunk.chunk_type}::{chunk.anchor}"
-    prev = previous.get(key)
-    if not prev:
-        return chunk.semantic_id
-    prev_hash = prev.get('content_hash')
-    if prev_hash == chunk.content_hash:
-        return prev.get('semantic_id', chunk.semantic_id)
-    similarity = difflib.SequenceMatcher(a=prev_hash or '', b=chunk.content_hash).ratio()
-    if similarity >= 0.92:
-        return prev.get('semantic_id', chunk.semantic_id)
-    return chunk.semantic_id
+        proc = subprocess.run(
+            ['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+    except FileNotFoundError:
+        proc = None
+    if proc is not None and proc.returncode == 0:
+        names = {name for name in proc.stdout.decode('utf-8', 'surrogateescape').split('\0') if name}
+        return [root / name for name in sorted(names)]
+    return list(root.rglob('*'))
 
 
 def iter_repo_files(root: Path) -> list[Path]:
     files: list[Path] = []
-    for path in root.rglob('*'):
+    for path in _candidate_files(root):
         if not path.is_file():
             continue
         rel = path.relative_to(root)
@@ -669,11 +690,12 @@ def build_manifest(
     speed differs (a single-file edit no longer re-parses the whole repo).
     """
     ensure_semantic_scaffold(root)
-    previous = load_previous_index(root)
     cache = _load_chunk_cache(root)
     new_cache: dict[str, Any] = {}
     err_sink: list[dict[str, str]] = errors if errors is not None else []
     chunks: list[Chunk] = []
+    # Chunk ids are a pure function of (path, anchor, type), so a build has no
+    # identity edges to record; lineage is recovered between refs at diff time.
     edges: list[dict[str, Any]] = []
     for rel in iter_repo_files(root):
         rel_str = str(rel)
@@ -693,12 +715,7 @@ def build_manifest(
             if len(err_sink) > before:
                 entry['error'] = err_sink[-1]['error']
         new_cache[rel_str] = entry
-        for chunk in parsed:
-            old_id = match_previous_id(chunk, previous)
-            if old_id != chunk.semantic_id:
-                edges.append({'from': old_id, 'to': chunk.semantic_id, 'reason': 'refined-anchor'})
-            chunk.semantic_id = old_id
-            chunks.append(chunk)
+        chunks.extend(parsed)
     _save_chunk_cache(root, new_cache)
     return chunks, edges
 
@@ -1290,6 +1307,8 @@ MERGE_DRIVER_PATTERNS: list[str] = [
     '.semantic/provenance.jsonl',
 ]
 
+ChunkRecords = list[dict[str, Any]]
+
 
 def _merge_record_sets(base: str, ours: str, theirs: str) -> str:
     """Three-way merge of JSONL files whose lines are immutable records.
@@ -1299,7 +1318,7 @@ def _merge_record_sets(base: str, ours: str, theirs: str) -> str:
     exact for an append-only log: two branches recording provenance always
     collided at end of file under a text merge, though they never disagree.
     """
-    o, a, b = (set(text.splitlines()) - {''} for text in (base, ours, theirs))
+    o, b = (set(text.splitlines()) - {''} for text in (base, theirs))
     kept = [line for line in ours.splitlines() if line and (line in b or line not in o)]
     kept_set = set(kept)
     for line in theirs.splitlines():
@@ -1310,85 +1329,263 @@ def _merge_record_sets(base: str, ours: str, theirs: str) -> str:
 
 
 def _merge_chunks_by_path(
-    base: dict[str, list[dict[str, Any]]],
-    ours: dict[str, list[dict[str, Any]]],
-    theirs: dict[str, list[dict[str, Any]]],
-) -> tuple[list[dict[str, Any]], list[str]]:
+    base: dict[str, ChunkRecords],
+    ours: dict[str, ChunkRecords],
+    theirs: dict[str, ChunkRecords],
+    rebuild: Callable[[list[str]], dict[str, ChunkRecords]] | None = None,
+) -> tuple[ChunkRecords, list[str]]:
     """Three-way merge of chunk records, with each source file as the unit.
 
-    A file's chunks are a function of that file alone, so when only one side
-    changed a file's chunks, that side's chunks are exactly what a rebuild of
-    the merged source yields -- provided the other side did not edit the file
-    in a way the parsers cannot see. A text merge has no such unit: line numbers
+    A file's chunks are a function of that file alone and carry its hash, so
+    unchanged chunks mean an unchanged file: when only one side changed a
+    file's chunks, that side's chunks are exactly what a rebuild of the merged
+    source yields. A text merge has no such unit: line numbers
     make one edit rewrite every later chunk in its file, so two edits to one
     file conflicted even when Git merged the source cleanly, and occasionally
     merged "cleanly" into line numbers that were wrong.
 
     When both sides changed a file's chunks, no merge of the records can be
-    trusted: content hashes of the merged source exist on neither side. Ours is kept and the path is returned so the caller can ask
-    for a rebuild instead of guessing.
+    trusted: content hashes of the merged source exist on neither side, and
+    even identical sides are suspect because line numbers are offsets -- two
+    edits that each shift a chunk by one shift it by two together. Those paths
+    go to ``rebuild``, which re-chunks the merged source; any it cannot resolve
+    keep ours and are returned so the caller reports a conflict.
     """
-    merged: list[dict[str, Any]] = []
-    needs_rebuild: list[str] = []
-    for path in sorted(set(base) | set(ours) | set(theirs), key=Path):
+    by_path: dict[str, ChunkRecords] = {}
+    contested: list[str] = []
+    for path in set(base) | set(ours) | set(theirs):
         o, a, b = base.get(path, []), ours.get(path, []), theirs.get(path, [])
         if a == o:
-            merged.extend(b)
+            by_path[path] = b
         elif b == o:
-            merged.extend(a)
+            by_path[path] = a
         else:
-            # Even identical sides need a rebuild: line numbers are offsets, and
-            # two edits that each shift a chunk by one shift it by two together.
-            merged.extend(a)
-            needs_rebuild.append(path)
-    return merged, needs_rebuild
+            by_path[path] = a
+            contested.append(path)
+    contested.sort()
+    resolved = rebuild(contested) if rebuild and contested else {}
+    by_path.update(resolved)
+    merged = [record for path in sorted(by_path, key=Path) for record in by_path[path]]
+    return merged, [path for path in contested if path not in resolved]
 
 
-def _group_by_path(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    grouped: dict[str, list[dict[str, Any]]] = {}
+def _group_by_path(records: ChunkRecords) -> dict[str, ChunkRecords]:
+    grouped: dict[str, ChunkRecords] = {}
     for record in records:
         grouped.setdefault(str(record.get('path', '')), []).append(record)
     return grouped
 
 
-def merge_semantic_artifact(name: str, base: str, ours: str, theirs: str) -> tuple[str, list[str]]:
+def merge_semantic_artifact(
+    name: str,
+    base: str,
+    ours: str,
+    theirs: str,
+    rebuild: Callable[..., dict[str, ChunkRecords]] | None = None,
+) -> tuple[str, list[str]]:
     """Merge one ``.semantic`` artifact; returns ``(text, paths_needing_rebuild)``.
 
-    Raises ``ValueError`` for an artifact it does not handle or cannot parse.
+    ``rebuild(paths, base, ours, theirs)`` re-chunks the merged source of files
+    both sides changed (see ``rebuild_from_merged_source``). Raises
+    ``ValueError`` for an artifact it does not handle or cannot parse.
     """
     if name in {'edges.jsonl', 'provenance.jsonl'}:
         return _merge_record_sets(base, ours, theirs), []
     if name == 'manifest.jsonl':
-        sides = [
-            _group_by_path([json.loads(line) for line in text.splitlines() if line.strip()])
+        records = [
+            [json.loads(line) for line in text.splitlines() if line.strip()]
             for text in (base, ours, theirs)
         ]
-        records, needs_rebuild = _merge_chunks_by_path(*sides)
-        lines = [json.dumps(record, sort_keys=True) for record in records]
+    elif name == 'chunk_index.json':
+        records = [list(json.loads(text).values()) if text.strip() else [] for text in (base, ours, theirs)]
+    else:
+        raise ValueError(f'no semantic merge rule for {name}')
+    sides = [_group_by_path(side) for side in records]
+    bound = (lambda paths: rebuild(paths, *sides)) if rebuild else None
+    merged, needs_rebuild = _merge_chunks_by_path(*sides, rebuild=bound)
+    if name == 'manifest.jsonl':
+        lines = [json.dumps(record, sort_keys=True) for record in merged]
         return '\n'.join(lines) + ('\n' if lines else ''), needs_rebuild
-    if name == 'chunk_index.json':
-        sides = [
-            _group_by_path(list(json.loads(text).values()) if text.strip() else [])
-            for text in (base, ours, theirs)
-        ]
-        records, needs_rebuild = _merge_chunks_by_path(*sides)
-        index = {f"{r['path']}::{r['chunk_type']}::{r['anchor']}": r for r in records}
-        return json.dumps(index, indent=2, sort_keys=True) + '\n', needs_rebuild
-    raise ValueError(f'no semantic merge rule for {name}')
+    index = {f"{r['path']}::{r['chunk_type']}::{r['anchor']}": r for r in merged}
+    return json.dumps(index, indent=2, sort_keys=True) + '\n', needs_rebuild
+
+
+def _git_output(args: list[str], cwd: Path) -> bytes | None:
+    proc = subprocess.run(['git', *args], cwd=cwd, capture_output=True, check=False)
+    return proc.stdout if proc.returncode == 0 else None
+
+
+def _commit_ids(cwd: Path, revs: list[str]) -> list[str]:
+    seen: list[str] = []
+    for rev in revs:
+        out = _git_output(['rev-parse', '-q', '--verify', f'{rev}^{{commit}}'], cwd)
+        sha = out.decode().strip() if out else ''
+        if sha and sha not in seen:
+            seen.append(sha)
+    return seen
+
+
+def _merge_in_progress(cwd: Path) -> tuple[list[str], list[str]]:
+    """Commits that may be the other side, and the merge base, of the running merge.
+
+    Git does not hand a merge driver its commits, so these are candidates read
+    from where Git leaves them: ``GITHEAD_<sha>`` for ``git merge``, the last
+    ``done`` entry of a rebase, the sequencer heads. A candidate is only ever
+    used after the chunks it yields match the side Git passed to the driver,
+    so a wrong guess costs a conflict, never a wrong merge. A single
+    ``git cherry-pick`` leaves no trace and falls back to the conflict.
+    """
+    revs = [key[len('GITHEAD_'):] for key in os.environ if key.startswith('GITHEAD_')]
+    git_dir_out = _git_output(['rev-parse', '--git-dir'], cwd)
+    if git_dir_out:
+        done = (cwd / git_dir_out.decode().strip()) / 'rebase-merge' / 'done'
+        try:
+            picks = [line.split() for line in done.read_text(encoding='utf-8').splitlines()]
+        except OSError:
+            picks = []
+        if picks and len(picks[-1]) > 1:
+            revs.append(picks[-1][1])
+    revs += ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'REBASE_HEAD']
+    theirs = _commit_ids(cwd, revs)
+    bases: list[str] = []
+    for commit in theirs:
+        out = _git_output(['merge-base', '--all', 'HEAD', commit], cwd) or b''
+        parents = _git_output(['rev-parse', f'{commit}^@'], cwd) or b''
+        for sha in (out + parents).decode().split():
+            if sha not in bases:
+                bases.append(sha)
+    return theirs, bases
+
+
+def _chunk_records_for_source(path: str, data: bytes | None) -> ChunkRecords:
+    if data is None:
+        return []
+    with tempfile.TemporaryDirectory() as tmp:
+        source = Path(tmp) / Path(path).name
+        source.write_bytes(data)
+        return [chunk.to_dict() for chunk in parse_file(source, path)]
+
+
+def _canonical(records: ChunkRecords) -> list[str]:
+    # The manifest keeps a file's chunks in source order, the index by key.
+    return sorted(json.dumps(record, sort_keys=True) for record in records)
+
+
+def _source_matching(
+    cwd: Path, commits: list[str], path: str, records: ChunkRecords
+) -> tuple[str | None, bytes | None]:
+    """``(commit, source)`` for the first commit whose chunks of ``path`` equal
+    ``records``; commit is None when none does. Records carry the file hash,
+    so a match pins the exact bytes, and a missing file matches no records."""
+    expected = _canonical(records)
+    for commit in commits:
+        data = _git_output(['cat-file', 'blob', f'{commit}:{path}'], cwd)
+        if _canonical(_chunk_records_for_source(path, data)) == expected:
+            return commit, data
+    return None, None
+
+
+def _renamed_to(cwd: Path, base_commit: str, side_commit: str, path: str) -> str | None:
+    """Where ``side_commit`` renamed ``path``, by the rename detection Git merges with."""
+    out = _git_output(['diff', '--name-status', '-M', '-z', base_commit, side_commit], cwd)
+    fields = out.decode('utf-8', 'surrogateescape').split('\0') if out else []
+    targets: list[str] = []
+    i = 0
+    while i < len(fields) and fields[i]:
+        status = fields[i]
+        if status[:1] in {'R', 'C'}:
+            if status[:1] == 'R' and fields[i + 1] == path:
+                targets.append(fields[i + 2])
+            i += 3
+        else:
+            i += 2
+    return targets[0] if len(targets) == 1 else None
+
+
+def _merge_file(ours: bytes, base: bytes, theirs: bytes) -> bytes | None:
+    with tempfile.TemporaryDirectory() as tmp:
+        names = []
+        for label, data in (('ours', ours), ('base', base), ('theirs', theirs)):
+            (Path(tmp) / label).write_bytes(data)
+            names.append(str(Path(tmp) / label))
+        proc = subprocess.run(['git', 'merge-file', '-p', '--quiet', *names], capture_output=True, check=False)
+        return proc.stdout if proc.returncode == 0 else None
+
+
+def _plain_text_merge(cwd: Path, path: str) -> bool:
+    attr = (_git_output(['check-attr', 'merge', '--', path], cwd) or b'').decode()
+    return attr.rsplit(':', 1)[-1].strip() in {'unspecified', 'set'}
+
+
+def rebuild_from_merged_source(
+    cwd: Path,
+    paths: list[str],
+    base: dict[str, ChunkRecords],
+    ours: dict[str, ChunkRecords],
+    theirs: dict[str, ChunkRecords],
+) -> dict[str, ChunkRecords]:
+    """Re-chunk files both sides changed, from the source Git is merging.
+
+    Each side's source is accepted only if chunking it reproduces that side's
+    committed chunks -- exact, since chunks carry the file hash -- so stale
+    artifacts or an unidentified commit decline rather than guess. The merged
+    source is Git's own three-way file merge. A file one side renamed and the
+    other edited is merged at its new path, as Git does. A source conflict, a
+    modify/delete, or a path with a custom merge attribute declines: Git
+    reports those on the source, and its result there is not ours to predict.
+    """
+    theirs_commits, base_commits = _merge_in_progress(cwd)
+    resolved: dict[str, ChunkRecords] = {}
+    if not theirs_commits:
+        return resolved
+    for path in paths:
+        ours_commit, src_ours = _source_matching(cwd, ['HEAD'], path, ours.get(path, []))
+        theirs_commit, src_theirs = _source_matching(cwd, theirs_commits, path, theirs.get(path, []))
+        base_commit, src_base = _source_matching(cwd, base_commits, path, base.get(path, []))
+        if ours_commit is None or theirs_commit is None or base_commit is None:
+            continue
+        if src_ours is None and src_theirs is None:
+            resolved[path] = []
+            continue
+        target = path
+        if src_ours is None or src_theirs is None:
+            if src_base is None:
+                continue
+            gone_commit, gone_side, kept_side = (
+                (ours_commit, ours, theirs) if src_ours is None else (theirs_commit, theirs, ours)
+            )
+            target = _renamed_to(cwd, base_commit, gone_commit, path) or ''
+            if not target or kept_side.get(target):
+                continue  # modify/delete, or the other side also has the target
+            found, moved = _source_matching(cwd, [gone_commit], target, gone_side.get(target, []))
+            if found is None:
+                continue
+            src_ours, src_theirs = (moved, src_theirs) if src_ours is None else (src_ours, moved)
+        if not (_plain_text_merge(cwd, path) and _plain_text_merge(cwd, target)):
+            continue
+        merged = _merge_file(src_ours, src_base or b'', src_theirs)
+        if merged is None:
+            continue
+        if target != path:
+            resolved[path] = []
+        resolved[target] = _chunk_records_for_source(target, merged)
+    return resolved
 
 
 def cmd_merge_driver(args: argparse.Namespace) -> int:
     """Git merge driver entry point: ``aigit merge-driver %O %A %B %P``.
 
     Writes the result to %A. Exits 1 -- a conflict Git will report -- only when
-    a file's chunks changed on both sides, which a rebuild resolves.
+    a file both sides changed could not be re-chunked from the merged source.
     """
     name = Path(args.path or args.ours).name
     base, ours, theirs = (
         Path(p).read_text(encoding='utf-8') for p in (args.base, args.ours, args.theirs)
     )
+    cwd = Path.cwd()
+    rebuild = lambda paths, *sides: rebuild_from_merged_source(cwd, paths, *sides)
     try:
-        merged, needs_rebuild = merge_semantic_artifact(name, base, ours, theirs)
+        merged, needs_rebuild = merge_semantic_artifact(name, base, ours, theirs, rebuild=rebuild)
     except (ValueError, KeyError, json.JSONDecodeError, AttributeError) as exc:
         print(f'aigit merge-driver: cannot merge {args.path or name} ({exc}); leaving ours', file=sys.stderr)
         return 1

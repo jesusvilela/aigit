@@ -173,14 +173,16 @@ driver for this clone (the repository's `.gitattributes` already routes the
 artifacts to it; without the driver Git falls back to its text merge):
 
 - `manifest.jsonl` and `chunk_index.json` merge per source file. A file changed
-  on one side takes that side's chunks, which is what a rebuild of the merged
-  source produces. A file changed on both sides is reported as a conflict to
-  resolve with `aigit chunk`: its line numbers and hashes exist on neither side.
+  on one side keeps that side's chunks. A file changed on both sides is
+  re-chunked from the merged source, following a rename on either side as Git
+  does. Only a conflict in the source itself stops the merge.
 - `edges.jsonl` and `provenance.jsonl` hold immutable records and merge as sets,
   so two branches appending provenance no longer collide at end of file.
 
-Hosted merge buttons do not run custom drivers; the CI freshness gate
-(`aigit chunk --check`) still catches stale artifacts there.
+Every chunk carries its file's hash, so two versions of a file never share
+records. Even a plain text merge -- a hosted merge button, a clone without the
+driver -- therefore either conflicts or produces exactly what `aigit chunk`
+would; it cannot merge into stale artifacts.
 
 ## Community: build the contract with us
 

@@ -87,7 +87,10 @@ def test_unparseable_file_is_reported_not_silently_skipped(tmp_path: Path) -> No
     errors: list[dict[str, str]] = []
     chunks, _ = build_manifest(tmp_path, errors)
     assert [e["path"] for e in errors] == ["broken.py"]
-    assert not [c for c in chunks if c.path.endswith("broken.py")]
+    # Still tracked -- as one opaque, low-confidence chunk -- so an edit to it
+    # changes the manifest instead of vanishing from review and merge.
+    broken = [c for c in chunks if c.path.endswith("broken.py")]
+    assert [(c.chunk_type, c.confidence) for c in broken] == [("file", "low")]
 
 
 # --------------------------------------------------------------------------- #
