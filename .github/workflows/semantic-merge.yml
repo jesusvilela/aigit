@@ -22,7 +22,9 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: semantic-merge
+  # One group per pull request: a shared group keeps a single pending run,
+  # so a burst of pull request events would drop all but the last.
+  group: semantic-merge-${{ github.event.pull_request.number || 'all' }}
   cancel-in-progress: false
 
 jobs:
@@ -51,7 +53,9 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e .
+          # Not editable: the driver must not run code from the pull request
+          # branches the script checks out.
+          python -m pip install .
 
       - name: Resolve semantic-only conflicts
         env:

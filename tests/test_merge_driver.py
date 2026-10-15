@@ -490,3 +490,54 @@ def test_branch_cut_before_the_routing_still_uses_the_driver(tmp_path, monkeypat
 
     assert result.returncode == 0, result.stdout + result.stderr
     _assert_fresh(tmp_path)
+
+
+def _git_version() -> tuple[int, ...]:
+    out = subprocess.run(['git', '--version'], text=True, capture_output=True).stdout.split()[-1]
+    return tuple(int(part) for part in out.split('.')[:2] if part.isdigit())
+
+
+@pytest.mark.skipif(_git_version() < (2, 38), reason='git merge-tree --write-tree needs Git 2.38')
+def test_merge_tree_as_merge_queues_run_it(repo):
+    # A merge queue merges two refs with no work tree of either: HEAD is
+    # neither side, so ours must come from the command line.
+    _diverge_on_one_file(repo)
+    _git(repo, 'checkout', '-q', '--detach', 'main~1')
+
+    result = _git(repo, 'merge-tree', '--write-tree', 'main', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    tree = result.stdout.split()[0]
+    merged = _git(repo, 'commit-tree', tree, '-p', 'main', '-p', 'feature', '-m', 'queue').stdout.strip()
+    _git(repo, 'checkout', '-q', '--detach', merged)
+    _assert_fresh(repo)
+
+
+def test_artifact_blob_ids_never_reach_git_as_options(repo, monkeypatch):
+    calls = []
+    monkeypatch.setattr(core, '_git_output', lambda args, cwd: calls.append(args))
+    records = [{'path': 'a.py', 'file_hash': '--output=/tmp/pwned'}]
+    assert core._source_matching(repo, [], 'a.py', records) == (False, None, None)
+    assert calls == []
+
+
+def test_artifact_paths_are_not_trusted_as_file_names():
+    assert core._chunk_records_for_source('a/..', b'x = 1\n')
+    assert core._chunk_records_for_source('', b'x = 1\n')
+
+
+def test_a_file_missing_from_an_artifact_must_be_missing_from_its_commit(repo):
+    # A stale artifact that omits a file the commit has is not evidence of
+    # a deletion.
+    head = _git(repo, 'rev-parse', 'HEAD').stdout.strip()
+    assert core._source_matching(repo, [head], 'a.py', []) == (False, None, None)
+    assert core._source_matching(repo, [head], 'gone.py', []) == (True, None, None)
+
+
+def test_undecodable_driver_input_is_a_conflict_not_a_crash(tmp_path):
+    for name in ('o', 'a', 'b'):
+        (tmp_path / name).write_bytes(b'\xff\xfe\x00garbage')
+    args = type('Args', (), {'base': str(tmp_path / 'o'), 'ours': str(tmp_path / 'a'),
+                             'theirs': str(tmp_path / 'b'), 'path': '.semantic/manifest.jsonl'})()
+    assert core.cmd_merge_driver(args) == 1
+    assert (tmp_path / 'a').read_bytes() == b'\xff\xfe\x00garbage'
