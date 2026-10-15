@@ -13,12 +13,13 @@ SCRIPT = REPO_ROOT / 'scripts' / 'resolve_semantic_conflicts.sh'
 BASE = 'def a():\n    return 1\n\n\ndef b():\n    return 2\n'
 STUB_GH = """#!/usr/bin/env bash
 case "$*" in
-  *mergeable*) echo "$STUB_MERGEABLE" ;;
   *headRefName*) printf 'feature\\tmain\\tfalse\\n' ;;
   'pr list'*) echo 7 ;;
   'workflow run'*) echo "$*" >> "$STUB_LOG" ;;
   'run list'*) echo "$STUB_PENDING_RUN" ;;
-  api*) echo "$*" >> "$STUB_LOG"; [ -z "$STUB_APPROVE_FAILS" ] ;;
+  'api -X POST'*) echo "$*" >> "$STUB_LOG"; [ -z "$STUB_APPROVE_FAILS" ] ;;
+  *pulls/7*) printf '%s\\t%s\\n' "$STUB_MERGEABLE" "$STUB_MERGE_SHA" ;;
+  *commits/*) echo "$STUB_MERGE_PARENT" ;;
 esac
 """
 
@@ -46,7 +47,7 @@ def setup(tmp_path):
         'PATH': f"{bin_dir}{os.pathsep}{os.environ['PATH']}",
         'PYTHON': sys.executable,
         'PYTHONPATH': str(REPO_ROOT),
-        'STUB_MERGEABLE': 'CONFLICTING',
+        'STUB_MERGEABLE': 'false',
         'AIGIT_MERGEABLE_ATTEMPTS': '1',
         'STUB_LOG': str(tmp_path / 'gh.log'),
     }
@@ -104,11 +105,38 @@ def test_mergeable_pull_request_is_not_touched(setup):
     work, env, commit = setup
     commit('feature', '# top\n' + BASE)
     before = _run(work, 'git', 'rev-parse', 'origin/feature').stdout
+    base_tip = _run(work, 'git', 'rev-parse', 'origin/main').stdout.strip()
 
-    result = _resolve(work, {**env, 'STUB_MERGEABLE': 'MERGEABLE'})
+    result = _resolve(work, {**env, 'STUB_MERGEABLE': 'true', 'STUB_MERGE_SHA': 'abc', 'STUB_MERGE_PARENT': base_tip})
 
-    assert 'no conflict' in result.stdout
+    assert 'no conflict' in result.stdout, result.stdout + result.stderr
     assert _run(work, 'git', 'rev-parse', 'origin/feature').stdout == before
+
+
+def test_a_verdict_against_an_older_base_is_not_trusted(setup):
+    # Seen live: right after the base moved, GitHub still called a now
+    # conflicting pull request mergeable, from a trial merge on the old base.
+    work, env, commit = setup
+    commit('feature', '# top\n' + BASE)
+
+    result = _resolve(work, {**env, 'STUB_MERGEABLE': 'true', 'STUB_MERGE_SHA': 'abc', 'STUB_MERGE_PARENT': 'an-older-base'})
+
+    assert 'no verdict against the current main' in result.stdout, result.stdout + result.stderr
+
+
+def test_a_refused_push_does_not_stop_the_run(setup):
+    work, env, commit = setup
+    commit('feature', '# top\n' + BASE)
+    _run(work, 'git', 'checkout', '-q', 'main')
+    commit('main', BASE + '\n\ndef c():\n    return 3\n')
+    hook = Path(_run(work, 'git', 'config', 'remote.origin.url').stdout.strip()) / 'hooks' / 'pre-receive'
+    hook.write_text('#!/bin/sh\nexit 1\n', encoding='utf-8')
+    hook.chmod(0o755)
+
+    result = _run(work, 'bash', str(SCRIPT), '7', '7', env=env)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert result.stdout.count('push refused') == 2
 
 
 def _conflicting(work, commit):

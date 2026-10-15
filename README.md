@@ -175,7 +175,8 @@ artifacts to it; without the driver Git falls back to its text merge):
 - `manifest.jsonl` and `chunk_index.json` merge per source file. A file changed
   on one side keeps that side's chunks. A file changed on both sides is
   re-chunked from the merged source, following a rename on either side as Git
-  does, in a merge, rebase, cherry-pick, revert or stash. Only a conflict in
+  does, in a merge, rebase, cherry-pick, revert, stash or the
+  `git merge-tree --write-tree` that merge queues run. Only a conflict in
   the source itself stops it -- or merge options that change how Git merges
   file content (`-X`, another strategy, `merge.renormalize`), which ask for
   `aigit chunk` rather than predict Git's result.
@@ -183,13 +184,16 @@ artifacts to it; without the driver Git falls back to its text merge):
   so two branches appending provenance no longer collide at end of file.
 
 Every chunk carries its file's hash, so two versions of a file never share
-records. Even a plain text merge -- a hosted merge button, a clone without the
-driver -- therefore either conflicts or produces exactly what `aigit chunk`
-would; it cannot merge into stale artifacts. Octopus merges, artifacts that
-were already stale on either side, and `.semantic/` deleted on one side stop
-for `aigit chunk` rather than guess. When a pull request conflicts
-with its base only in `.semantic/`, the Semantic Merge workflow merges the base
-in with the driver and pushes, so the hosted merge button works again.
+records. Given artifacts that are fresh on both sides, even a plain text merge
+-- a hosted merge button, a clone without the driver -- therefore either
+conflicts or produces exactly what `aigit chunk` would. No merge can repair
+artifacts that were already stale, or notice a merge with a branch that
+predates AIGit; `aigit chunk --check` in CI catches both. Octopus merges,
+artifacts that were already stale on either side, and `.semantic/` deleted on
+one side stop for `aigit chunk` rather than guess. When a pull request
+conflicts with its base only in `.semantic/`, the Semantic Merge workflow
+merges the base in with the driver and pushes, so the hosted merge button
+works again.
 
 ## Community: build the contract with us
 

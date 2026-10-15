@@ -40,6 +40,15 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
   side (a modify/delete). Merging a branch that predates AIGit into one that
   adopted it involves no artifact conflict at all; the freshness gate is
   what catches the result.
+- Merge queues: `git merge-tree --write-tree A B` (Git 2.38+) is supported;
+  ours is read from the command, not `HEAD`, which a queue does not use.
+- Review hardening. Artifacts from another branch are untrusted input: a
+  `file_hash` reaches `git cat-file` only as a well-formed object id, never as
+  a possible option; a crafted path is not used as a file name; malformed or
+  undecodable artifacts are a conflict, not a crash. A file missing from an
+  artifact must be missing from its commit too, so a stale artifact cannot
+  pass for a deletion. The throwaway merge repository runs without fsmonitor
+  or automatic maintenance.
 - Semantic Merge workflow (`scripts/resolve_semantic_conflicts.sh`): hosted
   merge buttons run no custom driver, so when GitHub reports a pull request as
   conflicting and the conflict is only in `.semantic/`, it merges the base in
@@ -47,7 +56,11 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
   left alone. A push made with the default token leaves the pull request's
   runs awaiting approval, reporting nothing; the script approves them (seen
   live on a test pull request), dispatching CI where it may not. Set
-  `AIGIT_BOT_TOKEN` to have the push start CI normally.
+  `AIGIT_BOT_TOKEN` to have the push start CI normally. GitHub's mergeability
+  verdict is trusted only when its trial merge was built on the current base
+  tip (a stale "mergeable" was seen live); one pull request failing never
+  stops the rest; the driver runs from the installed package, never from a
+  pull request's branch; each pull request has its own concurrency group.
 - `duplicate-work` also catches an addition that reimplements code already in
   the repository, reported with `scope: existing` (the earlier pass, now
   `scope: concurrent`, only saw two branches adding the same thing at once).
