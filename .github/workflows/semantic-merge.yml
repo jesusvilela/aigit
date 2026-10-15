@@ -58,6 +58,12 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           AIGIT_DISPATCH_CI: ${{ secrets.AIGIT_BOT_TOKEN == '' && 'ci.yml' || '' }}
         run: |
+          # The script runs from the default branch, so the pull request that
+          # introduces it has none to run yet.
+          if [ ! -x scripts/resolve_semantic_conflicts.sh ]; then
+            echo '::notice::scripts/resolve_semantic_conflicts.sh is not on the default branch yet; nothing to do.'
+            exit 0
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           ./scripts/resolve_semantic_conflicts.sh ${PR_NUMBER}
