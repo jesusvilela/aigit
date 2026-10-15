@@ -175,14 +175,19 @@ artifacts to it; without the driver Git falls back to its text merge):
 - `manifest.jsonl` and `chunk_index.json` merge per source file. A file changed
   on one side keeps that side's chunks. A file changed on both sides is
   re-chunked from the merged source, following a rename on either side as Git
-  does. Only a conflict in the source itself stops the merge.
+  does, in a merge, rebase, cherry-pick, revert or stash. Only a conflict in
+  the source itself stops it -- or merge options that change how Git merges
+  file content (`-X`, another strategy, `merge.renormalize`), which ask for
+  `aigit chunk` rather than predict Git's result.
 - `edges.jsonl` and `provenance.jsonl` hold immutable records and merge as sets,
   so two branches appending provenance no longer collide at end of file.
 
 Every chunk carries its file's hash, so two versions of a file never share
 records. Even a plain text merge -- a hosted merge button, a clone without the
 driver -- therefore either conflicts or produces exactly what `aigit chunk`
-would; it cannot merge into stale artifacts.
+would; it cannot merge into stale artifacts. When a pull request conflicts
+with its base only in `.semantic/`, the Semantic Merge workflow merges the base
+in with the driver and pushes, so the hosted merge button works again.
 
 ## Community: build the contract with us
 

@@ -8,15 +8,28 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 - `aigit merge-driver` / `install-merge-driver`: a Git merge driver for
   `.semantic/` artifacts. Chunk artifacts merge per source file instead of per
-  line; a file both sides changed is re-chunked from the merged source
-  (following renames), so the only merges that stop are those whose source
-  conflicts. Immutable records (`provenance.jsonl`, `edges.jsonl`) merge as
-  sets. Replaying 150 pairs of concurrent edits, adds, deletes and renames on
-  this repository through real `git merge` and `git rebase`: the text merge
-  stopped 39 times on artifacts alone; the driver never did, and all 129 merges
-  whose source merged cleanly matched a rebuild exactly. The 21 genuine source
-  conflicts are unchanged.
-
+  line; a file both sides changed is re-chunked from the merged source,
+  following renames, in a merge, rebase, cherry-pick, revert or stash.
+  The merged source comes from Git's own ort merge of the three versions, not
+  `git merge-file`: ort diffs with histogram, merge-file with Myers, and on
+  400 random three-way merges they disagreed 8 times -- twice both merging
+  cleanly into different text. Immutable records (`provenance.jsonl`,
+  `edges.jsonl`) merge as sets. Merge options that change Git's file merge
+  (`-X`, a strategy other than ort, `pull.twohead`, `merge.renormalize`) are
+  read off the launching Git command (Linux, macOS, Windows) and ask for
+  `aigit chunk` instead; if that command cannot be read, so does the driver. Replaying 150 pairs of
+  concurrent edits, adds, deletes and renames on this repository through real
+  `git merge`, `git rebase` and `git cherry-pick`: the text merge stopped on
+  artifacts alone 41-44 times per mode; the driver never did, and every result
+  whose source merged cleanly matched a rebuild exactly. The 20 genuine source
+  conflicts are unchanged. 300 adversarial merges of low-entropy files, where
+  the two diff algorithms disagree, also all matched a rebuild when clean.
+- Semantic Merge workflow (`scripts/resolve_semantic_conflicts.sh`): hosted
+  merge buttons run no custom driver, so when GitHub reports a pull request as
+  conflicting and the conflict is only in `.semantic/`, it merges the base in
+  with the driver and pushes. Source conflicts, stale results and forks are
+  left alone. Pushes made with the default token start no workflows, so it
+  dispatches CI on each branch it pushes (or set `AIGIT_BOT_TOKEN`).
 - `duplicate-work` also catches an addition that reimplements code already in
   the repository, reported with `scope: existing` (the earlier pass, now
   `scope: concurrent`, only saw two branches adding the same thing at once).
@@ -46,8 +59,10 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Changed
 
-- Every chunk records `file_hash`, the SHA-256 of its whole file, making a
-  file's records a one-to-one function of its bytes. Git calls a merge driver
+- Every chunk records `file_hash`, the Git blob id of its whole file as the
+  parsers read it (line endings normalised, so CRLF and LF checkouts agree),
+  making a file's records a one-to-one function of that text. The merge driver
+  reads each side's source by this id. Git calls a merge driver
   only when the two sides' artifacts differ, and when two branches each
   inserted a line above every chunk of a file, both recorded the same +1 shift:
   Git kept it, and the merged file -- shifted by two -- had stale artifacts.
