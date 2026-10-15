@@ -4,9 +4,10 @@ name: Semantic Merge
 # conflicts with its base only in .semantic/ artifacts, merge the base in with
 # the AIGit driver so the button works again. Source conflicts are left alone.
 #
-# Commits pushed with the default GITHUB_TOKEN start no workflows, so the
-# script dispatches CI on each commit it pushes. With an AIGIT_BOT_TOKEN
-# secret (contents: write) the push itself starts CI and no dispatch is made.
+# A push made with the default GITHUB_TOKEN leaves the pull request's workflow
+# runs awaiting approval; the script approves them so their checks report on
+# the pull request, and dispatches CI if it may not. With an AIGIT_BOT_TOKEN
+# secret (contents: write) the push starts CI normally.
 
 on:
   push:

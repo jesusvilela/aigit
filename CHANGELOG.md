@@ -24,12 +24,30 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
   whose source merged cleanly matched a rebuild exactly. The 20 genuine source
   conflicts are unchanged. 300 adversarial merges of low-entropy files, where
   the two diff algorithms disagree, also all matched a rebuild when clean.
+- A 30-scenario sweep of Git operations, each through real Git with the
+  driver, found no stale result after these fixes: the driver now also
+  handles reverts (which merge in reverse), stash pop, branches that adopted
+  AIGit separately (no base artifacts: the base source is read from the merge
+  base), a file renamed to a type outside the semantic layer, and branches
+  cut before `.gitattributes` routed the artifacts (`install-merge-driver`
+  also routes them in `.git/info/attributes`). The commit being merged is
+  pinned per operation; a looser candidate list let a stale artifact match
+  the merged commit's parent and be chunked as its source. Contested files
+  merge in one batch (100 files: 5.6s to 2.4s). Declined, with a conflict
+  asking for `aigit chunk`: octopus merges (Git runs no driver for them),
+  artifacts already stale on either side, `git checkout -m` of uncommitted
+  work (which exits 0 despite the conflict), and `.semantic/` deleted on one
+  side (a modify/delete). Merging a branch that predates AIGit into one that
+  adopted it involves no artifact conflict at all; the freshness gate is
+  what catches the result.
 - Semantic Merge workflow (`scripts/resolve_semantic_conflicts.sh`): hosted
   merge buttons run no custom driver, so when GitHub reports a pull request as
   conflicting and the conflict is only in `.semantic/`, it merges the base in
   with the driver and pushes. Source conflicts, stale results and forks are
-  left alone. Pushes made with the default token start no workflows, so it
-  dispatches CI on each branch it pushes (or set `AIGIT_BOT_TOKEN`).
+  left alone. A push made with the default token leaves the pull request's
+  runs awaiting approval, reporting nothing; the script approves them (seen
+  live on a test pull request), dispatching CI where it may not. Set
+  `AIGIT_BOT_TOKEN` to have the push start CI normally.
 - `duplicate-work` also catches an addition that reimplements code already in
   the repository, reported with `scope: existing` (the earlier pass, now
   `scope: concurrent`, only saw two branches adding the same thing at once).
@@ -75,6 +93,9 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
   Edits to it used to be invisible to `semantic-diff` and `semantic-merge`. A
   file that fails to parse is still reported as an error, and now appears this
   way rather than not at all.
+- `aigit chunk` skips symlinks. Git stores the link, not its target, so the
+  target was chunked twice, and a link leaving the repository made the
+  manifest depend on the machine.
 - `aigit chunk` lists files through Git (tracked, plus untracked files that are
   not ignored), so ignored local state -- logs, coverage reports -- no longer
   leaks into the manifest and makes one commit chunk differently on two

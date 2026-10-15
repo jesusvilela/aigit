@@ -185,7 +185,9 @@ artifacts to it; without the driver Git falls back to its text merge):
 Every chunk carries its file's hash, so two versions of a file never share
 records. Even a plain text merge -- a hosted merge button, a clone without the
 driver -- therefore either conflicts or produces exactly what `aigit chunk`
-would; it cannot merge into stale artifacts. When a pull request conflicts
+would; it cannot merge into stale artifacts. Octopus merges, artifacts that
+were already stale on either side, and `.semantic/` deleted on one side stop
+for `aigit chunk` rather than guess. When a pull request conflicts
 with its base only in `.semantic/`, the Semantic Merge workflow merges the base
 in with the driver and pushes, so the hosted merge button works again.
 

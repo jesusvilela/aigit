@@ -631,24 +631,28 @@ def _candidate_files(root: Path) -> list[Path]:
     return list(root.rglob('*'))
 
 
+def _is_chunkable(rel: Path) -> bool:
+    """Whether a repository path belongs in the semantic layer at all."""
+    if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
+        return False
+    # Build products are reproducible local artifacts, not source intent.
+    # Never let a package build perturb the committed semantic graph.
+    if any(part in {'__pycache__', 'build', 'dist'} or part.endswith('.egg-info') for part in rel.parts):
+        return False
+    if any(part.startswith('.') and part != '.github' for part in rel.parts):
+        return False
+    return rel.suffix.lower() not in BINARY_ASSET_SUFFIXES
+
+
 def iter_repo_files(root: Path) -> list[Path]:
-    files: list[Path] = []
-    for path in _candidate_files(root):
-        if not path.is_file():
-            continue
-        rel = path.relative_to(root)
-        if rel.parts[0] in {'.git', '.semantic', '.deerflow'}:
-            continue
-        # Build products are reproducible local artifacts, not source intent.
-        # Never let a package build perturb the committed semantic graph.
-        if any(part in {'__pycache__', 'build', 'dist'} or part.endswith('.egg-info') for part in rel.parts):
-            continue
-        if any(part.startswith('.') and part != '.github' for part in rel.parts):
-            continue
-        if path.suffix.lower() in BINARY_ASSET_SUFFIXES:
-            continue
-        files.append(rel)
-    return sorted(files)
+    # Symlinks are skipped: Git stores the link, not its target, so chunking
+    # the target under the link's path duplicated it, and a link leaving the
+    # repository made the manifest depend on the machine.
+    return sorted(
+        path.relative_to(root)
+        for path in _candidate_files(root)
+        if path.is_file() and not path.is_symlink() and _is_chunkable(path.relative_to(root))
+    )
 
 
 def ensure_semantic_scaffold(root: Path | None = None) -> None:
@@ -1344,6 +1348,7 @@ def _merge_chunks_by_path(
     ours: dict[str, ChunkRecords],
     theirs: dict[str, ChunkRecords],
     rebuild: Callable[[list[str]], dict[str, ChunkRecords]] | None = None,
+    base_known: bool = True,
 ) -> tuple[ChunkRecords, list[str]]:
     """Three-way merge of chunk records, with each source file as the unit.
 
@@ -1361,12 +1366,21 @@ def _merge_chunks_by_path(
     edits that each shift a chunk by one shift it by two together. Those paths
     go to ``rebuild``, which re-chunks the merged source; any it cannot resolve
     keep ours and are returned so the caller reports a conflict.
+
+    Without base records (``base_known`` false: the artifacts did not exist at
+    the merge base, as when two branches adopt AIGit separately) "unchanged
+    since base" cannot be told from "added" or "deleted", so every path the
+    two sides disagree on is contested.
     """
     by_path: dict[str, ChunkRecords] = {}
     contested: list[str] = []
     for path in set(base) | set(ours) | set(theirs):
         o, a, b = base.get(path, []), ours.get(path, []), theirs.get(path, [])
-        if a == o:
+        if not base_known:
+            by_path[path] = a
+            if a != b:
+                contested.append(path)
+        elif a == o:
             by_path[path] = b
         elif b == o:
             by_path[path] = a
@@ -1396,7 +1410,7 @@ def merge_semantic_artifact(
 ) -> tuple[str, list[str]]:
     """Merge one ``.semantic`` artifact; returns ``(text, paths_needing_rebuild)``.
 
-    ``rebuild(paths, base, ours, theirs)`` re-chunks the merged source of files
+    ``rebuild(paths, base, ours, theirs, base_known=...)`` re-chunks the merged source of files
     both sides changed (see ``rebuild_from_merged_source``). Raises
     ``ValueError`` for an artifact it does not handle or cannot parse.
     """
@@ -1412,8 +1426,9 @@ def merge_semantic_artifact(
     else:
         raise ValueError(f'no semantic merge rule for {name}')
     sides = [_group_by_path(side) for side in records]
-    bound = (lambda paths: rebuild(paths, *sides)) if rebuild else None
-    merged, needs_rebuild = _merge_chunks_by_path(*sides, rebuild=bound)
+    base_known = bool(records[0]) or not (records[1] or records[2])
+    bound = (lambda paths: rebuild(paths, *sides, base_known=base_known)) if rebuild else None
+    merged, needs_rebuild = _merge_chunks_by_path(*sides, rebuild=bound, base_known=base_known)
     if name == 'manifest.jsonl':
         lines = [json.dumps(record, sort_keys=True) for record in merged]
         return '\n'.join(lines) + ('\n' if lines else ''), needs_rebuild
@@ -1436,45 +1451,60 @@ def _commit_ids(cwd: Path, revs: list[str]) -> list[str]:
     return seen
 
 
-def _merge_in_progress(cwd: Path) -> tuple[list[str], list[str]]:
-    """Commits that may be the other side, and the merge base, of the running merge.
+_PICK_COMMANDS = {'pick', 'p', 'reword', 'r', 'edit', 'e', 'squash', 's', 'fixup', 'f'}
 
-    Git does not hand a merge driver its commits, so these are candidates read
-    from where Git leaves them: ``GITHEAD_<sha>`` for ``git merge``, the last
-    ``done`` entry of a rebase, the sequencer heads. A candidate is only ever
-    used after the chunks it yields match the side Git passed to the driver,
-    so a wrong guess costs a conflict, never a wrong merge. A cherry-pick
-    leaves no such trace, so the revisions named on the command line of the
-    Git process that started this one count as candidates too.
+
+def _merge_in_progress(cwd: Path) -> tuple[list[str], list[str]]:
+    """``([theirs], bases)``: the commit Git is merging in, and its merge base(s).
+
+    Git does not hand a merge driver its commits; each operation leaves them
+    somewhere else. A merge exports ``GITHEAD_<sha>``; a rebase lists the
+    current pick last in ``rebase-merge/done``; a cherry-pick, revert or stash
+    names its commit on the command line of the Git process that started
+    this one. Only the exact commit is returned, never a list of plausible
+    ones: the chunks of a stale artifact match *some* commit -- typically the
+    parent of the one being merged -- and accepting that would chunk the
+    wrong source. Where the commit cannot be pinned down (``git am``, an
+    octopus, a range of cherry-picks) none is returned, and sources are read
+    by blob id instead.
     """
-    revs = [key[len('GITHEAD_'):] for key in os.environ if key.startswith('GITHEAD_')]
-    git_dir_out = _git_output(['rev-parse', '--git-dir'], cwd)
-    if git_dir_out:
-        done = (cwd / git_dir_out.decode().strip()) / 'rebase-merge' / 'done'
-        try:
-            picks = [line.split() for line in done.read_text(encoding='utf-8').splitlines()]
-        except OSError:
-            picks = []
-        if picks and len(picks[-1]) > 1:
-            revs.append(picks[-1][1])
-    revs += ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'REBASE_HEAD']
-    # `git cherry-pick B`, `git revert B`, `git stash apply`: the revisions
-    # named on the command line, ranges expanded.
-    for arg in (_git_parent_args() or [])[1:]:
-        if arg.startswith('-'):
-            continue
-        if '..' in arg:
-            revs += (_git_output(['rev-list', '--max-count=50', arg, '--'], cwd) or b'').decode().split()
-        else:
-            revs.append(arg)
-    theirs = _commit_ids(cwd, revs)
+    args = _git_parent_args() or []
+    operation = _git_operation(args)
+    named = [arg for arg in args[2:] if not arg.startswith('-') and arg != operation]
+
+    def parents(commit: str) -> list[str]:
+        return (_git_output(['rev-parse', f'{commit}^@'], cwd) or b'').decode().split()
+
+    theirs: list[str] = []
     bases: list[str] = []
-    for commit in theirs:
-        out = _git_output(['merge-base', '--all', 'HEAD', commit], cwd) or b''
-        parents = _git_output(['rev-parse', f'{commit}^@'], cwd) or b''
-        for sha in (out + parents).decode().split():
-            if sha not in bases:
-                bases.append(sha)
+    if operation in {'merge', 'pull'}:
+        heads = [key[len('GITHEAD_'):] for key in os.environ if key.startswith('GITHEAD_')]
+        theirs = _commit_ids(cwd, heads) if len(heads) == 1 else []
+        if theirs:
+            bases = (_git_output(['merge-base', '--all', 'HEAD', theirs[0]], cwd) or b'').decode().split()
+    elif operation == 'rebase':
+        git_dir = (_git_output(['rev-parse', '--git-dir'], cwd) or b'').decode().strip()
+        try:
+            done = (cwd / git_dir / 'rebase-merge' / 'done').read_text(encoding='utf-8').split('\n')
+        except OSError:
+            done = []
+        last = next((line.split() for line in reversed(done) if line.strip()), [])
+        if len(last) > 1 and last[0] in _PICK_COMMANDS:
+            theirs = _commit_ids(cwd, [last[1]])
+            bases = parents(theirs[0]) if theirs else []
+    elif operation in {'cherry-pick', 'revert'} and len(named) == 1 and '..' not in named[0]:
+        picked = _commit_ids(cwd, named)
+        if picked and operation == 'cherry-pick':
+            theirs, bases = picked, parents(picked[0])
+        elif picked and len(parents(picked[0])) == 1:
+            theirs, bases = parents(picked[0]), picked  # a revert merges in reverse
+    elif operation == 'stash':
+        refs = [arg for arg in named if arg not in {'pop', 'apply'}] or ['refs/stash']
+        stash = _commit_ids(cwd, refs[:1])
+        if stash:
+            theirs, bases = stash, parents(stash[0])[:1]
+    if len(theirs) != 1 or not bases:
+        return [], []
     return theirs, bases
 
 
@@ -1494,30 +1524,33 @@ def _canonical(records: ChunkRecords) -> list[str]:
 
 def _source_matching(
     cwd: Path, commits: list[str], path: str, records: ChunkRecords
-) -> tuple[bool, bytes | None]:
-    """``(found, source)`` of ``path`` on the side whose chunks are ``records``.
+) -> tuple[bool, str | None, bytes | None]:
+    """``(found, commit, source)`` of ``path`` on the side whose chunks are ``records``.
 
     The source counts only if chunking it reproduces ``records`` exactly; no
     records means the file is absent on that side. It is read from the given
     commits, which exposes artifacts that are stale against their commit. With
-    no commit to read -- a cherry-pick, a revert or a stash, where Git leaves
-    no trace of what it applies -- it is read by the blob id the chunks name;
-    an artifact already stale in the applied commit then carries over, as it
-    would through a text merge, for the freshness gate to catch.
+    no commit to read -- ``git am``, or a cherry-pick whose command line is
+    unreadable -- it is read by the blob id the chunks name; an artifact
+    already stale in the applied commit then carries over, as it would through
+    a text merge, for the freshness gate to catch. ``commit`` is the commit the
+    source came from, when it came from one.
     """
     if not records:
-        return True, None
+        return True, None, None
     expected = _canonical(records)
     if commits:
-        candidates = [_git_output(['cat-file', 'blob', f'{commit}:{path}'], cwd) for commit in commits]
-    else:
-        blob_ids = {record.get('file_hash') for record in records}
-        blob_id = blob_ids.pop() if len(blob_ids) == 1 else None
-        candidates = [_git_output(['cat-file', 'blob', str(blob_id)], cwd)] if blob_id else []
-    for data in candidates:
+        for commit in commits:
+            data = _git_output(['cat-file', 'blob', f'{commit}:{path}'], cwd)
+            if data is not None and _canonical(_chunk_records_for_source(path, data)) == expected:
+                return True, commit, data
+        return False, None, None
+    blob_ids = {record.get('file_hash') for record in records}
+    if len(blob_ids) == 1 and all(blob_ids):
+        data = _git_output(['cat-file', 'blob', str(blob_ids.pop())], cwd)
         if data is not None and _canonical(_chunk_records_for_source(path, data)) == expected:
-            return True, data
-    return False, None
+            return True, None, data
+    return False, None, None
 
 
 def _commit_with(cwd: Path, commits: list[str], path: str, data: bytes | None) -> str | None:
@@ -1550,21 +1583,28 @@ def _renamed_to(cwd: Path, base_commit: str, side_commit: str, path: str) -> str
 _GIT_ENV_KEPT = ('GIT_CONFIG', 'GIT_EXEC_PATH')
 
 
-def _merge_like_git(ours: bytes, base: bytes | None, theirs: bytes) -> bytes | None:
-    """Merge three versions of a file exactly as ``git merge`` would, or None on conflict.
+def _merge_like_git(jobs: dict[str, tuple[bytes, bytes | None, bytes]]) -> dict[str, bytes | None]:
+    """Merge three versions of each file exactly as ``git merge`` would.
+
+    ``jobs`` maps a key to ``(ours, base, theirs)`` (base None: added on both
+    sides); the result maps it to the merged bytes, or None on conflict.
 
     ``git merge-file`` is not that: it diffs with Myers, while the ort
     strategy behind merge, rebase and cherry-pick hard-codes histogram, and
     on 400 random three-way merges they disagreed 8 times -- twice both
     merging cleanly into different text, which would have been chunked as if
-    Git had produced it. So the file goes through ort itself, in a throwaway
-    repository, under the user's configuration.
+    Git had produced it. So the files go through ort itself, all in one merge
+    in a throwaway repository, under the user's configuration.
     """
+    results: dict[str, bytes | None] = dict.fromkeys(jobs)
+    if not jobs:
+        return results
     env = {k: v for k, v in os.environ.items() if not k.startswith('GIT') or k.startswith(_GIT_ENV_KEPT)}
     env.update(
         GIT_AUTHOR_NAME='aigit', GIT_AUTHOR_EMAIL='aigit@localhost',
         GIT_COMMITTER_NAME='aigit', GIT_COMMITTER_EMAIL='aigit@localhost',
     )
+    names = {f'f{i}': key for i, key in enumerate(jobs)}
     with tempfile.TemporaryDirectory() as tmp:
         hooks = Path(tmp) / 'no-hooks'
         hooks.mkdir()
@@ -1575,27 +1615,32 @@ def _merge_like_git(ours: bytes, base: bytes | None, theirs: bytes) -> bytes | N
                 cwd=tmp, env=env, input=data, capture_output=True, check=False,
             )
 
-        def commit(data: bytes | None, parent: str | None = None) -> str:
-            entry = b''
-            if data is not None:
-                blob = git('hash-object', '-w', '--no-filters', '--stdin', data=data).stdout.decode().strip()
-                entry = f'100644 blob {blob}\tf\n'.encode()
-            tree = git('mktree', data=entry).stdout.decode().strip()
+        def commit(side: int, parent: str | None = None) -> str:
+            entries = []
+            for name, key in names.items():
+                data = jobs[key][side]
+                if data is not None:
+                    blob = git('hash-object', '-w', '--no-filters', '--stdin', data=data).stdout.decode().strip()
+                    entries.append(f'100644 blob {blob}\t{name}\n')
+            tree = git('mktree', data=''.join(entries).encode()).stdout.decode().strip()
             return git('commit-tree', tree, *(['-p', parent] if parent else []), '-m', 'x').stdout.decode().strip()
 
         if git('init', '-q', '--template=').returncode != 0:
-            return None
-        base_commit = commit(base)
-        ours_commit, theirs_commit = commit(ours, base_commit), commit(theirs, base_commit)
+            return results
+        base_commit = commit(1)
+        ours_commit, theirs_commit = commit(0, base_commit), commit(2, base_commit)
         if git('checkout', '-q', ours_commit).returncode != 0:
-            return None
-        if git('merge', '-q', '--no-commit', '--no-ff', '-s', 'ort', theirs_commit).returncode != 0:
-            return None
-        staged = git('ls-files', '-s', '--', 'f').stdout.decode().split()
-        if len(staged) < 4 or staged[2] != '0':
-            return None
-        merged = git('cat-file', 'blob', staged[1])
-        return merged.stdout if merged.returncode == 0 else None
+            return results
+        if git('merge', '-q', '--no-commit', '--no-ff', '-s', 'ort', theirs_commit).returncode not in {0, 1}:
+            return results
+        for line in git('ls-files', '-s', '-z').stdout.decode().split('\0'):
+            meta, _, name = line.partition('\t')
+            fields = meta.split()
+            if name in names and len(fields) == 3 and fields[2] == '0':
+                merged = git('cat-file', 'blob', fields[1])
+                if merged.returncode == 0:
+                    results[names[name]] = merged.stdout
+    return results
 
 
 def _plain_text_merge(cwd: Path, path: str) -> bool:
@@ -1697,32 +1742,59 @@ def _merge_is_overridden(cwd: Path) -> bool:
     return args is None or _strategy_overrides(args[1:])
 
 
+_OPERATIONS = {'merge', 'pull', 'rebase', 'cherry-pick', 'revert', 'stash', 'am'}
+
+
+def _git_operation(args: list[str]) -> str | None:
+    """The Git subcommand in a Git command line (``git -c k=v merge x`` -> merge)."""
+    values = iter(args[1:])
+    for arg in values:
+        if arg in _VALUE_OPTIONS:
+            next(values, None)
+        elif not arg.startswith('-'):
+            return arg if arg in _OPERATIONS else None
+    return None
+
+
 def rebuild_from_merged_source(
     cwd: Path,
     paths: list[str],
     base: dict[str, ChunkRecords],
     ours: dict[str, ChunkRecords],
     theirs: dict[str, ChunkRecords],
+    base_known: bool = True,
 ) -> dict[str, ChunkRecords]:
     """Re-chunk files both sides changed, from the source Git is merging.
 
     Each side's source is accepted only if chunking it reproduces that side's
     committed chunks -- exact, since chunks carry the file's blob id -- so
-    artifacts stale against their commit decline rather than guess. The
-    merged source comes from Git's own ort merge of the three versions. A file
-    one side renamed and the other edited is merged at its new path, as Git
-    does. A source conflict, a modify/delete,
-    a custom merge attribute, or merge options that change Git's file merge
-    decline: Git's result there is not ours to reproduce.
+    artifacts stale against their commit decline rather than guess. Without
+    base artifacts the base source is read from the commit Git merges against.
+    The merged source comes from Git's own ort merge of the three versions. A
+    file one side renamed and the other edited is merged at its new path, as
+    Git does; renamed out of the chunked set, it leaves the artifacts. A
+    source conflict, a modify/delete, a custom merge attribute, or merge
+    options that change Git's file merge decline: Git's result there is not
+    ours to reproduce.
     """
     resolved: dict[str, ChunkRecords] = {}
     if _merge_is_overridden(cwd):
         return resolved
     theirs_commits, base_commits = _merge_in_progress(cwd)
+    exact_base = None
+    if not base_known:
+        if len(base_commits) != 1:
+            return resolved
+        exact_base = base_commits[0]
+    jobs: dict[str, tuple[bytes, bytes | None, bytes]] = {}
+    origin: dict[str, str] = {}
     for path in paths:
-        ok_ours, src_ours = _source_matching(cwd, ['HEAD'], path, ours.get(path, []))
-        ok_theirs, src_theirs = _source_matching(cwd, theirs_commits, path, theirs.get(path, []))
-        ok_base, src_base = _source_matching(cwd, base_commits, path, base.get(path, []))
+        ok_ours, _, src_ours = _source_matching(cwd, ['HEAD'], path, ours.get(path, []))
+        ok_theirs, _, src_theirs = _source_matching(cwd, theirs_commits, path, theirs.get(path, []))
+        if exact_base:
+            ok_base, src_base = True, _git_output(['cat-file', 'blob', f'{exact_base}:{path}'], cwd)
+        else:
+            ok_base, _, src_base = _source_matching(cwd, base_commits, path, base.get(path, []))
         if not (ok_ours and ok_theirs and ok_base):
             continue
         if src_ours is None and src_theirs is None:
@@ -1730,27 +1802,39 @@ def rebuild_from_merged_source(
             continue
         target = path
         if src_ours is None or src_theirs is None:
-            # One side lost the file: a rename if Git would pair it with a new
-            # path, which needs both commits to ask; else a modify/delete.
+            present, present_side = (src_theirs, theirs) if src_ours is None else (src_ours, ours)
+            if src_base is None:
+                resolved[path] = present_side.get(path, [])  # added on one side only
+                continue
+            if present == src_base:
+                resolved[path] = []  # deleted on one side, untouched on the other
+                continue
+            # Otherwise a rename, if Git pairs the file with a new path; that
+            # needs both commits to ask. Failing that, a modify/delete.
             gone_side, kept_side = (ours, theirs) if src_ours is None else (theirs, ours)
             gone_commit = 'HEAD' if src_ours is None else _commit_with(cwd, theirs_commits, path, None)
-            base_commit = _commit_with(cwd, base_commits, path, src_base)
-            if src_base is None or gone_commit is None or base_commit is None:
+            base_commit = exact_base or _commit_with(cwd, base_commits, path, src_base)
+            if gone_commit is None or base_commit is None:
                 continue
             target = _renamed_to(cwd, base_commit, gone_commit, path) or ''
             if not target or kept_side.get(target):
                 continue
-            found, moved = _source_matching(cwd, [gone_commit], target, gone_side.get(target, []))
+            if not _is_chunkable(Path(target)):
+                resolved[path] = []  # renamed out of the semantic layer
+                continue
+            found, _, moved = _source_matching(cwd, [gone_commit], target, gone_side.get(target, []))
             if not found or moved is None:
                 continue
             src_ours, src_theirs = (moved, src_theirs) if src_ours is None else (src_ours, moved)
         if not (_plain_text_merge(cwd, path) and _plain_text_merge(cwd, target)):
             continue
-        merged = _merge_like_git(src_ours, src_base, src_theirs)
+        jobs[target] = (src_ours, src_base, src_theirs)
+        origin[target] = path
+    for target, merged in _merge_like_git(jobs).items():
         if merged is None:
             continue
-        if target != path:
-            resolved[path] = []
+        if origin[target] != target:
+            resolved[origin[target]] = []
         resolved[target] = _chunk_records_for_source(target, merged)
     return resolved
 
@@ -1766,7 +1850,7 @@ def cmd_merge_driver(args: argparse.Namespace) -> int:
         Path(p).read_text(encoding='utf-8') for p in (args.base, args.ours, args.theirs)
     )
     cwd = Path.cwd()
-    rebuild = lambda paths, *sides: rebuild_from_merged_source(cwd, paths, *sides)
+    rebuild = lambda paths, *sides, **kw: rebuild_from_merged_source(cwd, paths, *sides, **kw)
     try:
         merged, needs_rebuild = merge_semantic_artifact(name, base, ours, theirs, rebuild=rebuild)
     except (ValueError, KeyError, json.JSONDecodeError, AttributeError) as exc:
@@ -1791,18 +1875,29 @@ def cmd_install_merge_driver(args: argparse.Namespace) -> int:
     _run_git(['config', f'merge.{MERGE_DRIVER_NAME}.driver', command], cwd=repo_root)
     lines = _read_gitattributes(repo_root)
     added = []
+    routed = []
     for pattern in MERGE_DRIVER_PATTERNS:
         existing = [line for line in lines if re.match(rf'^{re.escape(pattern)}\s', line)]
         if any('merge=' in line and f'merge={MERGE_DRIVER_NAME}' not in line for line in existing):
             # A path has one merge attribute; LFS pointers are not records we can merge.
             print(f'skipped {pattern}: it already names another merge driver in {GITATTRIBUTES_FILE}')
             continue
+        routed.append(f'{pattern} merge={MERGE_DRIVER_NAME}')
         if not existing:
-            lines.append(f'{pattern} merge={MERGE_DRIVER_NAME}')
+            lines.append(routed[-1])
             added.append(pattern)
     if added:
         _write_gitattributes(repo_root, lines)
         print(f'routed {len(added)} semantic artifacts to the merge driver in {GITATTRIBUTES_FILE}')
+    # Git reads .gitattributes from the branch being merged into, so a branch
+    # cut before the routing was committed would merge the artifacts as text.
+    # info/attributes applies to every branch in this clone.
+    info = repo_root / _run_git(['rev-parse', '--git-path', 'info/attributes'], cwd=repo_root)
+    present = info.read_text(encoding='utf-8').splitlines() if info.exists() else []
+    missing = [line for line in routed if line not in present]
+    if missing:
+        info.parent.mkdir(parents=True, exist_ok=True)
+        info.write_text(''.join(f'{line}\n' for line in present + missing), encoding='utf-8')
     print(f'registered merge.{MERGE_DRIVER_NAME}.driver for this clone')
     return 0
 
