@@ -137,6 +137,7 @@ aigit commit -m "refactor parser" \
 | `aigit semantic-merge --base <ref> --ours <ref> --theirs <ref>` | you need early merge-risk signals |
 | `aigit record-provenance --agent … --model … --prompt …` | you need an auditable record of AI context |
 | `aigit commit -m <message> --agent … --model … --prompt …` | you want provenance attached to a commit |
+| `aigit install-merge-driver` | concurrent branches keep colliding on `.semantic/` files |
 | `aigit serve-api` | an agent or tool needs semantic context locally |
 | `aigit improve` | you want a concise local chunk-and-test cycle |
 | `aigit subagent-scout` | you need a quick repository diagnosis |
@@ -165,6 +166,23 @@ Run `aigit --help` for the full command reference.
   provenance.jsonl     # append-only AI work record
   cache/                # local-only, ignored by Git
 ```
+
+Chunk artifacts are a function of the source, file by file, so they should not
+be merged line by line. `aigit install-merge-driver` registers a Git merge
+driver for this clone (the repository's `.gitattributes` already routes the
+artifacts to it; without the driver Git falls back to its text merge):
+
+- `manifest.jsonl` and `chunk_index.json` merge per source file. A file changed
+  on one side keeps that side's chunks. A file changed on both sides is
+  re-chunked from the merged source, following a rename on either side as Git
+  does. Only a conflict in the source itself stops the merge.
+- `edges.jsonl` and `provenance.jsonl` hold immutable records and merge as sets,
+  so two branches appending provenance no longer collide at end of file.
+
+Every chunk carries its file's hash, so two versions of a file never share
+records. Even a plain text merge -- a hosted merge button, a clone without the
+driver -- therefore either conflicts or produces exactly what `aigit chunk`
+would; it cannot merge into stale artifacts.
 
 ## Community: build the contract with us
 
