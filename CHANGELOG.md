@@ -6,6 +6,18 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ### Added
 
+- `aigit merge-driver` / `install-merge-driver`: a Git merge driver for
+  `.semantic/` artifacts. Chunk artifacts merge per source file instead of per
+  line; immutable records (`provenance.jsonl`, `edges.jsonl`) merge as sets.
+  Replaying concurrent edits on this repository: of 300 merges where two
+  branches edited one file and Git merged the source cleanly, a text merge
+  conflicted on the artifacts 284 times and produced wrong line numbers without
+  a conflict 2 times -- two edits that each shift a chunk by one line agree on
+  "+1", and Git keeps one. The driver never produces a wrong result in the
+  replay (0 of 1,800 merges); it asks for `aigit chunk` whenever a file's
+  chunks changed on both sides, because only the merged source can say what
+  they are. Two branches recording provenance always conflicted at end of file;
+  they now merge cleanly.
 - `duplicate-work` also catches an addition that reimplements code already in
   the repository, reported with `scope: existing` (the earlier pass, now
   `scope: concurrent`, only saw two branches adding the same thing at once).

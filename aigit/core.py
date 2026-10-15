@@ -10,6 +10,7 @@ import importlib.util
 import json
 import os
 import re
+import shlex
 import shutil
 import stat
 import subprocess
@@ -1276,6 +1277,153 @@ def cmd_merge(args: argparse.Namespace) -> int:
         else:
             print(f"  conflict [{c['kind']}] {c['path']}::{c['anchor']} ({c['semantic_id']})")
     print(f'detected {len(conflicts)} semantic conflicts')
+    return 0
+
+
+MERGE_DRIVER_NAME = 'aigit-semantic'
+# Artifacts the merge driver understands, by file name. Chunk artifacts are a
+# per-file function of the source; the others are sets of immutable records.
+MERGE_DRIVER_PATTERNS: list[str] = [
+    '.semantic/manifest.jsonl',
+    '.semantic/chunk_index.json',
+    '.semantic/edges.jsonl',
+    '.semantic/provenance.jsonl',
+]
+
+
+def _merge_record_sets(base: str, ours: str, theirs: str) -> str:
+    """Three-way merge of JSONL files whose lines are immutable records.
+
+    A line survives when both sides kept it or either side added it, so a
+    removal on one side is honoured and concurrent appends both land. This is
+    exact for an append-only log: two branches recording provenance always
+    collided at end of file under a text merge, though they never disagree.
+    """
+    o, a, b = (set(text.splitlines()) - {''} for text in (base, ours, theirs))
+    kept = [line for line in ours.splitlines() if line and (line in b or line not in o)]
+    kept_set = set(kept)
+    for line in theirs.splitlines():
+        if line and line not in kept_set and line not in o:
+            kept.append(line)
+            kept_set.add(line)
+    return ''.join(f'{line}\n' for line in kept)
+
+
+def _merge_chunks_by_path(
+    base: dict[str, list[dict[str, Any]]],
+    ours: dict[str, list[dict[str, Any]]],
+    theirs: dict[str, list[dict[str, Any]]],
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Three-way merge of chunk records, with each source file as the unit.
+
+    A file's chunks are a function of that file alone, so when only one side
+    changed a file's chunks, that side's chunks are exactly what a rebuild of
+    the merged source yields -- provided the other side did not edit the file
+    in a way the parsers cannot see. A text merge has no such unit: line numbers
+    make one edit rewrite every later chunk in its file, so two edits to one
+    file conflicted even when Git merged the source cleanly, and occasionally
+    merged "cleanly" into line numbers that were wrong.
+
+    When both sides changed a file's chunks, no merge of the records can be
+    trusted: content hashes of the merged source exist on neither side. Ours is kept and the path is returned so the caller can ask
+    for a rebuild instead of guessing.
+    """
+    merged: list[dict[str, Any]] = []
+    needs_rebuild: list[str] = []
+    for path in sorted(set(base) | set(ours) | set(theirs), key=Path):
+        o, a, b = base.get(path, []), ours.get(path, []), theirs.get(path, [])
+        if a == o:
+            merged.extend(b)
+        elif b == o:
+            merged.extend(a)
+        else:
+            # Even identical sides need a rebuild: line numbers are offsets, and
+            # two edits that each shift a chunk by one shift it by two together.
+            merged.extend(a)
+            needs_rebuild.append(path)
+    return merged, needs_rebuild
+
+
+def _group_by_path(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for record in records:
+        grouped.setdefault(str(record.get('path', '')), []).append(record)
+    return grouped
+
+
+def merge_semantic_artifact(name: str, base: str, ours: str, theirs: str) -> tuple[str, list[str]]:
+    """Merge one ``.semantic`` artifact; returns ``(text, paths_needing_rebuild)``.
+
+    Raises ``ValueError`` for an artifact it does not handle or cannot parse.
+    """
+    if name in {'edges.jsonl', 'provenance.jsonl'}:
+        return _merge_record_sets(base, ours, theirs), []
+    if name == 'manifest.jsonl':
+        sides = [
+            _group_by_path([json.loads(line) for line in text.splitlines() if line.strip()])
+            for text in (base, ours, theirs)
+        ]
+        records, needs_rebuild = _merge_chunks_by_path(*sides)
+        lines = [json.dumps(record, sort_keys=True) for record in records]
+        return '\n'.join(lines) + ('\n' if lines else ''), needs_rebuild
+    if name == 'chunk_index.json':
+        sides = [
+            _group_by_path(list(json.loads(text).values()) if text.strip() else [])
+            for text in (base, ours, theirs)
+        ]
+        records, needs_rebuild = _merge_chunks_by_path(*sides)
+        index = {f"{r['path']}::{r['chunk_type']}::{r['anchor']}": r for r in records}
+        return json.dumps(index, indent=2, sort_keys=True) + '\n', needs_rebuild
+    raise ValueError(f'no semantic merge rule for {name}')
+
+
+def cmd_merge_driver(args: argparse.Namespace) -> int:
+    """Git merge driver entry point: ``aigit merge-driver %O %A %B %P``.
+
+    Writes the result to %A. Exits 1 -- a conflict Git will report -- only when
+    a file's chunks changed on both sides, which a rebuild resolves.
+    """
+    name = Path(args.path or args.ours).name
+    base, ours, theirs = (
+        Path(p).read_text(encoding='utf-8') for p in (args.base, args.ours, args.theirs)
+    )
+    try:
+        merged, needs_rebuild = merge_semantic_artifact(name, base, ours, theirs)
+    except (ValueError, KeyError, json.JSONDecodeError, AttributeError) as exc:
+        print(f'aigit merge-driver: cannot merge {args.path or name} ({exc}); leaving ours', file=sys.stderr)
+        return 1
+    Path(args.ours).write_text(merged, encoding='utf-8')
+    if needs_rebuild:
+        print(
+            f'aigit merge-driver: {args.path or name}: chunks changed on both sides for '
+            f"{', '.join(needs_rebuild)}; run `aigit chunk` and stage .semantic/",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
+def cmd_install_merge_driver(args: argparse.Namespace) -> int:
+    """Register the merge driver in this clone and route artifacts to it."""
+    repo_root = Path(args.repo).resolve()
+    command = f'{shlex.quote(sys.executable)} -m aigit.cli merge-driver %O %A %B %P'
+    _run_git(['config', f'merge.{MERGE_DRIVER_NAME}.name', 'AIGit semantic artifact merge'], cwd=repo_root)
+    _run_git(['config', f'merge.{MERGE_DRIVER_NAME}.driver', command], cwd=repo_root)
+    lines = _read_gitattributes(repo_root)
+    added = []
+    for pattern in MERGE_DRIVER_PATTERNS:
+        existing = [line for line in lines if re.match(rf'^{re.escape(pattern)}\s', line)]
+        if any('merge=' in line and f'merge={MERGE_DRIVER_NAME}' not in line for line in existing):
+            # A path has one merge attribute; LFS pointers are not records we can merge.
+            print(f'skipped {pattern}: it already names another merge driver in {GITATTRIBUTES_FILE}')
+            continue
+        if not existing:
+            lines.append(f'{pattern} merge={MERGE_DRIVER_NAME}')
+            added.append(pattern)
+    if added:
+        _write_gitattributes(repo_root, lines)
+        print(f'routed {len(added)} semantic artifacts to the merge driver in {GITATTRIBUTES_FILE}')
+    print(f'registered merge.{MERGE_DRIVER_NAME}.driver for this clone')
     return 0
 
 
@@ -3494,6 +3642,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     setup_storage.add_argument('--repo', default='.')
     setup_storage.set_defaults(func=cmd_setup_storage)
+
+    merge_driver = sub.add_parser(
+        'merge-driver',
+        help='Git merge driver for .semantic artifacts (invoked by Git as %%O %%A %%B %%P)',
+    )
+    merge_driver.add_argument('base')
+    merge_driver.add_argument('ours')
+    merge_driver.add_argument('theirs')
+    merge_driver.add_argument('path', nargs='?', default='')
+    merge_driver.set_defaults(func=cmd_merge_driver)
+
+    install_merge_driver = sub.add_parser(
+        'install-merge-driver',
+        help='Merge .semantic artifacts by source file instead of by line in this clone',
+    )
+    install_merge_driver.add_argument('--repo', default='.')
+    install_merge_driver.set_defaults(func=cmd_install_merge_driver)
 
     scout = sub.add_parser(
         'subagent-scout',

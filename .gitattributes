@@ -1,0 +1,4 @@
+.semantic/manifest.jsonl merge=aigit-semantic
+.semantic/chunk_index.json merge=aigit-semantic
+.semantic/edges.jsonl merge=aigit-semantic
+.semantic/provenance.jsonl merge=aigit-semantic
