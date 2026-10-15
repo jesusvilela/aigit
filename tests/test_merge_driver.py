@@ -450,7 +450,12 @@ def test_edit_merges_into_a_file_renamed_out_of_the_layer(repo):
 
 def test_symlinks_are_not_chunked(tmp_path):
     (tmp_path / 'target.py').write_text(BASE['a.py'], encoding='utf-8')
-    (tmp_path / 'link.py').symlink_to('target.py')
+    try:
+        (tmp_path / 'link.py').symlink_to('target.py')
+    except OSError as exc:
+        if getattr(exc, 'winerror', None) == 1314:
+            pytest.skip('Windows symlink privilege is unavailable')
+        raise
     paths = {record['path'] for record in map(json.loads, _artifacts(tmp_path)[0].splitlines())}
     assert paths == {'target.py'}
 

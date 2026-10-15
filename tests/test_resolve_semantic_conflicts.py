@@ -8,6 +8,10 @@ import pytest
 
 from aigit.core import build_manifest, render_manifest, write_manifest
 
+pytestmark = pytest.mark.skipif(
+    os.name == 'nt', reason='resolver integration requires a POSIX shell, paths and executable stubs',
+)
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = REPO_ROOT / 'scripts' / 'resolve_semantic_conflicts.sh'
 BASE = 'def a():\n    return 1\n\n\ndef b():\n    return 2\n'

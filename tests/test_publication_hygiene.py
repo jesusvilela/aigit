@@ -24,7 +24,7 @@ def test_scout_excludes_generated_runtime_and_semantic_state(tmp_path: Path) -> 
     summary = scout_repo(tmp_path)
 
     assert summary.file_count == 1
-    assert summary.total_bytes == len('x = 1\n')
+    assert summary.total_bytes == (tmp_path / 'src.py').stat().st_size
 
 
 def test_markdown_parser_ignores_hash_comments_inside_fenced_code() -> None:
