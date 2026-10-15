@@ -915,12 +915,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ba4af90b6541727104eff45e3185f9649375d21d6e8a958ce734db4861b5c83a",
-    "end_line": 114,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 115,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "570be3970ff56577",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_a41afeeb37d0513b",
-    "start_line": 110
+    "start_line": 111
   },
   "aigit/admin_ui.py::function::_format_bool": {
     "anchor": "_format_bool",
@@ -928,12 +928,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "75a44db373b626085757842945f52eb3b61d8986b5632112defd3af2556f9d54",
-    "end_line": 13,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 14,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "5da0e1f95e757bcb",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_600f3cca9b03b790",
-    "start_line": 12
+    "start_line": 13
   },
   "aigit/admin_ui.py::function::_git_markdown": {
     "anchor": "_git_markdown",
@@ -941,12 +941,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e6d105779da6921844c8bd26c561bb5dee1fae18d9143fa37a80c56ab8d03661",
-    "end_line": 58,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 59,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "37b21f8f171cdeb6",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_f27764bbff8c5797",
-    "start_line": 48
+    "start_line": 49
   },
   "aigit/admin_ui.py::function::_overview_html": {
     "anchor": "_overview_html",
@@ -954,12 +954,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d0740a6ca3b92a2b8c93014b97a3709a9654d5858867ea65b3aca323113ba98a",
-    "end_line": 45,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 46,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "df5a281e1b3d0876",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_0b5118b2ca954f3c",
-    "start_line": 16
+    "start_line": 17
   },
   "aigit/admin_ui.py::function::_queue_rows": {
     "anchor": "_queue_rows",
@@ -967,12 +967,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "263f5ac7fc5896b92f9210795e1e68b92349d6facb8f81ab9f29c6acc7961bd4",
-    "end_line": 73,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 74,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "6e3f639f04d77715",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_f8339db245546fc0",
-    "start_line": 61
+    "start_line": 62
   },
   "aigit/admin_ui.py::function::_refresh_dashboard": {
     "anchor": "_refresh_dashboard",
@@ -980,12 +980,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7fdda459d3f363443e976616a99406f0f45479b6bdb31ba7e340f015886738b4",
-    "end_line": 185,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 186,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "773f2b172797f0f7",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_6227768ccaaf88e5",
-    "start_line": 173
+    "start_line": 174
   },
   "aigit/admin_ui.py::function::_run_action": {
     "anchor": "_run_action",
@@ -993,12 +993,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d3b8e7b989a78a6e3553e6a187174f2dd737a18cbe25ec4726e42a11a4db5d0c",
-    "end_line": 170,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 171,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "7d998bd11704d370",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_9f954369471d6966",
-    "start_line": 163
+    "start_line": 164
   },
   "aigit/admin_ui.py::function::_run_and_refresh": {
     "anchor": "_run_and_refresh",
@@ -1006,12 +1006,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f45eff0c3e8d9d3e379c45d229083bd3f41eeaf92ab1114d95939626668f50b1",
-    "end_line": 191,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 192,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "1fbd621b33b6645b",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_e3d6d0171cd96dcc",
-    "start_line": 188
+    "start_line": 189
   },
   "aigit/admin_ui.py::function::_runtime_markdown": {
     "anchor": "_runtime_markdown",
@@ -1019,12 +1019,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "9548a6e23db39439687f13e5f81421c416f665ffd0969e062d78d10187ada0ed",
-    "end_line": 135,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 136,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "5eaa20979f1ddafe",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_fb302e875aedb593",
-    "start_line": 117
+    "start_line": 118
   },
   "aigit/admin_ui.py::function::_semantic_markdown": {
     "anchor": "_semantic_markdown",
@@ -1032,12 +1032,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "473499ef0ca79f9bd1bc81fdaa1cfb798c568b59464006e1369b3d830936f119",
-    "end_line": 87,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 88,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "7ebe2405962c1ab9",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_427632463cbf1baf",
-    "start_line": 76
+    "start_line": 77
   },
   "aigit/admin_ui.py::function::_semantic_rows": {
     "anchor": "_semantic_rows",
@@ -1045,12 +1045,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ca5643792513c0611cd5545dd28050b37804a254768d311f204dec57d28c8538",
-    "end_line": 91,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 92,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "47bf2a1324d59053",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_757ccc55acfb6bfe",
-    "start_line": 90
+    "start_line": 91
   },
   "aigit/admin_ui.py::function::_thread_details_markdown": {
     "anchor": "_thread_details_markdown",
@@ -1058,12 +1058,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "651163709664e41ec83a13b5b5a121ad9b1e7cc6f9fed8edee302f8153053b42",
-    "end_line": 160,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 161,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "7ebe1a97b73e9cdc",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_e0b5a57947ac36f3",
-    "start_line": 138
+    "start_line": 139
   },
   "aigit/admin_ui.py::function::_thread_rows": {
     "anchor": "_thread_rows",
@@ -1071,12 +1071,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "791336a8b83f180e2e257305b837499bdf15dc7464293f788c74e5d2bbc08171",
-    "end_line": 107,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 108,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "763e329737e4345e",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_119a78a1dd3acfaa",
-    "start_line": 94
+    "start_line": 95
   },
   "aigit/admin_ui.py::function::launch_admin_ui": {
     "anchor": "launch_admin_ui",
@@ -1084,12 +1084,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c731a12070276b6d54d87315aec80d0f0dbad59df7c47896ce4ff497400c40a4",
-    "end_line": 342,
-    "file_hash": "195d8630d5c33aeebcec782f6d57501e0025c326",
+    "end_line": 343,
+    "file_hash": "3d4213a2941ce1abf314c9637b06f1e790339b01",
     "fingerprint": "9d3f3b0f26f5657f",
     "path": "aigit/admin_ui.py",
     "semantic_id": "sc_887eebbcbfa3900a",
-    "start_line": 194
+    "start_line": 195
   },
   "aigit/cli.py::file::file": {
     "anchor": "file",
