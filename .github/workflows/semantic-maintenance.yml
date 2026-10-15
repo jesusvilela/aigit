@@ -4,6 +4,15 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '23 4 * * 1'
+  # A pull request that changes source without regenerating .semantic/ -- a
+  # Dependabot bump, a merge from the web editor -- leaves main stale; open
+  # the refresh pull request as soon as that lands rather than next Monday.
+  push:
+    branches: [main]
+
+concurrency:
+  group: semantic-maintenance
+  cancel-in-progress: true
 
 permissions:
   contents: write
