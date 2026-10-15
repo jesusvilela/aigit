@@ -1,6 +1,6 @@
 {
   "task": "Repair findings from Dojo-1/aigittestbed",
-  "status": "repairs-verified; final-Windows-suite-running",
+  "status": "repairs-verified-and-published",
   "base_commit": "25dae73262aa51874a3ee0a5c21556175bff4391",
   "branch": "codex/fix-validation-findings",
   "confirmed_product_findings": ["F-007 TypeScript body coverage", "F-008 YAML value coverage"],
@@ -15,7 +15,8 @@
     "linux_python_3_10": "133 passed, including POSIX modes, symlinks and shell resolver integration",
     "lineage": "four cases, precision 1.0, recall 1.0",
     "artifacts": "POSIX rebuild and freshness gate passed",
-    "full_windows_suite": "in progress; earlier run identified host/fixture assumptions corrected in tests"
+    "full_windows_suite": "282 passed, 18 skipped; completed in 688.43 seconds",
+    "github_ci": "success for code commit f3c2b60 on Python 3.10, 3.11, 3.12, semantics, uv-lock and package; run 38752325983"
   },
-  "next": ["finish full Windows suite", "publish pull request and final evidence"]
+  "next": ["review and merge pull request; no merge performed by this task"]
 }
