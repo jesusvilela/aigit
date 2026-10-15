@@ -1,0 +1,15 @@
+{
+  "experiment": "algorithms",
+  "trials": 400,
+  "seed": 2,
+  "aigit_commit": "25dae73262aa51874a3ee0a5c21556175bff4391",
+  "git": "2.34.1",
+  "python": "3.10.12",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "summary": {
+    "agree": 392,
+    "both clean, different text": 2,
+    "merge-file clean, git conflicts": 4,
+    "git clean, merge-file conflicts": 2
+  }
+}

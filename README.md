@@ -7,12 +7,15 @@
 [![CI](https://github.com/jesusvilela/aigit/actions/workflows/ci.yml/badge.svg)](https://github.com/jesusvilela/aigit/actions/workflows/ci.yml)
 [![Semantic Maintenance](https://github.com/jesusvilela/aigit/actions/workflows/semantic-maintenance.yml/badge.svg)](https://github.com/jesusvilela/aigit/actions/workflows/semantic-maintenance.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-111111.svg)](LICENSE)
+[![Merge driver: 0 stale in 450 replayed merges](https://img.shields.io/badge/merge%20driver-0%20stale%20%2F%20450%20replayed%20merges-2a78d6.svg)](docs/evals/results/2026-10-15-merge-driver/README.md)
 
 > **Git for files. AIGit for intent.**
 
-AI-native semantic version control that gives people, agents, and CI a shared, deterministic view of what a change *means*.
+AI-native semantic version control. People, agents, and CI get one shared, deterministic answer to the question a line diff never answers: *what did this change mean?*
 
-**Alpha software.** The semantic core is usable today; parser coverage and workflow ergonomics are actively evolving. Bring it to a real repository, inspect the output, and help shape the contract.
+It stays out of your way while doing it. The semantic layer is committed beside your code, merges as cleanly as your code does, and disappears without a trace if you remove it.
+
+**Alpha software.** The semantic core is usable today; parser coverage and workflow ergonomics are still moving. Bring it to a real repository, inspect the output, and help shape the contract.
 
 <br>
 
@@ -38,6 +41,32 @@ AIGit keeps Git exactly as it is and adds a committed semantic layer beside it. 
 | use agents responsibly | append-only provenance and commit trailers | audit generated work without guessing |
 | merge agent work with confidence | semantic merge reports | surface conflict risk before the merge button |
 | automate without surrendering control | a local API, CI checks, and an optional operator UI | keep humans in the loop |
+
+## Merges that don't fight you
+
+A committed semantic layer has a classic failure mode: two branches change the code cleanly, and the generated files beside it collide anyway. At merge-queue volume, that is a conflict on almost every busy file, and a human resolving metadata nobody wrote by hand.
+
+AIGit's merge driver treats `.semantic/` as what it is, a function of the source. It merges the artifacts file by file, and re-chunks any file both branches touched from the source Git actually merged. That covers `merge`, `rebase`, `cherry-pick`, `revert`, `stash` and the `merge-tree` that merge queues run.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/evals/results/2026-10-15-merge-driver/figures/headline-dark.svg">
+  <img alt="0 stale merges across 450 replayed merges, rebases and cherry-picks. 0 needless .semantic/ conflicts, where Git's text merge stopped 120 times on the same changes. 32 of 32 corner cases handled." src="docs/evals/results/2026-10-15-merge-driver/figures/headline-light.svg" width="760">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/evals/results/2026-10-15-merge-driver/figures/replay-outcomes-dark.svg">
+  <img alt="Replayed concurrent changes. With Git's text merge, 40 of 150 stop on .semantic/ alone in each of merge, rebase and cherry-pick. With the AIGit driver, none do; the 25 genuine source conflicts are unchanged, and no merge is stale." src="docs/evals/results/2026-10-15-merge-driver/figures/replay-outcomes-light.svg" width="760">
+</picture>
+
+- **Only real conflicts stop you.** In 150 replayed pairs of concurrent changes, Git's text merge stopped 40 times per operation on `.semantic/` alone. The driver stopped on none of them, and every genuine source conflict still surfaced.
+- **Never silently wrong.** Every merge's artifacts were compared byte for byte with a fresh rebuild. None was stale. Where the driver cannot follow Git (octopus merges, artifacts already stale), it stops and asks for `aigit chunk` rather than guess.
+- **It runs Git's own merge, not an imitation.** `git merge-file` and Git's ort strategy disagreed on 8 of 400 random merges, 2 of them silently. So the driver merges with ort itself.
+
+Full method, raw data, the 32-scenario corner-case sweep and the threats to validity are in the [evaluation report](docs/evals/results/2026-10-15-merge-driver/README.md). Rerun it with `make merge-driver-eval`.
+
+```bash
+aigit install-merge-driver   # once per clone; .gitattributes already routes the artifacts
+```
 
 ## The quiet architecture
 
@@ -66,6 +95,7 @@ git clone https://github.com/jesusvilela/aigit.git
 cd aigit
 ./scripts/bootstrap_uv.sh
 uv run aigit chunk
+uv run aigit install-merge-driver
 ```
 
 Then ask a useful question of your repository:
@@ -121,6 +151,7 @@ aigit commit -m "refactor parser" \
 | Semantic core | deterministic chunking for Python, Markdown, JSON, YAML, TypeScript, and a safe file fallback |
 | Identity and lineage | stable semantic IDs, conservative lineage edges, `chunk_index.json` |
 | Review tooling | semantic diff and semantic merge reports |
+| Merging | a Git merge driver that merges `.semantic/` by source file, and a workflow that unblocks the hosted merge button |
 | Provenance | append-only provenance log, signed records, commit trailers |
 | Agent access | local HTTP API through `aigit serve-api` |
 | Team automation | semantic freshness checks and PR-based maintenance workflow |
@@ -167,33 +198,7 @@ Run `aigit --help` for the full command reference.
   cache/                # local-only, ignored by Git
 ```
 
-Chunk artifacts are a function of the source, file by file, so they should not
-be merged line by line. `aigit install-merge-driver` registers a Git merge
-driver for this clone (the repository's `.gitattributes` already routes the
-artifacts to it; without the driver Git falls back to its text merge):
-
-- `manifest.jsonl` and `chunk_index.json` merge per source file. A file changed
-  on one side keeps that side's chunks. A file changed on both sides is
-  re-chunked from the merged source, following a rename on either side as Git
-  does, in a merge, rebase, cherry-pick, revert, stash or the
-  `git merge-tree --write-tree` that merge queues run. Only a conflict in
-  the source itself stops it -- or merge options that change how Git merges
-  file content (`-X`, another strategy, `merge.renormalize`), which ask for
-  `aigit chunk` rather than predict Git's result.
-- `edges.jsonl` and `provenance.jsonl` hold immutable records and merge as sets,
-  so two branches appending provenance no longer collide at end of file.
-
-Every chunk carries its file's hash, so two versions of a file never share
-records. Given artifacts that are fresh on both sides, even a plain text merge
--- a hosted merge button, a clone without the driver -- therefore either
-conflicts or produces exactly what `aigit chunk` would. No merge can repair
-artifacts that were already stale, or notice a merge with a branch that
-predates AIGit; `aigit chunk --check` in CI catches both. Octopus merges,
-artifacts that were already stale on either side, and `.semantic/` deleted on
-one side stop for `aigit chunk` rather than guess. When a pull request
-conflicts with its base only in `.semantic/`, the Semantic Merge workflow
-merges the base in with the driver and pushes, so the hosted merge button
-works again.
+`manifest.jsonl` and `chunk_index.json` are never merged line by line: the driver merges them per source file and re-chunks files both branches changed. `edges.jsonl` and `provenance.jsonl` hold immutable records and merge as sets, so two branches recording provenance never collide at the end of the file. Every chunk carries its file's hash. Given fresh artifacts on both sides, even a plain text merge, such as a hosted merge button or a clone without the driver, either conflicts or produces exactly what `aigit chunk` would. When a pull request conflicts with its base only in `.semantic/`, the Semantic Merge workflow merges the base in with the driver and pushes. What no merge can fix (artifacts that were already stale, a branch that predates AIGit) is what `aigit chunk --check` in CI is for. Details and limits are in the [evaluation report](docs/evals/results/2026-10-15-merge-driver/README.md).
 
 ## Community: build the contract with us
 
@@ -223,6 +228,7 @@ Useful references:
 - [Beta readiness and release artifacts](docs/BETA_READINESS.md)
 - [Development journal](docs/DEVELOPMENT_JOURNAL.md)
 - [Evaluation program](docs/evals/README.md)
+- [Merge driver evaluation](docs/evals/results/2026-10-15-merge-driver/README.md)
 - [Changelog](CHANGELOG.md)
 - [Release governance](docs/RELEASE_GOVERNANCE.md)
 - [Roadmap](docs/EPICS_ROADMAP.md)

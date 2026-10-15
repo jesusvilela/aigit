@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="246" viewBox="0 0 760 246" role="img" aria-label="Where git merge-file and git merge disagree" font-family="system-ui, -apple-system, &#x27;Segoe UI&#x27;, sans-serif">
+<title>Where git merge-file and git merge disagree</title>
+<rect width="760" height="246" rx="8" fill="#fcfcfb"/>
+<text x="24.0" y="36.0" font-size="18" font-weight="600" fill="#0b0b0b" text-anchor="start">Why the driver runs Git’s own merge</text>
+<text x="24.0" y="58.0" font-size="13" font-weight="400" fill="#52514e" text-anchor="start">8 of 400 random three-way merges differ between git merge-file (Myers diff)</text>
+<text x="24.0" y="76.0" font-size="13" font-weight="400" fill="#52514e" text-anchor="start">and git merge (ort&#x27;s histogram diff). Red: stale artifacts with no conflict at all</text>
+<text x="288.0" y="120.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">Both merge cleanly, into different text</text>
+<path d="M300.0,104.0 H496.0 Q500.0,104.0 500.0,108.0 V122.0 Q500.0,126.0 496.0,126.0 H300.0 Z" fill="#d03b3b"/>
+<text x="508.0" y="120.0" font-size="12" font-weight="600" fill="#0b0b0b" text-anchor="start">2</text>
+<text x="288.0" y="156.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">merge-file clean, Git conflicts</text>
+<path d="M300.0,140.0 H696.0 Q700.0,140.0 700.0,144.0 V158.0 Q700.0,162.0 696.0,162.0 H300.0 Z" fill="#898781"/>
+<text x="708.0" y="156.0" font-size="12" font-weight="600" fill="#0b0b0b" text-anchor="start">4</text>
+<text x="288.0" y="192.0" font-size="12" font-weight="400" fill="#52514e" text-anchor="end">Git clean, merge-file conflicts</text>
+<path d="M300.0,176.0 H496.0 Q500.0,176.0 500.0,180.0 V194.0 Q500.0,198.0 496.0,198.0 H300.0 Z" fill="#898781"/>
+<text x="508.0" y="192.0" font-size="12" font-weight="600" fill="#0b0b0b" text-anchor="start">2</text>
+<line x1="300.0" y1="98.0" x2="300.0" y2="204.0" stroke="#c3c2b7" stroke-width="1"/>
+<text x="24.0" y="232.0" font-size="11" font-weight="400" fill="#898781" text-anchor="start">Git 2.34.1 · seed 2 · data: algorithms.csv</text>
+</svg>

@@ -1,0 +1,11 @@
+files,variant,median_seconds,min_seconds,max_seconds
+10,per-file,1.265,1.132,1.297
+10,batched,0.683,0.591,0.774
+25,per-file,2.604,2.545,2.667
+25,batched,1.426,1.231,1.697
+50,per-file,4.818,4.612,4.826
+50,batched,1.647,1.635,1.804
+100,per-file,8.255,8.059,8.324
+100,batched,3.177,2.981,3.18
+200,per-file,17.855,17.849,19.443
+200,batched,6.948,6.438,7.002
