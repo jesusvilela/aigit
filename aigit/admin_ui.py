@@ -339,3 +339,4 @@ def launch_admin_ui(repo_root: Path, host: str, port: int, share: bool = False) 
         load_logs.click(lambda name, lines: get_deerflow_container_logs(name, int(lines)), inputs=[container_name, tail_lines], outputs=container_logs)
 
     demo.launch(server_name=host, server_port=port, share=share, inbrowser=False)
+# motion test: edit at the bottom
