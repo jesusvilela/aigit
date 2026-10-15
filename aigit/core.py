@@ -35,7 +35,7 @@ CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
 # Bump whenever Chunk gains or changes a field: cached entries are rehydrated
 # with ``Chunk(**record)``, so a stale entry silently backfills new fields with
 # their defaults and quietly degrades everything computed from them.
-CHUNK_CACHE_VERSION = '4'
+CHUNK_CACHE_VERSION = '5'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 BINARY_ASSET_SUFFIXES = {
@@ -117,9 +117,10 @@ class Chunk:
     confidence: str
     fingerprint: str = ''
     body_fingerprint: str = ''
-    # SHA-256 of the whole source file. Makes a file's records differ whenever
-    # its bytes do, so Git hands every divergent file to the merge driver
-    # instead of trivially keeping one side's records (see parse_file).
+    # Git blob id of the whole file as the parsers read it. Makes a file's
+    # records differ whenever its content does, so Git hands every divergent
+    # file to the merge driver, which can fetch the source by this id (see
+    # parse_file).
     file_hash: str = ''
 
     def to_dict(self) -> dict[str, Any]:
@@ -499,10 +500,20 @@ def _disambiguate_anchors(chunks: list[Chunk]) -> list[Chunk]:
     return chunks
 
 
+def _git_blob_id(data: bytes) -> str:
+    return hashlib.sha1(b'blob %d\0' % len(data) + data, usedforsecurity=False).hexdigest()
+
+
 def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | None = None) -> list[Chunk]:
     """Chunk one file. Every file yields at least one chunk, and every chunk
     carries the file's hash, so the records are a one-to-one function of the
-    bytes: two versions of a file never share records.
+    text the parsers read: two versions of a file never share records.
+
+    The hash is the Git blob id of that text -- line endings normalised, as
+    the parsers see them, so a CRLF checkout chunks like an LF one -- which
+    for an LF file is the id of the blob Git stores. The merge driver fetches
+    each side's source by it, needing no knowledge of which commits Git is
+    merging.
 
     Without that, Git merges the artifacts wrongly where no merge driver can
     intervene. Git calls a driver only when both sides' artifact blobs differ
@@ -513,7 +524,7 @@ def parse_file(full_path: Path, rel_path: str, errors: list[dict[str, str]] | No
     one side's records stand for a merged file they did not describe.
     """
     text = full_path.read_text(encoding='utf-8', errors='replace')
-    file_hash = hashlib.sha256(full_path.read_bytes()).hexdigest()
+    file_hash = _git_blob_id(text.encode('utf-8'))
     suffix = full_path.suffix.lower()
     if suffix == '.py':
         parsed = parse_python(rel_path, text, errors)
@@ -1432,8 +1443,9 @@ def _merge_in_progress(cwd: Path) -> tuple[list[str], list[str]]:
     from where Git leaves them: ``GITHEAD_<sha>`` for ``git merge``, the last
     ``done`` entry of a rebase, the sequencer heads. A candidate is only ever
     used after the chunks it yields match the side Git passed to the driver,
-    so a wrong guess costs a conflict, never a wrong merge. A single
-    ``git cherry-pick`` leaves no trace and falls back to the conflict.
+    so a wrong guess costs a conflict, never a wrong merge. A cherry-pick
+    leaves no such trace, so the revisions named on the command line of the
+    Git process that started this one count as candidates too.
     """
     revs = [key[len('GITHEAD_'):] for key in os.environ if key.startswith('GITHEAD_')]
     git_dir_out = _git_output(['rev-parse', '--git-dir'], cwd)
@@ -1446,6 +1458,15 @@ def _merge_in_progress(cwd: Path) -> tuple[list[str], list[str]]:
         if picks and len(picks[-1]) > 1:
             revs.append(picks[-1][1])
     revs += ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'REBASE_HEAD']
+    # `git cherry-pick B`, `git revert B`, `git stash apply`: the revisions
+    # named on the command line, ranges expanded.
+    for arg in (_git_parent_args() or [])[1:]:
+        if arg.startswith('-'):
+            continue
+        if '..' in arg:
+            revs += (_git_output(['rev-list', '--max-count=50', arg, '--'], cwd) or b'').decode().split()
+        else:
+            revs.append(arg)
     theirs = _commit_ids(cwd, revs)
     bases: list[str] = []
     for commit in theirs:
@@ -1473,16 +1494,38 @@ def _canonical(records: ChunkRecords) -> list[str]:
 
 def _source_matching(
     cwd: Path, commits: list[str], path: str, records: ChunkRecords
-) -> tuple[str | None, bytes | None]:
-    """``(commit, source)`` for the first commit whose chunks of ``path`` equal
-    ``records``; commit is None when none does. Records carry the file hash,
-    so a match pins the exact bytes, and a missing file matches no records."""
+) -> tuple[bool, bytes | None]:
+    """``(found, source)`` of ``path`` on the side whose chunks are ``records``.
+
+    The source counts only if chunking it reproduces ``records`` exactly; no
+    records means the file is absent on that side. It is read from the given
+    commits, which exposes artifacts that are stale against their commit. With
+    no commit to read -- a cherry-pick, a revert or a stash, where Git leaves
+    no trace of what it applies -- it is read by the blob id the chunks name;
+    an artifact already stale in the applied commit then carries over, as it
+    would through a text merge, for the freshness gate to catch.
+    """
+    if not records:
+        return True, None
     expected = _canonical(records)
+    if commits:
+        candidates = [_git_output(['cat-file', 'blob', f'{commit}:{path}'], cwd) for commit in commits]
+    else:
+        blob_ids = {record.get('file_hash') for record in records}
+        blob_id = blob_ids.pop() if len(blob_ids) == 1 else None
+        candidates = [_git_output(['cat-file', 'blob', str(blob_id)], cwd)] if blob_id else []
+    for data in candidates:
+        if data is not None and _canonical(_chunk_records_for_source(path, data)) == expected:
+            return True, data
+    return False, None
+
+
+def _commit_with(cwd: Path, commits: list[str], path: str, data: bytes | None) -> str | None:
+    """The first of ``commits`` holding exactly ``data`` at ``path`` (None: no such file)."""
     for commit in commits:
-        data = _git_output(['cat-file', 'blob', f'{commit}:{path}'], cwd)
-        if _canonical(_chunk_records_for_source(path, data)) == expected:
-            return commit, data
-    return None, None
+        if _git_output(['cat-file', 'blob', f'{commit}:{path}'], cwd) == data:
+            return commit
+    return None
 
 
 def _renamed_to(cwd: Path, base_commit: str, side_commit: str, path: str) -> str | None:
@@ -1517,6 +1560,62 @@ def _plain_text_merge(cwd: Path, path: str) -> bool:
     return attr.rsplit(':', 1)[-1].strip() in {'unspecified', 'set'}
 
 
+def _process_parent_and_args(pid: int) -> tuple[int, list[str]] | None:
+    try:
+        stat_line = Path(f'/proc/{pid}/stat').read_text(encoding='utf-8')
+        args = Path(f'/proc/{pid}/cmdline').read_bytes().decode('utf-8', 'replace').split('\0')
+        return int(stat_line.rsplit(')', 1)[1].split()[1]), [arg for arg in args if arg]
+    except (OSError, ValueError, IndexError):
+        pass
+    try:
+        proc = subprocess.run(['ps', '-o', 'ppid=,args=', '-p', str(pid)], capture_output=True, text=True, check=False)
+    except FileNotFoundError:
+        return None
+    fields = proc.stdout.split()
+    if proc.returncode != 0 or not fields:
+        return None
+    return int(fields[0]), fields[1:]
+
+
+def _git_parent_args() -> list[str] | None:
+    """Arguments of the nearest Git process above this one, if it can be read."""
+    pid = os.getppid()
+    for _ in range(5):
+        found = _process_parent_and_args(pid)
+        if found is None:
+            return None
+        parent, args = found
+        if args and Path(args[0]).name in {'git', 'git.exe'}:
+            return args
+        if parent <= 1:
+            return None
+        pid = parent
+    return None
+
+
+_STRATEGY_FLAGS = ('-X', '--strategy-option', '-s', '--strategy')
+
+
+def _merge_is_overridden(cwd: Path) -> bool:
+    """Whether Git may merge file content differently from a plain ``merge-file``.
+
+    ``-X ignore-space-change``, ``-X ours``, another strategy or
+    ``merge.renormalize`` all change Git's result, and none reaches a merge
+    driver, so they are read off the Git process that started this one. A
+    false alarm (``-X`` inside a commit message) only costs a conflict.
+    Where the process table cannot be read, the CI freshness gate remains.
+    """
+    renormalize = (_git_output(['config', '--bool', 'merge.renormalize'], cwd) or b'').strip()
+    if renormalize == b'true':
+        return True
+    args = _git_parent_args() or []
+    return any(
+        arg == flag or (arg.startswith(flag) and (flag in {'-X', '-s'} or arg[len(flag)] == '='))
+        for arg in args[1:]
+        for flag in _STRATEGY_FLAGS
+    )
+
+
 def rebuild_from_merged_source(
     cwd: Path,
     paths: list[str],
@@ -1527,38 +1626,40 @@ def rebuild_from_merged_source(
     """Re-chunk files both sides changed, from the source Git is merging.
 
     Each side's source is accepted only if chunking it reproduces that side's
-    committed chunks -- exact, since chunks carry the file hash -- so stale
-    artifacts or an unidentified commit decline rather than guess. The merged
-    source is Git's own three-way file merge. A file one side renamed and the
-    other edited is merged at its new path, as Git does. A source conflict, a
-    modify/delete, or a path with a custom merge attribute declines: Git
-    reports those on the source, and its result there is not ours to predict.
+    committed chunks -- exact, since chunks carry the file's blob id -- so
+    artifacts stale against their commit decline rather than guess. The merged source is Git's own
+    three-way file merge. A file one side renamed and the other edited is
+    merged at its new path, as Git does. A source conflict, a modify/delete,
+    a custom merge attribute, or merge options that change Git's file merge
+    decline: Git's result there is not ours to predict.
     """
-    theirs_commits, base_commits = _merge_in_progress(cwd)
     resolved: dict[str, ChunkRecords] = {}
-    if not theirs_commits:
+    if _merge_is_overridden(cwd):
         return resolved
+    theirs_commits, base_commits = _merge_in_progress(cwd)
     for path in paths:
-        ours_commit, src_ours = _source_matching(cwd, ['HEAD'], path, ours.get(path, []))
-        theirs_commit, src_theirs = _source_matching(cwd, theirs_commits, path, theirs.get(path, []))
-        base_commit, src_base = _source_matching(cwd, base_commits, path, base.get(path, []))
-        if ours_commit is None or theirs_commit is None or base_commit is None:
+        ok_ours, src_ours = _source_matching(cwd, ['HEAD'], path, ours.get(path, []))
+        ok_theirs, src_theirs = _source_matching(cwd, theirs_commits, path, theirs.get(path, []))
+        ok_base, src_base = _source_matching(cwd, base_commits, path, base.get(path, []))
+        if not (ok_ours and ok_theirs and ok_base):
             continue
         if src_ours is None and src_theirs is None:
             resolved[path] = []
             continue
         target = path
         if src_ours is None or src_theirs is None:
-            if src_base is None:
+            # One side lost the file: a rename if Git would pair it with a new
+            # path, which needs both commits to ask; else a modify/delete.
+            gone_side, kept_side = (ours, theirs) if src_ours is None else (theirs, ours)
+            gone_commit = 'HEAD' if src_ours is None else _commit_with(cwd, theirs_commits, path, None)
+            base_commit = _commit_with(cwd, base_commits, path, src_base)
+            if src_base is None or gone_commit is None or base_commit is None:
                 continue
-            gone_commit, gone_side, kept_side = (
-                (ours_commit, ours, theirs) if src_ours is None else (theirs_commit, theirs, ours)
-            )
             target = _renamed_to(cwd, base_commit, gone_commit, path) or ''
             if not target or kept_side.get(target):
-                continue  # modify/delete, or the other side also has the target
+                continue
             found, moved = _source_matching(cwd, [gone_commit], target, gone_side.get(target, []))
-            if found is None:
+            if not found or moved is None:
                 continue
             src_ours, src_theirs = (moved, src_theirs) if src_ours is None else (src_ours, moved)
         if not (_plain_text_merge(cwd, path) and _plain_text_merge(cwd, target)):

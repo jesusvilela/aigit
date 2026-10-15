@@ -219,19 +219,57 @@ def test_rebase_rechunks_a_file_both_sides_changed(repo):
     _assert_fresh(repo)
 
 
-def test_cherry_pick_cannot_identify_its_commit_and_asks_for_a_rebuild(repo):
+def test_cherry_pick_reads_sources_by_blob_id(repo):
+    # Git leaves no trace of the commit a cherry-pick applies; the chunks name
+    # their file's blob, which is enough.
     _diverge_on_one_file(repo)
 
     result = _git(repo, 'cherry-pick', 'feature', check=False)
 
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(repo)
+
+
+def test_cherry_pick_follows_a_rename(repo):
+    # The picked commit is read off the `git cherry-pick` command line.
+    _git(repo, 'checkout', '-qb', 'feature')
+    _commit_snapshot(repo, {'a.py': BASE['a.py'] + '\n\ndef a3():\n    return 3\n'}, 'feature edits a')
+    _git(repo, 'checkout', '-q', 'main')
+    _git(repo, 'mv', 'a.py', 'moved.py')
+    _commit_snapshot(repo, {}, 'main renames a')
+
+    result = _git(repo, 'cherry-pick', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert 'def a3' in (repo / 'moved.py').read_text(encoding='utf-8')
+    _assert_fresh(repo)
+
+
+def test_strategy_options_decline_the_rebuild(repo):
+    # -X ignore-space-change changes Git's file merge, so the driver must not
+    # predict it with a plain one.
+    _diverge_on_one_file(repo)
+
+    result = _git(repo, 'merge', '--no-edit', '-Xignore-space-change', 'feature', check=False)
+
     assert result.returncode != 0
     assert 'run `aigit chunk`' in result.stderr
-    assert '<<<<<<<' not in (repo / '.semantic' / 'manifest.jsonl').read_text(encoding='utf-8')
-    chunks, edges = build_manifest(repo)
-    write_manifest(chunks, edges, repo)
-    _git(repo, 'add', '-A')
-    _git(repo, '-c', 'core.editor=true', 'cherry-pick', '--continue')
-    _assert_fresh(repo)
+
+
+def test_renormalize_declines_the_rebuild(repo):
+    _diverge_on_one_file(repo)
+    _git(repo, 'config', 'merge.renormalize', 'true')
+
+    result = _git(repo, 'merge', '--no-edit', 'feature', check=False)
+
+    assert result.returncode != 0
+
+
+def test_crlf_checkout_chunks_like_lf(tmp_path):
+    (tmp_path / 'a.py').write_bytes(BASE['a.py'].encode())
+    lf = _artifacts(tmp_path)
+    (tmp_path / 'a.py').write_bytes(BASE['a.py'].replace('\n', '\r\n').encode())
+    assert _artifacts(tmp_path) == lf
 
 
 def test_source_conflict_leaves_the_artifacts_conflicted_too(repo):
