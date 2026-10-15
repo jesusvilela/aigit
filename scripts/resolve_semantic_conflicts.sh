@@ -10,8 +10,10 @@
 #
 # Usage: resolve_semantic_conflicts.sh [PR_NUMBER...]   (default: all open PRs)
 # Needs: gh (authenticated), a checkout with push access, AIGit installed.
-# AIGIT_DISPATCH_CI=<workflow file>: dispatch that workflow on each pushed
-# branch, for tokens whose pushes start no workflows.
+# AIGIT_DISPATCH_CI=<workflow file>: for the default Actions token, whose
+# pushes leave the pull request's workflow runs awaiting approval. Those runs
+# are approved, so their checks report on the pull request; if that is not
+# permitted, the named workflow is dispatched on the branch instead.
 
 set -euo pipefail
 
@@ -20,6 +22,13 @@ attempts="${AIGIT_MERGEABLE_ATTEMPTS:-10}"
 
 git config merge.aigit-semantic.name 'AIGit semantic artifact merge'
 git config merge.aigit-semantic.driver "$python_bin -m aigit.cli merge-driver %O %A %B %P"
+# Route the artifacts even on branches cut before .gitattributes routed them.
+info_attributes="$(git rev-parse --git-path info/attributes)"
+mkdir -p "$(dirname "$info_attributes")"
+for artifact in manifest.jsonl chunk_index.json edges.jsonl provenance.jsonl; do
+	line=".semantic/$artifact merge=aigit-semantic"
+	grep -qxF "$line" "$info_attributes" 2>/dev/null || printf '%s\n' "$line" >>"$info_attributes"
+done
 
 mergeable_state() {
 	# GitHub computes mergeability lazily; UNKNOWN means "not yet".
@@ -60,9 +69,29 @@ resolve() {
 	git push -q origin "HEAD:refs/heads/$head"
 	echo "#$pr: merged $base with the semantic merge driver and pushed"
 	if [ -n "${AIGIT_DISPATCH_CI:-}" ]; then
-		gh workflow run "$AIGIT_DISPATCH_CI" --ref "$head"
-		echo "#$pr: dispatched $AIGIT_DISPATCH_CI on $head"
+		start_checks "$pr" "$head" "$(git rev-parse HEAD)"
 	fi
+}
+
+start_checks() {
+	# Runs started by the default token's push wait for approval and report
+	# nothing on the pull request until approved.
+	local pr="$1" head="$2" sha="$3" ids="" approved=0
+	for ((i = 0; i < attempts * 2; i++)); do
+		ids="$(gh run list --commit "$sha" --json databaseId,conclusion \
+			-q '.[] | select(.conclusion == "action_required") | .databaseId')"
+		[ -n "$ids" ] && break
+		sleep 5
+	done
+	for id in $ids; do
+		gh api -X POST "repos/{owner}/{repo}/actions/runs/$id/approve" >/dev/null 2>&1 && approved=1
+	done
+	if [ "$approved" = 1 ]; then
+		echo "#$pr: approved the pull request's workflow runs on $sha"
+		return
+	fi
+	gh workflow run "$AIGIT_DISPATCH_CI" --ref "$head"
+	echo "#$pr: dispatched $AIGIT_DISPATCH_CI on $head"
 }
 
 if [ "$#" -eq 0 ]; then

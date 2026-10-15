@@ -1,6 +1,7 @@
 """The merge driver must agree with a rebuild of the merged source, or say it cannot."""
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -367,3 +368,125 @@ def test_install_leaves_paths_routed_to_another_driver(tmp_path):
     assert '.semantic/manifest.jsonl filter=lfs diff=lfs merge=lfs -text' in lines
     assert '.semantic/provenance.jsonl merge=aigit-semantic' in lines
     assert not any(line.startswith('.semantic/manifest.jsonl merge=aigit-semantic') for line in lines)
+
+
+def test_merge_of_a_branch_with_stale_artifacts_is_not_trusted(repo):
+    # The stale artifact matches the branch's *parent*; only the exact commit
+    # being merged may be used, or the wrong source would be chunked.
+    _git(repo, 'checkout', '-qb', 'feature')
+    _commit_snapshot(repo, {'a.py': '# top\n' + BASE['a.py']}, 'feature')
+    (repo / 'a.py').write_text('# top\n# unchunked\n' + BASE['a.py'], encoding='utf-8')
+    _git(repo, 'commit', '-qam', 'stale')
+    _git(repo, 'checkout', '-q', 'main')
+    _commit_snapshot(repo, {'a.py': BASE['a.py'] + '\n\ndef a3():\n    return 3\n'}, 'main')
+
+    result = _git(repo, 'merge', '--no-edit', 'feature', check=False)
+
+    assert result.returncode != 0
+    assert 'run `aigit chunk`' in result.stderr
+
+
+def test_revert_of_an_older_commit(repo):
+    _commit_snapshot(repo, {'a.py': BASE['a.py'].replace('return 2', 'return 20')}, 'change a2')
+    _commit_snapshot(repo, {'a.py': '# later\n' + BASE['a.py'].replace('return 2', 'return 20')}, 'later')
+
+    result = _git(repo, 'revert', '--no-edit', 'HEAD~1', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert 'return 2\n' in (repo / 'a.py').read_text(encoding='utf-8')
+    _assert_fresh(repo)
+
+
+def test_stash_pop_over_a_newer_commit(repo):
+    (repo / 'a.py').write_text('# wip\n' + BASE['a.py'], encoding='utf-8')
+    chunks, edges = build_manifest(repo)
+    write_manifest(chunks, edges, repo)
+    _git(repo, 'stash', '-q')
+    _commit_snapshot(repo, {'a.py': BASE['a.py'] + '\n\ndef a3():\n    return 3\n'}, 'main')
+
+    result = _git(repo, 'stash', 'pop', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(repo)
+
+
+def test_branches_that_adopted_aigit_separately(tmp_path, monkeypatch):
+    # Neither the merge base nor anything before it has artifacts: the driver
+    # gets an empty base and must read the base source from the merge base.
+    _git(tmp_path, 'init', '-q', '-b', 'main')
+    _git(tmp_path, 'config', 'user.email', 'test@example.com')
+    _git(tmp_path, 'config', 'user.name', 'test')
+    monkeypatch.chdir(tmp_path)
+    assert cmd_install_merge_driver(type('Args', (), {'repo': str(tmp_path)})()) == 0
+    (tmp_path / '.gitignore').write_text('.semantic/cache/\n', encoding='utf-8')
+    (tmp_path / 'a.py').write_text(BASE['a.py'], encoding='utf-8')
+    _git(tmp_path, 'add', '-A')
+    _git(tmp_path, 'commit', '-qm', 'before aigit')  # routing in place, no artifacts yet
+    _git(tmp_path, 'checkout', '-qb', 'feature')
+    _commit_snapshot(tmp_path, {'a.py': '# top\n' + BASE['a.py']}, 'feature adopts')
+    _git(tmp_path, 'checkout', '-q', 'main')
+    shutil.rmtree(tmp_path / '.semantic', ignore_errors=True)  # main adopts on its own
+    _commit_snapshot(tmp_path, {'a.py': BASE['a.py'] + '# main\n', 'b.py': BASE['b.py']}, 'main adopts')
+
+    result = _git(tmp_path, 'merge', '--no-edit', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(tmp_path)
+
+
+def test_edit_merges_into_a_file_renamed_out_of_the_layer(repo):
+    _git(repo, 'checkout', '-qb', 'feature')
+    _git(repo, 'mv', 'a.py', 'a.png')
+    _commit_snapshot(repo, {}, 'feature renames a to an excluded type')
+    _git(repo, 'checkout', '-q', 'main')
+    _commit_snapshot(repo, {'a.py': BASE['a.py'] + '# main\n'}, 'main edits a')
+
+    result = _git(repo, 'merge', '--no-edit', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '"a.py"' not in (repo / '.semantic' / 'manifest.jsonl').read_text(encoding='utf-8')
+    _assert_fresh(repo)
+
+
+def test_symlinks_are_not_chunked(tmp_path):
+    (tmp_path / 'target.py').write_text(BASE['a.py'], encoding='utf-8')
+    (tmp_path / 'link.py').symlink_to('target.py')
+    paths = {record['path'] for record in map(json.loads, _artifacts(tmp_path)[0].splitlines())}
+    assert paths == {'target.py'}
+
+
+def test_many_contested_files_merge_in_one_pass(repo):
+    files = {f'f{i}.py': BASE['a.py'] for i in range(40)}
+    _commit_snapshot(repo, files, 'many')
+    _git(repo, 'checkout', '-qb', 'feature')
+    _commit_snapshot(repo, {name: '# top\n' + text for name, text in files.items()}, 'feature')
+    _git(repo, 'checkout', '-q', 'main')
+    _commit_snapshot(repo, {name: text + '# main\n' for name, text in files.items()}, 'main')
+
+    result = _git(repo, 'merge', '--no-edit', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(repo)
+
+
+def test_branch_cut_before_the_routing_still_uses_the_driver(tmp_path, monkeypatch):
+    # .gitattributes routes the artifacts only from the commit that added it;
+    # merging main into an older branch must still go through the driver.
+    _git(tmp_path, 'init', '-q', '-b', 'main')
+    _git(tmp_path, 'config', 'user.email', 'test@example.com')
+    _git(tmp_path, 'config', 'user.name', 'test')
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / '.gitignore').write_text('.semantic/cache/\n', encoding='utf-8')
+    _commit_snapshot(tmp_path, BASE, 'base, no routing')
+    _git(tmp_path, 'checkout', '-qb', 'old-branch')
+    _commit_snapshot(tmp_path, {'a.py': '# top\n' + BASE['a.py']}, 'old branch')
+    _git(tmp_path, 'checkout', '-q', 'main')
+    assert cmd_install_merge_driver(type('Args', (), {'repo': str(tmp_path)})()) == 0
+    _commit_snapshot(tmp_path, {'a.py': BASE['a.py'] + '# main\n'}, 'main routes and edits')
+    _git(tmp_path, 'checkout', '-q', 'old-branch')
+    assert not (tmp_path / '.gitattributes').exists()
+
+    result = _git(tmp_path, 'merge', '--no-edit', 'main', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(tmp_path)
