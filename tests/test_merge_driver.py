@@ -6,7 +6,9 @@ from pathlib import Path
 
 import pytest
 
+from aigit import core
 from aigit.core import (
+    _strategy_overrides,
     build_manifest,
     cmd_install_merge_driver,
     merge_semantic_artifact,
@@ -243,6 +245,61 @@ def test_cherry_pick_follows_a_rename(repo):
     assert result.returncode == 0, result.stdout + result.stderr
     assert 'def a3' in (repo / 'moved.py').read_text(encoding='utf-8')
     _assert_fresh(repo)
+
+
+def test_merged_source_is_what_git_merges_not_what_merge_file_says(repo):
+    # Found by fuzzing: `git merge-file` (Myers) and ort (histogram) both
+    # merge these cleanly, into different text. Chunking merge-file's answer
+    # left the artifacts describing a file Git never wrote.
+    base, ours, theirs = 'z\n{\nx\n{\nx\nx\n', 'z\ny\nx\n{\nx\n{\nx\n', 'z\n{\nx\n{\n{\nx\nx\n'
+    _commit_snapshot(repo, {'notes.md': base}, 'notes')
+    _git(repo, 'checkout', '-qb', 'feature')
+    _commit_snapshot(repo, {'notes.md': theirs}, 'feature')
+    _git(repo, 'checkout', '-q', 'main')
+    _commit_snapshot(repo, {'notes.md': ours}, 'main')
+
+    result = _git(repo, 'merge', '--no-edit', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(repo)
+
+
+def test_explicit_ort_and_a_dash_x_message_still_rebuild(repo):
+    _diverge_on_one_file(repo)
+
+    result = _git(repo, 'merge', '-s', 'ort', '-m', '-Xnot an option', 'feature', check=False)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    _assert_fresh(repo)
+
+
+@pytest.mark.parametrize(
+    'args, overridden',
+    [
+        (['merge', 'feature'], False),
+        (['merge', '-s', 'ort', 'feature'], False),
+        (['merge', '--strategy=ort', 'feature'], False),
+        (['merge', '-m', '-Xours', 'feature'], False),
+        (['merge', '-Xours', 'feature'], True),
+        (['merge', '-X', 'patience', 'feature'], True),
+        (['rebase', '--strategy-option=theirs', 'main'], True),
+        (['merge', '-s', 'resolve', 'feature'], True),
+        (['merge', '-sresolve', 'feature'], True),
+    ],
+)
+def test_strategy_override_parsing(args, overridden):
+    assert _strategy_overrides(args) is overridden
+
+
+def test_unreadable_launching_process_declines(repo, monkeypatch):
+    monkeypatch.setattr(core, '_git_parent_args', lambda: None)
+    assert core._merge_is_overridden(repo) is True
+
+
+def test_another_two_head_strategy_declines(repo):
+    _diverge_on_one_file(repo)
+    _git(repo, 'config', 'pull.twohead', 'resolve')
+    assert core._merge_is_overridden(repo) is True
 
 
 def test_strategy_options_decline_the_rebuild(repo):

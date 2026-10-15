@@ -1545,14 +1545,57 @@ def _renamed_to(cwd: Path, base_commit: str, side_commit: str, path: str) -> str
     return targets[0] if len(targets) == 1 else None
 
 
-def _merge_file(ours: bytes, base: bytes, theirs: bytes) -> bytes | None:
+# Inherited Git settings a throwaway repository must not see: they name the
+# repository being merged. Configuration (``git -c``) is kept.
+_GIT_ENV_KEPT = ('GIT_CONFIG', 'GIT_EXEC_PATH')
+
+
+def _merge_like_git(ours: bytes, base: bytes | None, theirs: bytes) -> bytes | None:
+    """Merge three versions of a file exactly as ``git merge`` would, or None on conflict.
+
+    ``git merge-file`` is not that: it diffs with Myers, while the ort
+    strategy behind merge, rebase and cherry-pick hard-codes histogram, and
+    on 400 random three-way merges they disagreed 8 times -- twice both
+    merging cleanly into different text, which would have been chunked as if
+    Git had produced it. So the file goes through ort itself, in a throwaway
+    repository, under the user's configuration.
+    """
+    env = {k: v for k, v in os.environ.items() if not k.startswith('GIT') or k.startswith(_GIT_ENV_KEPT)}
+    env.update(
+        GIT_AUTHOR_NAME='aigit', GIT_AUTHOR_EMAIL='aigit@localhost',
+        GIT_COMMITTER_NAME='aigit', GIT_COMMITTER_EMAIL='aigit@localhost',
+    )
     with tempfile.TemporaryDirectory() as tmp:
-        names = []
-        for label, data in (('ours', ours), ('base', base), ('theirs', theirs)):
-            (Path(tmp) / label).write_bytes(data)
-            names.append(str(Path(tmp) / label))
-        proc = subprocess.run(['git', 'merge-file', '-p', '--quiet', *names], capture_output=True, check=False)
-        return proc.stdout if proc.returncode == 0 else None
+        hooks = Path(tmp) / 'no-hooks'
+        hooks.mkdir()
+
+        def git(*args: str, data: bytes = b'') -> subprocess.CompletedProcess:
+            return subprocess.run(
+                ['git', '-c', f'core.hooksPath={hooks}', '-c', 'commit.gpgSign=false', *args],
+                cwd=tmp, env=env, input=data, capture_output=True, check=False,
+            )
+
+        def commit(data: bytes | None, parent: str | None = None) -> str:
+            entry = b''
+            if data is not None:
+                blob = git('hash-object', '-w', '--no-filters', '--stdin', data=data).stdout.decode().strip()
+                entry = f'100644 blob {blob}\tf\n'.encode()
+            tree = git('mktree', data=entry).stdout.decode().strip()
+            return git('commit-tree', tree, *(['-p', parent] if parent else []), '-m', 'x').stdout.decode().strip()
+
+        if git('init', '-q', '--template=').returncode != 0:
+            return None
+        base_commit = commit(base)
+        ours_commit, theirs_commit = commit(ours, base_commit), commit(theirs, base_commit)
+        if git('checkout', '-q', ours_commit).returncode != 0:
+            return None
+        if git('merge', '-q', '--no-commit', '--no-ff', '-s', 'ort', theirs_commit).returncode != 0:
+            return None
+        staged = git('ls-files', '-s', '--', 'f').stdout.decode().split()
+        if len(staged) < 4 or staged[2] != '0':
+            return None
+        merged = git('cat-file', 'blob', staged[1])
+        return merged.stdout if merged.returncode == 0 else None
 
 
 def _plain_text_merge(cwd: Path, path: str) -> bool:
@@ -1561,31 +1604,51 @@ def _plain_text_merge(cwd: Path, path: str) -> bool:
 
 
 def _process_parent_and_args(pid: int) -> tuple[int, list[str]] | None:
+    """``(parent pid, argv)`` of a process: /proc, then ``ps``, then Windows CIM."""
     try:
         stat_line = Path(f'/proc/{pid}/stat').read_text(encoding='utf-8')
         args = Path(f'/proc/{pid}/cmdline').read_bytes().decode('utf-8', 'replace').split('\0')
         return int(stat_line.rsplit(')', 1)[1].split()[1]), [arg for arg in args if arg]
     except (OSError, ValueError, IndexError):
         pass
+    if os.name == 'nt':
+        query = (
+            f'$p = Get-CimInstance Win32_Process -Filter "ProcessId={pid}"; '
+            'if ($p) { $p.ParentProcessId; $p.CommandLine }'
+        )
+        command = ['powershell', '-NoProfile', '-NonInteractive', '-Command', query]
+    else:
+        command = ['ps', '-o', 'ppid=,args=', '-p', str(pid)]
     try:
-        proc = subprocess.run(['ps', '-o', 'ppid=,args=', '-p', str(pid)], capture_output=True, text=True, check=False)
+        proc = subprocess.run(command, capture_output=True, text=True, check=False)
     except FileNotFoundError:
         return None
-    fields = proc.stdout.split()
-    if proc.returncode != 0 or not fields:
+    if os.name == 'nt':
+        lines = proc.stdout.splitlines()
+        if proc.returncode != 0 or len(lines) < 2:
+            return None
+        parent, cmdline = lines[0].strip(), lines[1]
+        args = [arg.strip('"') for arg in shlex.split(cmdline, posix=False)]
+    else:
+        fields = proc.stdout.split()
+        if proc.returncode != 0 or not fields:
+            return None
+        parent, args = fields[0], fields[1:]
+    try:
+        return int(parent), args
+    except ValueError:
         return None
-    return int(fields[0]), fields[1:]
 
 
 def _git_parent_args() -> list[str] | None:
     """Arguments of the nearest Git process above this one, if it can be read."""
     pid = os.getppid()
-    for _ in range(5):
+    for _ in range(6):
         found = _process_parent_and_args(pid)
         if found is None:
             return None
         parent, args = found
-        if args and Path(args[0]).name in {'git', 'git.exe'}:
+        if args and Path(args[0]).name.lower() in {'git', 'git.exe'}:
             return args
         if parent <= 1:
             return None
@@ -1593,27 +1656,45 @@ def _git_parent_args() -> list[str] | None:
     return None
 
 
-_STRATEGY_FLAGS = ('-X', '--strategy-option', '-s', '--strategy')
+# Options whose value is a separate argument that may itself look like a flag.
+_VALUE_OPTIONS = {'-m', '--message', '-F', '--file', '-c', '-C', '--exec', '--onto', '--into-name'}
+
+
+def _strategy_overrides(args: list[str]) -> bool:
+    """Whether Git arguments pick a strategy other than ort, or any -X option."""
+    values = iter(args)
+    for arg in values:
+        if arg in _VALUE_OPTIONS:
+            next(values, None)
+        elif arg in {'-s', '--strategy'}:
+            if next(values, None) != 'ort':
+                return True
+        elif arg.startswith('--strategy='):
+            if arg.split('=', 1)[1] != 'ort':
+                return True
+        elif arg.startswith('-s') and not arg.startswith('--'):
+            if arg[2:] != 'ort':
+                return True
+        elif arg in {'-X', '--strategy-option'} or arg.startswith(('-X', '--strategy-option=')):
+            return True
+    return False
 
 
 def _merge_is_overridden(cwd: Path) -> bool:
-    """Whether Git may merge file content differently from a plain ``merge-file``.
+    """Whether Git may merge file content differently from a plain ort merge.
 
-    ``-X ignore-space-change``, ``-X ours``, another strategy or
-    ``merge.renormalize`` all change Git's result, and none reaches a merge
-    driver, so they are read off the Git process that started this one. A
-    false alarm (``-X`` inside a commit message) only costs a conflict.
-    Where the process table cannot be read, the CI freshness gate remains.
+    ``-X ignore-space-change``, ``-X ours``, another strategy (``-s``,
+    ``pull.twohead``) or ``merge.renormalize`` change Git's result, and none
+    reaches a merge driver, so they are read off the Git process that started
+    this one. If that process cannot be read, nothing is assumed: the driver
+    declines and asks for ``aigit chunk``. A false alarm only costs that.
     """
     renormalize = (_git_output(['config', '--bool', 'merge.renormalize'], cwd) or b'').strip()
-    if renormalize == b'true':
+    twohead = (_git_output(['config', 'pull.twohead'], cwd) or b'').strip()
+    if renormalize == b'true' or twohead not in {b'', b'ort'}:
         return True
-    args = _git_parent_args() or []
-    return any(
-        arg == flag or (arg.startswith(flag) and (flag in {'-X', '-s'} or arg[len(flag)] == '='))
-        for arg in args[1:]
-        for flag in _STRATEGY_FLAGS
-    )
+    args = _git_parent_args()
+    return args is None or _strategy_overrides(args[1:])
 
 
 def rebuild_from_merged_source(
@@ -1627,11 +1708,12 @@ def rebuild_from_merged_source(
 
     Each side's source is accepted only if chunking it reproduces that side's
     committed chunks -- exact, since chunks carry the file's blob id -- so
-    artifacts stale against their commit decline rather than guess. The merged source is Git's own
-    three-way file merge. A file one side renamed and the other edited is
-    merged at its new path, as Git does. A source conflict, a modify/delete,
+    artifacts stale against their commit decline rather than guess. The
+    merged source comes from Git's own ort merge of the three versions. A file
+    one side renamed and the other edited is merged at its new path, as Git
+    does. A source conflict, a modify/delete,
     a custom merge attribute, or merge options that change Git's file merge
-    decline: Git's result there is not ours to predict.
+    decline: Git's result there is not ours to reproduce.
     """
     resolved: dict[str, ChunkRecords] = {}
     if _merge_is_overridden(cwd):
@@ -1664,7 +1746,7 @@ def rebuild_from_merged_source(
             src_ours, src_theirs = (moved, src_theirs) if src_ours is None else (src_ours, moved)
         if not (_plain_text_merge(cwd, path) and _plain_text_merge(cwd, target)):
             continue
-        merged = _merge_file(src_ours, src_base or b'', src_theirs)
+        merged = _merge_like_git(src_ours, src_base, src_theirs)
         if merged is None:
             continue
         if target != path:

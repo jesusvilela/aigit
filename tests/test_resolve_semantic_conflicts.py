@@ -16,6 +16,7 @@ case "$*" in
   *mergeable*) echo "$STUB_MERGEABLE" ;;
   *headRefName*) printf 'feature\\tmain\\tfalse\\n' ;;
   'pr list'*) echo 7 ;;
+  'workflow run'*) echo "$*" >> "$STUB_LOG" ;;
 esac
 """
 
@@ -45,6 +46,7 @@ def setup(tmp_path):
         'PYTHONPATH': str(REPO_ROOT),
         'STUB_MERGEABLE': 'CONFLICTING',
         'AIGIT_MERGEABLE_ATTEMPTS': '1',
+        'STUB_LOG': str(tmp_path / 'gh.log'),
     }
 
     def commit(branch: str, text: str) -> None:
@@ -105,3 +107,15 @@ def test_mergeable_pull_request_is_not_touched(setup):
 
     assert 'no conflict' in result.stdout
     assert _run(work, 'git', 'rev-parse', 'origin/feature').stdout == before
+
+
+def test_ci_is_dispatched_on_the_pushed_branch(setup, tmp_path):
+    work, env, commit = setup
+    commit('feature', '# top\n' + BASE)
+    _run(work, 'git', 'checkout', '-q', 'main')
+    commit('main', BASE + '\n\ndef c():\n    return 3\n')
+
+    result = _resolve(work, {**env, 'AIGIT_DISPATCH_CI': 'ci.yml'})
+
+    assert 'dispatched ci.yml' in result.stdout, result.stdout + result.stderr
+    assert (tmp_path / 'gh.log').read_text(encoding='utf-8').split() == ['workflow', 'run', 'ci.yml', '--ref', 'feature']

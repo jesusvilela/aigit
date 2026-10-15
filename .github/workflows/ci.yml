@@ -3,6 +3,9 @@ name: CI
 on:
   push:
   pull_request:
+  # Semantic Merge dispatches CI on the merge commits it pushes: pushes made
+  # with the default token start no workflows, but a dispatch does.
+  workflow_dispatch:
 
 permissions:
   contents: read

@@ -4,9 +4,9 @@ name: Semantic Merge
 # conflicts with its base only in .semantic/ artifacts, merge the base in with
 # the AIGit driver so the button works again. Source conflicts are left alone.
 #
-# Commits pushed with the default GITHUB_TOKEN do not start other workflows,
-# so CI would not run on the resolved commit. Set an AIGIT_BOT_TOKEN secret
-# (contents: write) to have it run.
+# Commits pushed with the default GITHUB_TOKEN start no workflows, so the
+# script dispatches CI on each commit it pushes. With an AIGIT_BOT_TOKEN
+# secret (contents: write) the push itself starts CI and no dispatch is made.
 
 on:
   push:
@@ -16,6 +16,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   pull-requests: read
 
@@ -55,6 +56,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.AIGIT_BOT_TOKEN || github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          AIGIT_DISPATCH_CI: ${{ secrets.AIGIT_BOT_TOKEN == '' && 'ci.yml' || '' }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

@@ -10,19 +10,26 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
   `.semantic/` artifacts. Chunk artifacts merge per source file instead of per
   line; a file both sides changed is re-chunked from the merged source,
   following renames, in a merge, rebase, cherry-pick, revert or stash.
-  Immutable records (`provenance.jsonl`, `edges.jsonl`) merge as sets. Merge
-  options that change Git's file merge (`-X`, `-s`, `merge.renormalize`) are
-  detected and ask for `aigit chunk` instead. Replaying 150 pairs of
+  The merged source comes from Git's own ort merge of the three versions, not
+  `git merge-file`: ort diffs with histogram, merge-file with Myers, and on
+  400 random three-way merges they disagreed 8 times -- twice both merging
+  cleanly into different text. Immutable records (`provenance.jsonl`,
+  `edges.jsonl`) merge as sets. Merge options that change Git's file merge
+  (`-X`, a strategy other than ort, `pull.twohead`, `merge.renormalize`) are
+  read off the launching Git command (Linux, macOS, Windows) and ask for
+  `aigit chunk` instead; if that command cannot be read, so does the driver. Replaying 150 pairs of
   concurrent edits, adds, deletes and renames on this repository through real
   `git merge`, `git rebase` and `git cherry-pick`: the text merge stopped on
   artifacts alone 41-44 times per mode; the driver never did, and every result
   whose source merged cleanly matched a rebuild exactly. The 20 genuine source
-  conflicts are unchanged.
+  conflicts are unchanged. 300 adversarial merges of low-entropy files, where
+  the two diff algorithms disagree, also all matched a rebuild when clean.
 - Semantic Merge workflow (`scripts/resolve_semantic_conflicts.sh`): hosted
   merge buttons run no custom driver, so when GitHub reports a pull request as
   conflicting and the conflict is only in `.semantic/`, it merges the base in
   with the driver and pushes. Source conflicts, stale results and forks are
-  left alone. Set `AIGIT_BOT_TOKEN` for CI to run on the pushed commit.
+  left alone. Pushes made with the default token start no workflows, so it
+  dispatches CI on each branch it pushes (or set `AIGIT_BOT_TOKEN`).
 - `duplicate-work` also catches an addition that reimplements code already in
   the repository, reported with `scope: existing` (the earlier pass, now
   `scope: concurrent`, only saw two branches adding the same thing at once).

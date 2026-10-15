@@ -10,6 +10,8 @@
 #
 # Usage: resolve_semantic_conflicts.sh [PR_NUMBER...]   (default: all open PRs)
 # Needs: gh (authenticated), a checkout with push access, AIGit installed.
+# AIGIT_DISPATCH_CI=<workflow file>: dispatch that workflow on each pushed
+# branch, for tokens whose pushes start no workflows.
 
 set -euo pipefail
 
@@ -57,6 +59,10 @@ resolve() {
 	fi
 	git push -q origin "HEAD:refs/heads/$head"
 	echo "#$pr: merged $base with the semantic merge driver and pushed"
+	if [ -n "${AIGIT_DISPATCH_CI:-}" ]; then
+		gh workflow run "$AIGIT_DISPATCH_CI" --ref "$head"
+		echo "#$pr: dispatched $AIGIT_DISPATCH_CI on $head"
+	fi
 }
 
 if [ "$#" -eq 0 ]; then
