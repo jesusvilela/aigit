@@ -15,6 +15,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -32,10 +33,11 @@ RULESET_FILE = SEMANTIC_DIR / 'ruleset.yaml'
 SCHEMA_FILE = SEMANTIC_DIR / 'schema_version'
 # Local-only (gitignored) per-file parse cache for incremental chunking.
 CHUNK_CACHE_FILE = SEMANTIC_DIR / 'cache' / 'chunk_cache.json'
-# Bump whenever Chunk gains or changes a field: cached entries are rehydrated
+# Bump whenever a parser changes output or Chunk gains/changes a field:
+# cached entries are rehydrated
 # with ``Chunk(**record)``, so a stale entry silently backfills new fields with
 # their defaults and quietly degrades everything computed from them.
-CHUNK_CACHE_VERSION = '5'
+CHUNK_CACHE_VERSION = '6'
 
 SUPPORTED_PARSER_BACKENDS = {'python-ast', 'markdown-headings', 'json-keys', 'yaml-keys', 'typescript-ast', 'file'}
 BINARY_ASSET_SUFFIXES = {
@@ -216,7 +218,7 @@ def _has_body_signal(fingerprint: Any) -> bool:
     """A body fingerprint is only evidence when the body had tokens to hash.
 
     ``_simhash('')`` is all zeros, and two chunks with no body at all -- stubs,
-    or the declaration-only chunks the TypeScript parser emits -- would then
+    or declaration-only chunks in older TypeScript manifests -- would then
     compare as identical. That is an absence of signal, not a match.
     """
     return bool(fingerprint) and set(str(fingerprint)) != {'0'}
@@ -414,64 +416,125 @@ def parse_yaml(path: str, text: str) -> list[Chunk]:
     not be installed.
     """
     lines = text.splitlines()
-    # Top-level keys via line scanning (no-indent lines with a colon).
-    chunks_fb: list[Chunk] = []
-    for i, line in enumerate(lines, 1):
-        if line and not line[0].isspace() and ':' in line and not line.lstrip().startswith('#'):
-            key = line.split(':', 1)[0].strip()
-            if key:
-                chunks_fb.append(
-                    Chunk(
-                        semantic_id=_chunk_id(path, key, 'key'),
-                        path=path,
-                        chunk_type='key',
-                        anchor=key,
-                        content_hash=_content_hash(line),
-                        start_line=i,
-                        end_line=i,
-                        confidence='medium',
-                    )
-                )
-    return chunks_fb if chunks_fb else parse_text(path, text)
+    # Include the whole value section, including nested maps, sequences and
+    # block scalars. A key's declaration line alone does not describe its value.
+    key_pattern = re.compile(r'''^("(?:[^"\\]|\\.)*"|'(?:[^']|'')*'|[^\s#\-?:][^:]*?):(?:\s|$)''')
+    starts = [(i, match.group(1).strip()) for i, line in enumerate(lines)
+              if (match := key_pattern.match(line))]
+    if not starts:
+        return parse_text(path, text)
+    chunks: list[Chunk] = []
+    if starts[0][0] > 0:
+        chunks.extend(parse_text(path, '\n'.join(lines[:starts[0][0]])))
+    for n, (start, key) in enumerate(starts):
+        end = starts[n + 1][0] if n + 1 < len(starts) else len(lines)
+        chunks.append(Chunk(
+            semantic_id=_chunk_id(path, key, 'key'), path=path,
+            chunk_type='key', anchor=key,
+            content_hash=_content_hash('\n'.join(lines[start:end])),
+            start_line=start + 1, end_line=end, confidence='medium',
+        ))
+    return chunks
 
 
 _TS_DECL_PATTERN = re.compile(
-    r'^(?:export\s+)?(?:(?:async\s+)?function\*?\s+(\w+)|class\s+(\w+)|interface\s+(\w+)|type\s+(\w+)\s*=|(?:const|let|var)\s+(\w+)\s*(?::[^=]+)?=\s*(?:async\s+)?\()',
+    r'^[ \t]*(?:export\s+(?:default\s+)?)?(?:declare\s+)?(?:abstract\s+)?'
+    r'(?:(?:async\s+)?function\*?\s+(\w+)|class\s+(\w+)|interface\s+(\w+)|type\s+(\w+)\s*=|(?:const|let|var)\s+(\w+)\s*(?::[^=]+)?=\s*(?:async\s+)?\()',
     re.MULTILINE,
 )
 
 
-def parse_typescript(path: str, text: str) -> list[Chunk]:
-    """Chunk a TypeScript/JavaScript file by top-level declarations."""
-    lines = text.splitlines()
-    line_count = len(lines)
-    chunks: list[Chunk] = []
-    seen: set[str] = set()
-    for match in _TS_DECL_PATTERN.finditer(text):
-        name = next((g for g in match.groups() if g), None)
-        if not name or name in seen:
+def _typescript_code_mask(text: str) -> str:
+    """Hide literals/comments without moving offsets or line boundaries.
+
+    This is a lexical aid to conservative section scanning, not a TS AST.
+    Entire template literals are opaque; edits inside them remain in the
+    original text hashed by the enclosing section.
+    """
+    literal = re.compile(
+        r'//[^\r\n]*|/\*[\s\S]*?\*/'
+        r'|"(?:\\[\s\S]|[^"\\])*"'
+        r"|'(?:\\[\s\S]|[^'\\])*'"
+        r'|`(?:\\[\s\S]|[^`\\])*`'
+    )
+    regex_literal = re.compile(r'/(?![/*])(?:\\.|\[(?:\\.|[^\]\\\r\n])*\]|[^/\\\r\n])+/[dgimsuvy]*')
+    identifier = re.compile(r'[\w$]+')
+    prefix_words = {'return', 'throw', 'case', 'delete', 'void', 'typeof', 'new',
+                    'in', 'of', 'instanceof', 'yield', 'await'}
+    masked = list(text)
+    expect_operand = True
+    i = 0
+    while i < len(text):
+        match = literal.match(text, i)
+        if match is None and text[i] == '/' and expect_operand:
+            match = regex_literal.match(text, i)
+        if match is not None:
+            raw = match.group()
+            masked[i:match.end()] = ['\n' if c == '\n' else ' ' for c in raw]
+            if not raw.startswith(('//', '/*')):
+                expect_operand = False
+            i = match.end()
             continue
-        seen.add(name)
+        word = identifier.match(text, i)
+        if word:
+            expect_operand = word.group() in prefix_words
+            i = word.end()
+            continue
+        char = text[i]
+        if not char.isspace():
+            if text[i:i + 2] in {'++', '--'}:
+                i += 2
+                continue
+            expect_operand = char not in ')]}'
+        i += 1
+    return ''.join(masked)
+
+
+def parse_typescript(path: str, text: str) -> list[Chunk]:
+    """Chunk complete declaration sections with conservative lexical boundaries.
+
+    Each section extends to the next top-level declaration or EOF. Unsupported
+    syntax stays in a surrounding section or an opaque file fallback, so a
+    body edit cannot disappear from the content hash.
+    """
+    lines = text.splitlines()
+    masked = _typescript_code_mask(text)
+    candidates = {m.start(): m for m in _TS_DECL_PATTERN.finditer(masked)}
+    matches: list[re.Match[str]] = []
+    stack: list[str] = []
+    closing = {')': '(', ']': '[', '}': '{'}
+    for i, char in enumerate(masked):
+        if i in candidates and not stack:
+            matches.append(candidates[i])
+        if char in '([{':
+            stack.append(char)
+        elif char in closing:
+            if not stack or stack.pop() != closing[char]:
+                return parse_text(path, text)
+    if stack or not matches:
+        return parse_text(path, text)
+    chunks: list[Chunk] = []
+    first_line = text.count('\n', 0, matches[0].start())
+    if first_line:
+        chunks.extend(parse_text(path, '\n'.join(lines[:first_line])))
+    for n, match in enumerate(matches):
+        name = next((g for g in match.groups() if g), None)
         start_line = text.count('\n', 0, match.start()) + 1
-        chunk_type = 'function'
-        raw = match.group(0)
-        if 'class' in raw:
-            chunk_type = 'class'
-        elif 'interface' in raw:
-            chunk_type = 'interface'
-        elif raw.lstrip().startswith('type '):
-            chunk_type = 'type'
+        end_line = text.count('\n', 0, matches[n + 1].start()) if n + 1 < len(matches) else len(lines)
+        segment = '\n'.join(lines[start_line - 1:end_line])
+        group = next(i for i, value in enumerate(match.groups()) if value)
+        chunk_type = ('function', 'class', 'interface', 'type', 'function')[group]
         chunks.append(
             Chunk(
                 semantic_id=_chunk_id(path, name, chunk_type),
                 path=path,
                 chunk_type=chunk_type,
                 anchor=name,
-                content_hash=_content_hash(match.group(0)),
+                content_hash=_content_hash(segment),
                 start_line=start_line,
-                end_line=start_line,
+                end_line=end_line,
                 confidence='medium',
-                fingerprint=_simhash(match.group(0)),
+                fingerprint=_simhash(segment),
             )
         )
     return chunks if chunks else parse_text(path, text)
@@ -755,9 +818,27 @@ def render_manifest(chunks: list[Chunk], edges: list[dict[str, Any]]) -> tuple[s
 
 def write_manifest(chunks: list[Chunk], edges: list[dict[str, Any]], root: Path = Path('.')) -> None:
     manifest_text, edges_text, index_text = render_manifest(chunks, edges)
-    _repo_semantic_path(root, MANIFEST_FILE).write_text(manifest_text, encoding='utf-8')
-    _repo_semantic_path(root, EDGES_FILE).write_text(edges_text, encoding='utf-8')
-    _repo_semantic_path(root, INDEX_FILE).write_text(index_text, encoding='utf-8')
+    _atomic_write_text(_repo_semantic_path(root, MANIFEST_FILE), manifest_text)
+    _atomic_write_text(_repo_semantic_path(root, EDGES_FILE), edges_text)
+    _atomic_write_text(_repo_semantic_path(root, INDEX_FILE), index_text)
+
+
+def _atomic_write_text(path: Path, text: str) -> None:
+    """Publish one complete artifact; readers see the old or the new file."""
+    temporary: Path | None = None
+    mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', newline='\n',
+                                         dir=path.parent, prefix=f'.{path.name}.',
+                                         suffix='.tmp', delete=False) as stream:
+            temporary = Path(stream.name)
+            stream.write(text)
+        if mode is not None:
+            os.chmod(temporary, mode)
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def _read_text_or_empty(path: Path) -> str:
@@ -1942,17 +2023,28 @@ def _provenance_key() -> str | None:
     return os.environ.get('AIGIT_PROVENANCE_KEY') or None
 
 
+def _validate_provenance_identity(agent: str, model: str) -> None:
+    # These values appear in both newline-delimited HMACs and semicolon-
+    # delimited trailers. Reject ambiguous encodings before any write/commit.
+    for field, value in (('agent', agent), ('model', model)):
+        if (not isinstance(value, str) or not value or value != value.strip()
+                or ';' in value or any(ord(c) < 32 or ord(c) == 127 for c in value)):
+            raise ValueError(f'provenance {field} must be a nonempty identity without whitespace padding, control characters or semicolons')
+
+
 def _provenance_signature(key: str, commit: str, agent: str, model: str, prompt_hash: str) -> str:
     """HMAC-SHA256 over the immutable provenance claim, binding it to a commit.
 
     Without the key the signature cannot be reproduced, so a forged plaintext
     log row will not validate under ``verify-provenance --require-signature``.
     """
+    _validate_provenance_identity(agent, model)
     message = '\n'.join([commit, agent, model, prompt_hash]).encode('utf-8')
     return hmac.new(key.encode('utf-8'), message, hashlib.sha256).hexdigest()
 
 
 def cmd_record_provenance(args: argparse.Namespace) -> int:
+    _validate_provenance_identity(args.agent, args.model)
     repo_root = Path('.').resolve()
     ensure_semantic_scaffold(repo_root)
     commit = _run_git(['rev-parse', 'HEAD'])
@@ -1976,20 +2068,27 @@ def cmd_record_provenance(args: argparse.Namespace) -> int:
 
 
 def _parse_provenance_trailer(message: str) -> dict[str, str] | None:
-    trailer_line = None
-    for line in reversed(message.splitlines()):
-        if line.startswith('AI-Provenance: '):
-            trailer_line = line[len('AI-Provenance: ') :]
-            break
-    if trailer_line is None:
+    trailers = [line[len('AI-Provenance:'):].strip() for line in message.splitlines()
+                if line.startswith('AI-Provenance:')]
+    if not trailers:
         return None
+    if len(trailers) != 1:
+        raise ValueError('commit has multiple AI-Provenance trailers')
     fields: dict[str, str] = {}
-    for part in trailer_line.split(';'):
+    for part in trailers[0].split(';'):
         if '=' not in part:
-            continue
+            raise ValueError('invalid AI-Provenance trailer field')
         key, value = part.split('=', 1)
-        fields[key.strip()] = value.strip()
-    return fields or None
+        key = key.strip()
+        if key in fields:
+            raise ValueError(f'duplicate AI-Provenance field: {key}')
+        fields[key] = value.strip()
+    if set(fields) != {'agent', 'model', 'prompt-hash'}:
+        raise ValueError('AI-Provenance requires agent, model and prompt-hash fields')
+    _validate_provenance_identity(fields['agent'], fields['model'])
+    if not re.fullmatch(r'[0-9a-fA-F]{16,64}', fields['prompt-hash']):
+        raise ValueError('AI-Provenance prompt-hash must contain 16 to 64 hex characters')
+    return fields
 
 
 def verify_provenance(ref: str = 'HEAD', repo_root: Path = Path('.')) -> dict[str, Any]:
@@ -2001,28 +2100,30 @@ def verify_provenance(ref: str = 'HEAD', repo_root: Path = Path('.')) -> dict[st
         raise ValueError(f'{commit} is missing an AI-Provenance trailer')
 
     provenance_path = _repo_semantic_path(repo_root, SEMANTIC_DIR / 'provenance.jsonl')
-    rows = _read_jsonl_rows(provenance_path)
-    matching_row = next((row for row in reversed(rows) if row.get('commit') == commit), None)
-    if matching_row is None:
+    rows = _read_jsonl_rows(provenance_path, strict=True)
+    commit_rows = [row for row in rows if row.get('commit') == commit]
+    if not commit_rows:
         raise ValueError(f'no provenance log row found for commit {commit}')
-
-    prompt_hash = str(matching_row.get('prompt_hash', ''))
-    trailer_prompt_hash = trailer.get('prompt-hash', '')
-    if trailer_prompt_hash and not prompt_hash.startswith(trailer_prompt_hash):
+    matching_rows = [row for row in commit_rows
+                     if row.get('agent') == trailer['agent'] and row.get('model') == trailer['model']
+                     and isinstance(row.get('prompt_hash'), str)
+                     and re.fullmatch(r'[0-9a-fA-F]{64}', row['prompt_hash'])
+                     and row['prompt_hash'].lower().startswith(trailer['prompt-hash'].lower())]
+    if not matching_rows:
         raise ValueError(f'provenance trailer does not match log row for commit {commit}')
+    if len({row['prompt_hash'].lower() for row in matching_rows}) != 1:
+        raise ValueError(f'ambiguous provenance prompt-hash prefix for commit {commit}')
 
     key = _provenance_key()
-    signature = matching_row.get('signature')
+    matching_row = matching_rows[-1]
     signed = False
-    if key and signature:
-        expected = _provenance_signature(
-            key,
-            commit,
-            str(matching_row.get('agent', '')),
-            str(matching_row.get('model', '')),
-            prompt_hash,
-        )
-        signed = hmac.compare_digest(expected, str(signature))
+    if key:
+        for candidate in reversed(matching_rows):
+            signature = candidate.get('signature')
+            expected = _provenance_signature(key, commit, candidate['agent'], candidate['model'], candidate['prompt_hash'])
+            if isinstance(signature, str) and re.fullmatch(r'[0-9a-fA-F]{64}', signature) and hmac.compare_digest(expected, signature.lower()):
+                matching_row, signed = candidate, True
+                break
 
     return {
         'commit': commit,
@@ -2047,6 +2148,7 @@ def cmd_verify_provenance(args: argparse.Namespace) -> int:
 
 
 def cmd_commit(args: argparse.Namespace) -> int:
+    _validate_provenance_identity(args.agent, args.model)
     trailer = f"AI-Provenance: agent={args.agent};model={args.model};prompt-hash={_hash([args.prompt])[:16]}"
     message = f"{args.message}\n\n{trailer}\n"
     subprocess.run(['git', 'commit', '-m', message], check=True)
@@ -3186,19 +3288,29 @@ def _read_json_file(path: Path) -> Any | None:
         return None
 
 
-def _read_jsonl_rows(path: Path) -> list[dict[str, Any]]:
+def _read_jsonl_rows(path: Path, *, strict: bool = False) -> list[dict[str, Any]]:
     if not path.exists():
         return []
     rows: list[dict[str, Any]] = []
-    for line in path.read_text(encoding='utf-8').splitlines():
+    try:
+        text = path.read_text(encoding='utf-8')
+    except (OSError, UnicodeError) as exc:
+        if strict:
+            raise ValueError(f'cannot read JSONL log: {path}') from exc
+        raise
+    for number, line in enumerate(text.splitlines(), 1):
         if not line.strip():
             continue
         try:
             value = json.loads(line)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as exc:
+            if strict:
+                raise ValueError(f'invalid JSONL record at {path}:{number}') from exc
             continue
         if isinstance(value, dict):
             rows.append(value)
+        elif strict:
+            raise ValueError(f'JSONL record must be an object at {path}:{number}')
     return rows
 
 
@@ -3518,27 +3630,24 @@ def _filter_paginate(
 
 def serve_api(args: argparse.Namespace) -> int:
     manifest_file = _repo_semantic_path(Path('.').resolve(), MANIFEST_FILE)
-    # Parse the manifest at most once per mtime/size signature; serve many.
-    cache: dict[str, Any] = {'sig': None, 'chunks': None, 'etag': None, 'full_body': None}
+    # Hash actual bytes on every request: size/mtime can repeat after a restore
+    # or same-size edit. Parse/serialize only on a content change and publish
+    # one snapshot under a lock so body, rows and validator cannot be mixed.
+    cache: tuple[list[dict[str, Any]], str, bytes] | None = None
+    cache_lock = threading.Lock()
 
     def _load() -> tuple[list[dict[str, Any]], str, bytes]:
-        stat = manifest_file.stat()
-        sig = (stat.st_mtime_ns, stat.st_size)
-        if cache['sig'] != sig:
-            chunks = [
-                json.loads(line)
-                for line in manifest_file.read_text(encoding='utf-8').splitlines()
-                if line
-            ]
-            cache['chunks'] = chunks
-            cache['etag'] = '"' + hashlib.sha256(f'{sig[0]}-{sig[1]}'.encode()).hexdigest()[:16] + '"'
-            # Serialize the full unfiltered response once per change, then serve
-            # the bytes to every polling agent instead of re-dumping per request.
-            cache['full_body'] = json.dumps(
-                {'chunks': chunks, 'total': len(chunks), 'offset': 0, 'limit': None}
-            ).encode('utf-8')
-            cache['sig'] = sig
-        return cache['chunks'], cache['etag'], cache['full_body']
+        nonlocal cache
+        raw = manifest_file.read_bytes()
+        etag = '"' + hashlib.sha256(raw).hexdigest() + '"'
+        with cache_lock:
+            if cache is None or cache[1] != etag:
+                chunks = [json.loads(line) for line in raw.decode('utf-8').splitlines() if line.strip()]
+                if any(not isinstance(chunk, dict) for chunk in chunks):
+                    raise ValueError('manifest records must be JSON objects')
+                body = json.dumps({'chunks': chunks, 'total': len(chunks), 'offset': 0, 'limit': None}).encode('utf-8')
+                cache = (chunks, etag, body)
+            return cache
 
     class Handler(BaseHTTPRequestHandler):
         def _send(self, status: int, payload: dict[str, Any], headers: dict[str, str] | None = None) -> None:
@@ -3557,14 +3666,14 @@ def serve_api(args: argparse.Namespace) -> int:
                 self._send(200, {'status': 'ok'})
                 return
             if parts.path == '/chunks':
-                if not manifest_file.exists():
+                try:
+                    chunks, etag, full_body = _load()
+                except FileNotFoundError:
                     self._send(404, {'error': 'manifest missing'})
                     return
-                chunks, etag, full_body = _load()
-                if self.headers.get('If-None-Match') == etag:
-                    self.send_response(304)
-                    self.send_header('ETag', etag)
-                    self.end_headers()
+                except (OSError, ValueError, UnicodeError):
+                    self._send(503, {'error': 'manifest unavailable; re-run aigit chunk'},
+                               headers={'Retry-After': '1'})
                     return
                 query = urllib_parse.parse_qs(parts.query)
                 path_prefix = query.get('path', [None])[0]
@@ -3575,8 +3684,18 @@ def serve_api(args: argparse.Namespace) -> int:
                 except ValueError:
                     self._send(400, {'error': 'offset and limit must be integers'})
                     return
+                full_request = not path_prefix and offset <= 0 and limit is None
+                if not full_request:
+                    representation = json.dumps([etag, path_prefix, max(offset, 0), limit]).encode('utf-8')
+                    etag = '"' + hashlib.sha256(representation).hexdigest() + '"'
+                if self.headers.get('If-None-Match') == etag:
+                    self.send_response(304)
+                    self.send_header('ETag', etag)
+                    self.send_header('Cache-Control', 'no-cache')
+                    self.end_headers()
+                    return
                 # Fast path: unfiltered full request serves precomputed bytes.
-                if not path_prefix and offset <= 0 and limit is None:
+                if full_request:
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json')
                     self.send_header('Content-Length', str(len(full_body)))

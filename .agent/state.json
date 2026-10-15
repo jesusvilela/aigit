@@ -1,0 +1,22 @@
+{
+  "task": "Repair findings from Dojo-1/aigittestbed",
+  "status": "repairs-verified-and-published",
+  "base_commit": "25dae73262aa51874a3ee0a5c21556175bff4391",
+  "branch": "codex/fix-validation-findings",
+  "confirmed_product_findings": ["F-007 TypeScript body coverage", "F-008 YAML value coverage"],
+  "additional_repairs": ["provenance claim binding (F-015)", "HTTP manifest cache integrity (F-016)", "atomic per-file publication preserving permissions"],
+  "decisions": [
+    "Preserve stable semantic IDs and invalidate parser cache version 5",
+    "Use dependency-free conservative sections, documenting parser granularity",
+    "Keep harness measurement gaps out of product defect claims"
+  ],
+  "verification": {
+    "baseline_comparison": "112 cases: 93 baseline failures, no setup errors; repaired 111 passes and 1 POSIX mode skip on Windows",
+    "linux_python_3_10": "133 passed, including POSIX modes, symlinks and shell resolver integration",
+    "lineage": "four cases, precision 1.0, recall 1.0",
+    "artifacts": "POSIX rebuild and freshness gate passed",
+    "full_windows_suite": "282 passed, 18 skipped; completed in 688.43 seconds",
+    "github_ci": "success for code commit f3c2b60 on Python 3.10, 3.11, 3.12, semantics, uv-lock and package; run 38752325983"
+  },
+  "next": ["review and merge pull request; no merge performed by this task"]
+}

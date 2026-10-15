@@ -4,6 +4,24 @@ All notable changes to AIGit are documented here. The project follows [Keep a Ch
 
 ## [Unreleased]
 
+### Fixed
+
+- TypeScript/JavaScript section hashes now include declaration bodies and YAML
+  key hashes include nested values, lists and block scalars. Accurate section
+  line ranges and opaque preamble coverage replace declaration-only hashes.
+  Parser cache version 6 invalidates old results while preserving semantic IDs
+  for existing unique declarations and keys.
+- Provenance verification binds every trailer claim to its matching log row,
+  rejects ambiguous/incomplete claims and malformed JSONL, and prefers a valid
+  signed matching record over later unsigned or contradictory entries. Writers
+  reject delimiter/control-character identities before side effects. Existing
+  unambiguous HMACs and 16-hex prompt prefixes remain valid.
+- API snapshots and ETags are based on manifest bytes, so same-size edits with
+  restored timestamps cannot retain stale responses. Snapshot publication is
+  synchronized; invalid manifests return structured errors and pagination is
+  validated before conditional responses. Artifact writes use atomic per-file
+  replacement, retaining the previous file on failed publication.
+
 ### Added
 
 - `aigit merge-driver` / `install-merge-driver`: a Git merge driver for

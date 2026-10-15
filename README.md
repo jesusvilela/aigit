@@ -145,6 +145,30 @@ aigit commit -m "refactor parser" \
 
 Run `aigit --help` for the full command reference.
 
+### Parser and verification boundaries
+
+YAML chunks cover top-level key sections, including nested maps, sequences and
+block scalars. TypeScript/JavaScript chunks use a dependency-free lexical scanner:
+each recognized top-level declaration covers its section through the next
+declaration or EOF. Preamble text is tracked separately, and unsupported syntax
+is tracked conservatively rather than treated as a complete TypeScript AST.
+Body edits now change the section hash. Re-run `aigit chunk` after upgrading;
+the local parse cache is invalidated automatically.
+
+`verify-provenance` requires the trailer's agent, model and 16–64 hexadecimal
+prompt-hash prefix to identify one full 64-digit prompt hash in the log. It
+rejects duplicate trailer fields/lines and malformed log records. Existing
+16-digit trailers and unambiguous HMAC records remain compatible. Without a
+trusted `AIGIT_PROVENANCE_KEY`, matching plaintext claims do not establish
+authenticity; use `--require-signature` when authentication is required.
+Agent/model names cannot contain control characters, semicolons or padding.
+
+The HTTP API validates manifest content on each request and caches its parsed
+representation. ETags describe the requested representation. An unreadable or
+malformed manifest returns a JSON error (503); a missing manifest returns 404.
+Chunk artifact files are replaced atomically one file at a time; this does not
+provide a transaction across the manifest, index and edges files.
+
 ## Install profiles
 
 | Install | Includes |

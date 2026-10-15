@@ -121,8 +121,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "a64ab9bcb98b56e20b4b7da7f57e5753363594583ee3de6d3b5bda024f72cbd1",
-    "end_line": 2,
+    "content_hash": "6f229f35a196b9f4bc38a0f659e1feedd09e6fe90ddbcb815c6c93bf66cd232f",
+    "end_line": 14,
     "file_hash": "ec4fa6eb6c746fbaa9075a08062b7b5b877b83bd",
     "fingerprint": "",
     "path": ".github/dependabot.yml",
@@ -147,8 +147,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "84afe24daf34d1b5cf83fcaa3f56aa4c107c058039c857bcb6d516d621947f05",
-    "end_line": 13,
+    "content_hash": "54dfb353f7a8d12ec4b3ba97ab343a3d6327f9bbef481ba9d7dca98623516e82",
+    "end_line": 16,
     "file_hash": "1f93e1ff5cc7a7a1d7fb85e508af5be84f523514",
     "fingerprint": "",
     "path": ".github/workflows/ci.yml",
@@ -160,8 +160,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e9d80154ed42fc5c779b1331578b58b89c801eace74f24cd48eb4a2357940a95",
-    "end_line": 17,
+    "content_hash": "23c0c0071f1f0ec8b18f867d3824e8e9502c86f394ab51fed75ad4ad3ea8de94",
+    "end_line": 143,
     "file_hash": "1f93e1ff5cc7a7a1d7fb85e508af5be84f523514",
     "fingerprint": "",
     "path": ".github/workflows/ci.yml",
@@ -174,7 +174,7 @@
     "chunk_type": "key",
     "confidence": "medium",
     "content_hash": "06e1b32fa09079ae2f0001fff0eca27b4985957d4eb4857929b3cf058faae541",
-    "end_line": 1,
+    "end_line": 2,
     "file_hash": "1f93e1ff5cc7a7a1d7fb85e508af5be84f523514",
     "fingerprint": "",
     "path": ".github/workflows/ci.yml",
@@ -186,8 +186,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e96dc48149f5a83d1ed6dbb39bbc7e2b902aa3d34d6bd5ae4b291b68df0ca79a",
-    "end_line": 3,
+    "content_hash": "79528d5926dc08c5e2946b68ca4eadb8db787006639b0d9e6363752379fd9b3e",
+    "end_line": 9,
     "file_hash": "1f93e1ff5cc7a7a1d7fb85e508af5be84f523514",
     "fingerprint": "",
     "path": ".github/workflows/ci.yml",
@@ -199,8 +199,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "3526247ede006e9bdab9c6850728425d1b4166caf5cac50cf0955c44d24c1a8d",
-    "end_line": 10,
+    "content_hash": "e8f2263b0413f25128aa11d16dd3ae0ef6b0c660fb5b1dc08fe71e0a7daabb4b",
+    "end_line": 12,
     "file_hash": "1f93e1ff5cc7a7a1d7fb85e508af5be84f523514",
     "fingerprint": "",
     "path": ".github/workflows/ci.yml",
@@ -212,8 +212,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "84afe24daf34d1b5cf83fcaa3f56aa4c107c058039c857bcb6d516d621947f05",
-    "end_line": 24,
+    "content_hash": "3eb8ba922f2abc17831bbbba6ccf224f0c63bc2bca7ce049417c939104352981",
+    "end_line": 27,
     "file_hash": "b5f024254c650da174f5454edbcc98d52258c78b",
     "fingerprint": "",
     "path": ".github/workflows/release.yml",
@@ -225,8 +225,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e9d80154ed42fc5c779b1331578b58b89c801eace74f24cd48eb4a2357940a95",
-    "end_line": 28,
+    "content_hash": "316b0590539c0a4f07d9a09c2632cb84d9af9f183ea7f9db99267f1d2466d4de",
+    "end_line": 151,
     "file_hash": "b5f024254c650da174f5454edbcc98d52258c78b",
     "fingerprint": "",
     "path": ".github/workflows/release.yml",
@@ -239,7 +239,7 @@
     "chunk_type": "key",
     "confidence": "medium",
     "content_hash": "12eef9030d0c7029010c4635689f58328d109e6a85ed1a9245b20f3955b7db39",
-    "end_line": 1,
+    "end_line": 2,
     "file_hash": "b5f024254c650da174f5454edbcc98d52258c78b",
     "fingerprint": "",
     "path": ".github/workflows/release.yml",
@@ -251,8 +251,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e96dc48149f5a83d1ed6dbb39bbc7e2b902aa3d34d6bd5ae4b291b68df0ca79a",
-    "end_line": 3,
+    "content_hash": "6a5a1551d3e872326bd9651bb152fc97b1d8e6d8c1c3f0b2171a212f23ea956c",
+    "end_line": 18,
     "file_hash": "b5f024254c650da174f5454edbcc98d52258c78b",
     "fingerprint": "",
     "path": ".github/workflows/release.yml",
@@ -264,8 +264,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "3526247ede006e9bdab9c6850728425d1b4166caf5cac50cf0955c44d24c1a8d",
-    "end_line": 19,
+    "content_hash": "b1da3e44eda1a00aad3da1d6a72bf52241993ddaca478dadf67e03cd33d85e9f",
+    "end_line": 23,
     "file_hash": "b5f024254c650da174f5454edbcc98d52258c78b",
     "fingerprint": "",
     "path": ".github/workflows/release.yml",
@@ -277,8 +277,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "84afe24daf34d1b5cf83fcaa3f56aa4c107c058039c857bcb6d516d621947f05",
-    "end_line": 13,
+    "content_hash": "2c4f72541b311f841a572c6819b7bcb15b46d6e37fe10822c3ea63324067cb9f",
+    "end_line": 16,
     "file_hash": "95a6218acf4311bf847711fb82799f25bfe4daf6",
     "fingerprint": "",
     "path": ".github/workflows/semantic-maintenance.yml",
@@ -290,8 +290,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e9d80154ed42fc5c779b1331578b58b89c801eace74f24cd48eb4a2357940a95",
-    "end_line": 21,
+    "content_hash": "9949e762aca835fd8c853993d9323beb4a975b2addcce4ad089cba956bcc308a",
+    "end_line": 61,
     "file_hash": "95a6218acf4311bf847711fb82799f25bfe4daf6",
     "fingerprint": "",
     "path": ".github/workflows/semantic-maintenance.yml",
@@ -304,7 +304,7 @@
     "chunk_type": "key",
     "confidence": "medium",
     "content_hash": "95e9bcd8fe3ffe5f074aa04139c03342ff8d1c1bb5ecf24ad872dafe660c5c22",
-    "end_line": 1,
+    "end_line": 2,
     "file_hash": "95a6218acf4311bf847711fb82799f25bfe4daf6",
     "fingerprint": "",
     "path": ".github/workflows/semantic-maintenance.yml",
@@ -316,8 +316,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e96dc48149f5a83d1ed6dbb39bbc7e2b902aa3d34d6bd5ae4b291b68df0ca79a",
-    "end_line": 3,
+    "content_hash": "2d0b72c238303873fefc1dd6fb698baf65be7011e95459f7b6fcf3c92cbd0345",
+    "end_line": 12,
     "file_hash": "95a6218acf4311bf847711fb82799f25bfe4daf6",
     "fingerprint": "",
     "path": ".github/workflows/semantic-maintenance.yml",
@@ -329,8 +329,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "3526247ede006e9bdab9c6850728425d1b4166caf5cac50cf0955c44d24c1a8d",
-    "end_line": 17,
+    "content_hash": "dcc4bb79f6ebc8555975f87c1bbfadb4481f70b03c1a7b0c9ccb4ee3dac77d61",
+    "end_line": 20,
     "file_hash": "95a6218acf4311bf847711fb82799f25bfe4daf6",
     "fingerprint": "",
     "path": ".github/workflows/semantic-maintenance.yml",
@@ -342,8 +342,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "84afe24daf34d1b5cf83fcaa3f56aa4c107c058039c857bcb6d516d621947f05",
-    "end_line": 24,
+    "content_hash": "a2f42029a3bf3d723acafce27dbb56102961731096818996b96d5de2ba20521b",
+    "end_line": 29,
     "file_hash": "ea18748031bc5d586236accfa81c7c5a1c1b302e",
     "fingerprint": "",
     "path": ".github/workflows/semantic-merge.yml",
@@ -355,8 +355,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e9d80154ed42fc5c779b1331578b58b89c801eace74f24cd48eb4a2357940a95",
-    "end_line": 30,
+    "content_hash": "5aa6b3fe6b205b342545c5abddcd2cd571c5411666b45e640848c1143e0a1153",
+    "end_line": 74,
     "file_hash": "ea18748031bc5d586236accfa81c7c5a1c1b302e",
     "fingerprint": "",
     "path": ".github/workflows/semantic-merge.yml",
@@ -368,8 +368,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "d6582e3cef4f163d60c74f9693e81e8f3b6f74495fa8929eaf89c633d43517c9",
-    "end_line": 1,
+    "content_hash": "baea5ff555c7b7cfcad4da3d1b7ccef35854d20ff555bf63c74ebae7e3837998",
+    "end_line": 11,
     "file_hash": "ea18748031bc5d586236accfa81c7c5a1c1b302e",
     "fingerprint": "",
     "path": ".github/workflows/semantic-merge.yml",
@@ -381,8 +381,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "e96dc48149f5a83d1ed6dbb39bbc7e2b902aa3d34d6bd5ae4b291b68df0ca79a",
-    "end_line": 12,
+    "content_hash": "76cd58056d751386d997502042a3815d476ea465a43d17853b01798f6c83c32e",
+    "end_line": 18,
     "file_hash": "ea18748031bc5d586236accfa81c7c5a1c1b302e",
     "fingerprint": "",
     "path": ".github/workflows/semantic-merge.yml",
@@ -394,8 +394,8 @@
     "body_fingerprint": "",
     "chunk_type": "key",
     "confidence": "medium",
-    "content_hash": "3526247ede006e9bdab9c6850728425d1b4166caf5cac50cf0955c44d24c1a8d",
-    "end_line": 19,
+    "content_hash": "6817eff08d02be68be741fdd2e09ff3d143f34d4ee8babb337c15de5da90cc8c",
+    "end_line": 23,
     "file_hash": "ea18748031bc5d586236accfa81c7c5a1c1b302e",
     "fingerprint": "",
     "path": ".github/workflows/semantic-merge.yml",
@@ -408,12 +408,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "6795076fbba6ceec5444549de74ece2ca6038f2cf6b05fb7244ec3e391d265d4",
-    "end_line": 90,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "end_line": 108,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_a4967d82ed26ac9d",
-    "start_line": 7
+    "start_line": 25
   },
   "CHANGELOG.md::section::Added#2": {
     "anchor": "Added#2",
@@ -421,12 +421,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "26a58c13eebbb01cfab7ff14386c85bc290ac9a63f38be665daea26b4eb32156",
-    "end_line": 167,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "end_line": 185,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_838db1ff2ca9dfab",
-    "start_line": 161
+    "start_line": 179
   },
   "CHANGELOG.md::section::Changed": {
     "anchor": "Changed",
@@ -434,12 +434,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "fb45a9c0aa91c1070e2ea88a5f4f62dae076301f5af6a91a9e6a015141ec086d",
-    "end_line": 118,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "end_line": 136,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_7b83933cef22491e",
-    "start_line": 91
+    "start_line": 109
   },
   "CHANGELOG.md::section::Changelog": {
     "anchor": "Changelog",
@@ -448,7 +448,7 @@
     "confidence": "high",
     "content_hash": "20302a9c68c0b54f563f5a6dac949da77d5761cd8e602a5db742018ef1dd8415",
     "end_line": 4,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_de745f9a6003d29a",
@@ -459,13 +459,26 @@
     "body_fingerprint": "",
     "chunk_type": "section",
     "confidence": "high",
-    "content_hash": "80db1a9f132f7c5c6c4989f6c99ba810726fd5993e8456085758cc7db5b93215",
-    "end_line": 158,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "content_hash": "c9e9f9b25be75e9e80a4da6e7840bf1d76b1a472c2491e28f9916e10b64594fa",
+    "end_line": 24,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_e4910f51bba6a36a",
-    "start_line": 127
+    "start_line": 7
+  },
+  "CHANGELOG.md::section::Fixed#2": {
+    "anchor": "Fixed#2",
+    "body_fingerprint": "",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "80db1a9f132f7c5c6c4989f6c99ba810726fd5993e8456085758cc7db5b93215",
+    "end_line": 176,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
+    "fingerprint": "",
+    "path": "CHANGELOG.md",
+    "semantic_id": "sc_0d788cab573495fd",
+    "start_line": 145
   },
   "CHANGELOG.md::section::Removed": {
     "anchor": "Removed",
@@ -473,12 +486,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "e1905fd51c721d5d23c3a9674bc0e28cc1fc43f1eeaa81e4f1e6a7172b910104",
-    "end_line": 126,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "end_line": 144,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_52e9d4ccd9b646e8",
-    "start_line": 119
+    "start_line": 137
   },
   "CHANGELOG.md::section::[0.1.0] - 2026-07-24": {
     "anchor": "[0.1.0] - 2026-07-24",
@@ -486,12 +499,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "5e5d121a15da8da630a8a5ae708d4bdcb191a78e6b39d186432d2acdbd757209",
-    "end_line": 160,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "end_line": 178,
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_387ec8df715097b1",
-    "start_line": 159
+    "start_line": 177
   },
   "CHANGELOG.md::section::[Unreleased]": {
     "anchor": "[Unreleased]",
@@ -500,7 +513,7 @@
     "confidence": "high",
     "content_hash": "0a8abc12843c484cfddb32558625a8fe5a25758146e749c01b81c135264f4f53",
     "end_line": 6,
-    "file_hash": "5a29cb225ab32f8d746478365c86e12a91229fdb",
+    "file_hash": "a7d287e50d2f015f44f8934a9f6e9659ecb2c6a2",
     "fingerprint": "",
     "path": "CHANGELOG.md",
     "semantic_id": "sc_2540c3ec000e08a3",
@@ -682,7 +695,7 @@
     "confidence": "high",
     "content_hash": "e0f28be02e8741e1910b8f4d338a36d18e7f393c72838b939e70bd201331cc08",
     "end_line": 116,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_6583da49851b74a9",
@@ -695,7 +708,7 @@
     "confidence": "high",
     "content_hash": "5d3cb43cbd68bf49bf74610cd22112d16b7967f4008af2d540dcb573b176911e",
     "end_line": 22,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_623cb1dcdc05d1d4",
@@ -707,12 +720,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "876e349c5ec617c425002fbdd96b0bda2e976cb605b823fa940725f483cd7c30",
-    "end_line": 250,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 274,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_d015b664fc90619c",
-    "start_line": 248
+    "start_line": 272
   },
   "README.md::section::Command map": {
     "anchor": "Command map",
@@ -721,7 +734,7 @@
     "confidence": "high",
     "content_hash": "06eb691dd5437566c1a2da8af144244a2a476dd23e9dff76febbf72e967930bc",
     "end_line": 147,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_c6c01654f7d4101f",
@@ -733,12 +746,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "45e402d8fc3be862774e9541749b8608fa3ad6b2db3e99174c469abf3cd5c1ed",
-    "end_line": 210,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 234,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_4c2e2bdcfad79663",
-    "start_line": 198
+    "start_line": 222
   },
   "README.md::section::For maintainers and operators": {
     "anchor": "For maintainers and operators",
@@ -746,12 +759,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "ddc5c398770714d13d4bec8c75b369a10e4421422cfddb0cd2f5981283ba07db",
-    "end_line": 232,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 256,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_e2ee043b257104fe",
-    "start_line": 211
+    "start_line": 235
   },
   "README.md::section::Install profiles": {
     "anchor": "Install profiles",
@@ -759,12 +772,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "d440acb925cce40e0917c6ef068d3bb82c3cd018b39944b7e3aa4e98466fad4b",
-    "end_line": 156,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 180,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_03b5d3f055279d61",
-    "start_line": 148
+    "start_line": 172
   },
   "README.md::section::License": {
     "anchor": "License",
@@ -772,12 +785,25 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "9de6aa31f33faa6840739963827e08bfde3ea586e4039c17885c6c8093d13b4d",
-    "end_line": 247,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 271,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_f10a25bc00206028",
-    "start_line": 244
+    "start_line": 268
+  },
+  "README.md::section::Parser and verification boundaries": {
+    "anchor": "Parser and verification boundaries",
+    "body_fingerprint": "",
+    "chunk_type": "section",
+    "confidence": "high",
+    "content_hash": "62c5aa8689bb8383c8e3cb47632acacbccc1ebf64a94b655121e18031075c29b",
+    "end_line": 171,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
+    "fingerprint": "",
+    "path": "README.md",
+    "semantic_id": "sc_d2c3d4e1312bc4ce",
+    "start_line": 148
   },
   "README.md::section::Start in three breaths": {
     "anchor": "Start in three breaths",
@@ -786,7 +812,7 @@
     "confidence": "high",
     "content_hash": "a6b5b48b0a50b244e103ba2eb326257673e5f80cfe8436ee865472151ab55036",
     "end_line": 90,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_515919dea39fd393",
@@ -798,12 +824,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "52f4133e6688528d4eb7fb060dee3b651e8e41855c978f8811f257fa55da55a4",
-    "end_line": 197,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 221,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_60efb0d1ca36d734",
-    "start_line": 157
+    "start_line": 181
   },
   "README.md::section::The quiet architecture": {
     "anchor": "The quiet architecture",
@@ -812,7 +838,7 @@
     "confidence": "high",
     "content_hash": "f4ed4c5a743a9cd0646569cf2eb8a554bbe227fcce6fc63861d292ceb35372ec",
     "end_line": 59,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_676aa670084afa32",
@@ -824,12 +850,12 @@
     "chunk_type": "section",
     "confidence": "high",
     "content_hash": "e1b11a8aaf2e0db110aa9b67e314394bc8f8fe5ac32672cf4962c93e17c09b62",
-    "end_line": 243,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "end_line": 267,
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_635f32d855b50b3b",
-    "start_line": 233
+    "start_line": 257
   },
   "README.md::section::What is ready now": {
     "anchor": "What is ready now",
@@ -838,7 +864,7 @@
     "confidence": "high",
     "content_hash": "6efc9ed45328584e52e8ee7c5f6f0dbcb7693e8aefd62bd49f29268e85411242",
     "end_line": 128,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_677c6c2b7febc9e3",
@@ -851,7 +877,7 @@
     "confidence": "high",
     "content_hash": "cc94712d0029b4cbe8e29ba50c6b8787b75c0555e841e3d5b32fced8aa069609",
     "end_line": 41,
-    "file_hash": "bfe668568c6c74c88699479ccb26f357c1dde465",
+    "file_hash": "167f5f677bce1ca1a739cbc3eaae8b775520e961",
     "fingerprint": "",
     "path": "README.md",
     "semantic_id": "sc_0a4a5c364f9ee534",
@@ -1110,12 +1136,12 @@
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "04254062b15e4de63c22533b556e555fb12681b6a3fd84f32fee1405b752f41b",
-    "end_line": 127,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 129,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "8dfc3b5b32f7657f",
     "path": "aigit/core.py",
     "semantic_id": "sc_f4cd722c74240d4f",
-    "start_line": 108
+    "start_line": 110
   },
   "aigit/core.py::class::DeerFlowRepoSyncReport": {
     "anchor": "DeerFlowRepoSyncReport",
@@ -1123,12 +1149,12 @@
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "ce46918cc0a1174dbbdd195dcf51004c4e18c4936e633e4b44a205d62be2b362",
-    "end_line": 137,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 139,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ef0401503434077d",
     "path": "aigit/core.py",
     "semantic_id": "sc_0d5a2bf29cb9b3d4",
-    "start_line": 130
+    "start_line": 132
   },
   "aigit/core.py::class::EpicSpec": {
     "anchor": "EpicSpec",
@@ -1136,12 +1162,12 @@
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "e6d82d9658f74fa54e020d2ddab5d8db190a4db9c57c6e3aaaca76d627313da7",
-    "end_line": 106,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 108,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "b5fc5b5332f7667d",
     "path": "aigit/core.py",
     "semantic_id": "sc_348ced7b3d77ae8d",
-    "start_line": 99
+    "start_line": 101
   },
   "aigit/core.py::class::RepoScoutSummary": {
     "anchor": "RepoScoutSummary",
@@ -1149,12 +1175,25 @@
     "chunk_type": "class",
     "confidence": "high",
     "content_hash": "dd36490b6cab81d87710ea6b2ce9c86718b1c4738a764636ba3a8b7459b85b31",
-    "end_line": 150,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 152,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "e7dc201a3624e76d",
     "path": "aigit/core.py",
     "semantic_id": "sc_9793c4917206ab94",
-    "start_line": 140
+    "start_line": 142
+  },
+  "aigit/core.py::function::_atomic_write_text": {
+    "anchor": "_atomic_write_text",
+    "body_fingerprint": "f7b723d838b412b1",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8f5ae651f2e8c804fd82b65db718267d95396fc14ec1cae14d148441874c6a3a",
+    "end_line": 841,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "d7b523d838341231",
+    "path": "aigit/core.py",
+    "semantic_id": "sc_7d3bb9b17cdfb591",
+    "start_line": 826
   },
   "aigit/core.py::function::_body_similarity": {
     "anchor": "_body_similarity",
@@ -1162,12 +1201,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ab2ad90fd48c25f9b454b00f95796ab7633b4fd134bdf7da596b03072c6e139b",
-    "end_line": 234,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 236,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "c4b8c2315fa7472f",
     "path": "aigit/core.py",
     "semantic_id": "sc_193f07ba6e0f7d32",
-    "start_line": 225
+    "start_line": 227
   },
   "aigit/core.py::function::_body_text": {
     "anchor": "_body_text",
@@ -1175,12 +1214,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2939cdcd4651679363f9f1ed3c68b34df7d0863174b42a6aaa9ced0c1634057d",
-    "end_line": 212,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 214,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d6e81b8699cec276",
     "path": "aigit/core.py",
     "semantic_id": "sc_691488a9b8c7ea5f",
-    "start_line": 199
+    "start_line": 201
   },
   "aigit/core.py::function::_bootstrap_devx_quickcheck": {
     "anchor": "_bootstrap_devx_quickcheck",
@@ -1188,12 +1227,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "47e508aef9373756bb70a50d289ced4e90de26df26ae78567f606b2c4a30781c",
-    "end_line": 3833,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3952,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "7fba33a0971e90f4",
     "path": "aigit/core.py",
     "semantic_id": "sc_8e04a836a3701aec",
-    "start_line": 3791
+    "start_line": 3910
   },
   "aigit/core.py::function::_candidate_files": {
     "anchor": "_candidate_files",
@@ -1201,12 +1240,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a3c5bef5d1676b298b66d933ee1a70038e11ce3104adbbae3c0e42b3199030ea",
-    "end_line": 631,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 694,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "17938fc805c5767a",
     "path": "aigit/core.py",
     "semantic_id": "sc_5b12e5210ba321a2",
-    "start_line": 610
+    "start_line": 673
   },
   "aigit/core.py::function::_canonical": {
     "anchor": "_canonical",
@@ -1214,12 +1253,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2aa83a096e8274f72576de20e4a914e0fcaf137a99c5ff9aa6d6ed40d38e0282",
-    "end_line": 1547,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1628,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "44faab87906004b7",
     "path": "aigit/core.py",
     "semantic_id": "sc_d6cc665d9057578d",
-    "start_line": 1545
+    "start_line": 1626
   },
   "aigit/core.py::function::_chunk_id": {
     "anchor": "_chunk_id",
@@ -1227,12 +1266,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "70c9ee2f74727a73da345928e9655a4c7c0d93ed461e5ab2ccba269ce1ad11e9",
-    "end_line": 169,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 171,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "8dfca3d77431c27b",
     "path": "aigit/core.py",
     "semantic_id": "sc_7e445919e7911cdc",
-    "start_line": 168
+    "start_line": 170
   },
   "aigit/core.py::function::_chunk_records_for_source": {
     "anchor": "_chunk_records_for_source",
@@ -1240,12 +1279,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ad7bbe8a19d3046b55203a8e9d5850a24432c9a00936084afb048cd9f9a9b578",
-    "end_line": 1542,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1623,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4fd00bd9b612063a",
     "path": "aigit/core.py",
     "semantic_id": "sc_638e66388765e4a6",
-    "start_line": 1534
+    "start_line": 1615
   },
   "aigit/core.py::function::_chunk_similarity": {
     "anchor": "_chunk_similarity",
@@ -1253,12 +1292,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "aec479b18e4d108c0d028c0899452bb366c93fafbd2fb23ec47132ed3449a4eb",
-    "end_line": 249,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 251,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "84b859191be4d727",
     "path": "aigit/core.py",
     "semantic_id": "sc_0b6f16c5a1bcf2ad",
-    "start_line": 237
+    "start_line": 239
   },
   "aigit/core.py::function::_clean_section_lines": {
     "anchor": "_clean_section_lines",
@@ -1266,12 +1305,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4e55016f76fdf514627f7020d691190d8902af787872db653172109931b51a0b",
-    "end_line": 2493,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2595,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1eb93206fdf4427a",
     "path": "aigit/core.py",
     "semantic_id": "sc_c0b32c9f6d474335",
-    "start_line": 2492
+    "start_line": 2594
   },
   "aigit/core.py::function::_commit_ids": {
     "anchor": "_commit_ids",
@@ -1279,12 +1318,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6790c9ad4f3df1bc8500481f6215aa86f5116076fd66697f44bd42c1f39f5912",
-    "end_line": 1452,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1533,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3ffa314734b96607",
     "path": "aigit/core.py",
     "semantic_id": "sc_f8ae5cf308315c13",
-    "start_line": 1445
+    "start_line": 1526
   },
   "aigit/core.py::function::_commit_with": {
     "anchor": "_commit_with",
@@ -1292,12 +1331,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a1fa664a6f7991a8c0544689f74ea93beead2164cff489cd50cac883c90cf75d",
-    "end_line": 1591,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1672,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "2eb64bd976f05dfb",
     "path": "aigit/core.py",
     "semantic_id": "sc_aa0932b9beffeb6e",
-    "start_line": 1586
+    "start_line": 1667
   },
   "aigit/core.py::function::_content_hash": {
     "anchor": "_content_hash",
@@ -1305,12 +1344,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1b6968b318cfa65839ff8ac9fd1246ba9152e700352e41ee464105b3779d8a63",
-    "end_line": 173,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 175,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ddf03bb338784a5f",
     "path": "aigit/core.py",
     "semantic_id": "sc_bc7e47d81678a2ba",
-    "start_line": 172
+    "start_line": 174
   },
   "aigit/core.py::function::_copy_repo_tree": {
     "anchor": "_copy_repo_tree",
@@ -1318,12 +1357,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "37188cac039029c2a0181827adf756d42b8701adc916e538f0d6a4d471be1b1f",
-    "end_line": 2331,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2433,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "b6ab60c85376b759",
     "path": "aigit/core.py",
     "semantic_id": "sc_a2d4b994a27f3d8c",
-    "start_line": 2289
+    "start_line": 2391
   },
   "aigit/core.py::function::_count_files_in_tree": {
     "anchor": "_count_files_in_tree",
@@ -1331,12 +1370,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "facd5a61ec9636da50fa863ff0a3ec6930529f4eb5515b350022f0244eab7f5a",
-    "end_line": 3215,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3327,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "47b9009495045214",
     "path": "aigit/core.py",
     "semantic_id": "sc_87fc3f8ac637d0fa",
-    "start_line": 3205
+    "start_line": 3317
   },
   "aigit/core.py::function::_detect_lineage": {
     "anchor": "_detect_lineage",
@@ -1344,12 +1383,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "72f9052c7f6c9d59414ff2cb03abd3a434f3ef1c627a3e666079a6a55287bec1",
-    "end_line": 864,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 945,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5fbf881d7ee4c63f",
     "path": "aigit/core.py",
     "semantic_id": "sc_8aa958969bf0a1c5",
-    "start_line": 812
+    "start_line": 893
   },
   "aigit/core.py::function::_disambiguate_anchors": {
     "anchor": "_disambiguate_anchors",
@@ -1357,12 +1396,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e4ec52a372913d02f5c28b8d0ea3cb1dd0686635b9d0cfb8de65c55373bbd4ae",
-    "end_line": 500,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 563,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "8ff84f0f5790c738",
     "path": "aigit/core.py",
     "semantic_id": "sc_02e1dcca297ea0c8",
-    "start_line": 480
+    "start_line": 543
   },
   "aigit/core.py::function::_duplicate_score": {
     "anchor": "_duplicate_score",
@@ -1370,12 +1409,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "353f95c2c9a152896d2981d0f7af1fb10a83a95fa655a8df141a1006d93958c8",
-    "end_line": 1102,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1183,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "47f08f391be4522e",
     "path": "aigit/core.py",
     "semantic_id": "sc_16241ff268b776bb",
-    "start_line": 1083
+    "start_line": 1164
   },
   "aigit/core.py::function::_ensure_background_service": {
     "anchor": "_ensure_background_service",
@@ -1383,12 +1422,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "303f024cba7849f107308e0a39c6a98f0f25b55a5a3ee5527deaf6649bc9498f",
-    "end_line": 2212,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2314,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d7d74b2bfa65ce5b",
     "path": "aigit/core.py",
     "semantic_id": "sc_61fdd7407ec7e166",
-    "start_line": 2192
+    "start_line": 2294
   },
   "aigit/core.py::function::_ensure_lfs_pattern": {
     "anchor": "_ensure_lfs_pattern",
@@ -1396,12 +1435,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "fecc9489c06985eaa7b6a3d099564ba8c110d5e851e4eb9fb0a4e3202f82304c",
-    "end_line": 3924,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4043,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "6e386b0f15b5421b",
     "path": "aigit/core.py",
     "semantic_id": "sc_e7d7d15cb07b5a1a",
-    "start_line": 3914
+    "start_line": 4033
   },
   "aigit/core.py::function::_filter_paginate": {
     "anchor": "_filter_paginate",
@@ -1409,12 +1448,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0e6cd318cc06e1f156f1b40997fb38b0a4f29a1d4021fec8e4ad7026ab158dae",
-    "end_line": 3516,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3628,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "2e3f635635944f7f",
     "path": "aigit/core.py",
     "semantic_id": "sc_3498186586dcbb7b",
-    "start_line": 3501
+    "start_line": 3613
   },
   "aigit/core.py::function::_format_epic_objective": {
     "anchor": "_format_epic_objective",
@@ -1422,12 +1461,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "072efe94a0f6856d0b77e2e75165ff7d3ac779a6ae0858b38276b2485bc29f6a",
-    "end_line": 2555,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2657,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5d9a23ad971e1ab4",
     "path": "aigit/core.py",
     "semantic_id": "sc_0974dc049cb319f6",
-    "start_line": 2528
+    "start_line": 2630
   },
   "aigit/core.py::function::_git_blob_id": {
     "anchor": "_git_blob_id",
@@ -1435,12 +1474,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "dad4b1ce4c4523b33d57721b4038deb6bef77bd45b2bc3cfa2e9f8e27668f7d5",
-    "end_line": 504,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 567,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0c34e9930e08ef32",
     "path": "aigit/core.py",
     "semantic_id": "sc_17a9747c83301971",
-    "start_line": 503
+    "start_line": 566
   },
   "aigit/core.py::function::_git_operation": {
     "anchor": "_git_operation",
@@ -1448,12 +1487,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c5fb2342ff538abd32964820da1a72b34601e3a5352a81f76d2b34ceeea1d767",
-    "end_line": 1789,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1870,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1fff8a9d19e45fbf",
     "path": "aigit/core.py",
     "semantic_id": "sc_18d0faef16c93d91",
-    "start_line": 1781
+    "start_line": 1862
   },
   "aigit/core.py::function::_git_output": {
     "anchor": "_git_output",
@@ -1461,12 +1500,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "423b48128b528b2fba53af4f16b2d41f852bf9cc94fd94e338860f191e4ec6b2",
-    "end_line": 1442,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1523,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ed75efd95cc4d777",
     "path": "aigit/core.py",
     "semantic_id": "sc_cff3a8bcdd0793a8",
-    "start_line": 1440
+    "start_line": 1521
   },
   "aigit/core.py::function::_git_parent_args": {
     "anchor": "_git_parent_args",
@@ -1474,12 +1513,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e4a03c332217642802d7bda1dd4e368ce20e2a7c283078d0545455703ad4cdd9",
-    "end_line": 1734,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1815,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "87f5119910c41b52",
     "path": "aigit/core.py",
     "semantic_id": "sc_1d26b7edd381437c",
-    "start_line": 1721
+    "start_line": 1802
   },
   "aigit/core.py::function::_group_by_path": {
     "anchor": "_group_by_path",
@@ -1487,25 +1526,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d174119b1dfed6490f6b870c625453deb40d19087095ef5ed9131cc9f5f82583",
-    "end_line": 1401,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1482,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d5bc39539a708737",
     "path": "aigit/core.py",
     "semantic_id": "sc_663b6a9b406cd4c8",
-    "start_line": 1397
+    "start_line": 1478
   },
   "aigit/core.py::function::_has_body_signal": {
     "anchor": "_has_body_signal",
-    "body_fingerprint": "0fbe293c384b4a43",
+    "body_fingerprint": "0fbe493a384b4a43",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "3dd0957a99d3b81971dd3d26b035d8b17d877e9f51c3c3b9d94df27c43e453b8",
-    "end_line": 222,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "0cba2938384b4a43",
+    "content_hash": "ded24fbc6cf2a2fd6fccc66c3ee232cc2e3c135f7b8a30ac5827d4556accfed9",
+    "end_line": 224,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "0fbe693a384b4a43",
     "path": "aigit/core.py",
     "semantic_id": "sc_beb803ce451dd8d7",
-    "start_line": 215
+    "start_line": 217
   },
   "aigit/core.py::function::_hash": {
     "anchor": "_hash",
@@ -1513,12 +1552,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "103aaefe1866ee02535cc2be0f8b5bf0e2c1c258ad5c6090b0850537ce5b3019",
-    "end_line": 165,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 167,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "b9f22b535afc600f",
     "path": "aigit/core.py",
     "semantic_id": "sc_5becbef02f568dff",
-    "start_line": 164
+    "start_line": 166
   },
   "aigit/core.py::function::_is_chunkable": {
     "anchor": "_is_chunkable",
@@ -1526,12 +1565,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "724ed9720c04da229d1b812fa8eced93b719480ed85d019702d6909db218de73",
-    "end_line": 644,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 707,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "6d992a9d1444122c",
     "path": "aigit/core.py",
     "semantic_id": "sc_b3328a4e8bae5bc0",
-    "start_line": 634
+    "start_line": 697
   },
   "aigit/core.py::function::_iter_repo_files": {
     "anchor": "_iter_repo_files",
@@ -1539,12 +1578,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "43128c75d399781b8918d24f52905984836425d6f24d6cd0b5961d8e7b048885",
-    "end_line": 3669,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3788,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "37b10bd614049231",
     "path": "aigit/core.py",
     "semantic_id": "sc_f1bd96e92ebb17d4",
-    "start_line": 3658
+    "start_line": 3777
   },
   "aigit/core.py::function::_latest_mtime_iso": {
     "anchor": "_latest_mtime_iso",
@@ -1552,12 +1591,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "edff1ce5244334f7710b7bb3089f177ab8f5dfed8bc6a744ef3b318109bea4dc",
-    "end_line": 3230,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3342,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cfb142b1bcd6c215",
     "path": "aigit/core.py",
     "semantic_id": "sc_e362cddec82c5b8a",
-    "start_line": 3218
+    "start_line": 3330
   },
   "aigit/core.py::function::_load_chunk_cache": {
     "anchor": "_load_chunk_cache",
@@ -1565,12 +1604,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "12ae93054bf0646e94357857d7284d67a65bfa2ed605b5b586c589ddb4a53ddf",
-    "end_line": 686,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 749,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "47f423170cc47a28",
     "path": "aigit/core.py",
     "semantic_id": "sc_764c2a344e13b6b7",
-    "start_line": 674
+    "start_line": 737
   },
   "aigit/core.py::function::_merge_chunks_by_path": {
     "anchor": "_merge_chunks_by_path",
@@ -1578,12 +1617,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2970c42c45a21cdd0444193de7864fe64823849f94fa414d7522e9c03179a29d",
-    "end_line": 1394,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1475,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4ff0615b98160636",
     "path": "aigit/core.py",
     "semantic_id": "sc_0f8692ca10d1b173",
-    "start_line": 1346
+    "start_line": 1427
   },
   "aigit/core.py::function::_merge_env_defaults": {
     "anchor": "_merge_env_defaults",
@@ -1591,12 +1630,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "81b9bd64898a533cbd07edfa85536512ee7dd29b664320058318fd072ba476cc",
-    "end_line": 2108,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2210,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3eb90896d5b3c7b9",
     "path": "aigit/core.py",
     "semantic_id": "sc_58c3e57882163e55",
-    "start_line": 2081
+    "start_line": 2183
   },
   "aigit/core.py::function::_merge_in_progress": {
     "anchor": "_merge_in_progress",
@@ -1604,12 +1643,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f16ab0ebd2f1e08d133a2ca1420319a21ee6db2bc0c069ce02f8ce1f7226b1a1",
-    "end_line": 1531,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1612,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1eae8bdd19d05737",
     "path": "aigit/core.py",
     "semantic_id": "sc_711be9d0a10b47b1",
-    "start_line": 1458
+    "start_line": 1539
   },
   "aigit/core.py::function::_merge_is_overridden": {
     "anchor": "_merge_is_overridden",
@@ -1617,12 +1656,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6880cc545af88d71d9fbca3d3b3e84235dedc744c9dbb498f6f81ec9e58ad087",
-    "end_line": 1775,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1856,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5ff7895b11c44716",
     "path": "aigit/core.py",
     "semantic_id": "sc_b4732f49cbe0f236",
-    "start_line": 1761
+    "start_line": 1842
   },
   "aigit/core.py::function::_merge_like_git": {
     "anchor": "_merge_like_git",
@@ -1630,12 +1669,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e398e594795190c2d859a8711f2aae94b6d44b638e9185e0405f1dcfb97849e9",
-    "end_line": 1676,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1757,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1ff9019d38c00efb",
     "path": "aigit/core.py",
     "semantic_id": "sc_c2ebdd8ac3c8e333",
-    "start_line": 1616
+    "start_line": 1697
   },
   "aigit/core.py::function::_merge_record_sets": {
     "anchor": "_merge_record_sets",
@@ -1643,12 +1682,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4b392adca5521b108e51a2edd5fde88e6136b2c671b1fba38ce2260475430233",
-    "end_line": 1343,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1424,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3eb93b8679b2c6b0",
     "path": "aigit/core.py",
     "semantic_id": "sc_28ae408f836be200",
-    "start_line": 1328
+    "start_line": 1409
   },
   "aigit/core.py::function::_normalize_lineage_eval_entry": {
     "anchor": "_normalize_lineage_eval_entry",
@@ -1656,12 +1695,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "04ed4b141df2b3ec1fd14e5c701cb63eccaf4253c9bebf1a0a3a2787826a0d14",
-    "end_line": 903,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 984,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "8fbeeb961457f7f6",
     "path": "aigit/core.py",
     "semantic_id": "sc_75fc4d517ed8ecd9",
-    "start_line": 888
+    "start_line": 969
   },
   "aigit/core.py::function::_normalize_workspace_subdir": {
     "anchor": "_normalize_workspace_subdir",
@@ -1669,12 +1708,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "91e1773aec1b48452828ba810da276e38f1d42767b82f51a220b52ff04ae3eea",
-    "end_line": 2228,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2330,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "8ffa23d13564d22c",
     "path": "aigit/core.py",
     "semantic_id": "sc_2eaca67c6eed7ca4",
-    "start_line": 2221
+    "start_line": 2323
   },
   "aigit/core.py::function::_parse_env_file": {
     "anchor": "_parse_env_file",
@@ -1682,12 +1721,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ea15ebfe4a2d6bb862bd6c706f8963ce4a65b66df71521d8a3762d4c22efe907",
-    "end_line": 2078,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2180,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "6efc2194dd924234",
     "path": "aigit/core.py",
     "semantic_id": "sc_05d76bd63503a252",
-    "start_line": 2068
+    "start_line": 2170
   },
   "aigit/core.py::function::_parse_markdown_sections": {
     "anchor": "_parse_markdown_sections",
@@ -1695,25 +1734,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d8c078cd0fdd4fc204768468f2d452d0c2e14030f5283334025d3958f6f35b9b",
-    "end_line": 2489,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2591,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "bff6085779b44f3f",
     "path": "aigit/core.py",
     "semantic_id": "sc_a7ccfb48efb47277",
-    "start_line": 2478
+    "start_line": 2580
   },
   "aigit/core.py::function::_parse_provenance_trailer": {
     "anchor": "_parse_provenance_trailer",
-    "body_fingerprint": "5ebf089f70906bf5",
+    "body_fingerprint": "5c39cc89620042f2",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "dc8593d447aaa8a168546ae371d222eec06adb69163a5371b6c07a73be3bb25f",
-    "end_line": 1992,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "5ebf08df70b463f7",
+    "content_hash": "1be7eb146fdf36dae49e0bf52275a64f083e8bc561c0d032d18e005f0860d87b",
+    "end_line": 2091,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "5c394c99628042f6",
     "path": "aigit/core.py",
     "semantic_id": "sc_afca3ec0d88064df",
-    "start_line": 1978
+    "start_line": 2070
   },
   "aigit/core.py::function::_parse_simple_yaml": {
     "anchor": "_parse_simple_yaml",
@@ -1721,12 +1760,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "08afd38d325876aabee207f5ca636fa3c93ece83b255df837a8ed0369e359d7b",
-    "end_line": 576,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 639,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cebf4817d5f97fd7",
     "path": "aigit/core.py",
     "semantic_id": "sc_d583a25c94fd5522",
-    "start_line": 551
+    "start_line": 614
   },
   "aigit/core.py::function::_pid_is_running": {
     "anchor": "_pid_is_running",
@@ -1734,12 +1773,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d44c9218206da33bc88c9f0522e50759ad866d09f1c54ce8ce9851d9645f31c0",
-    "end_line": 2160,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2262,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "c5f351991a45d33c",
     "path": "aigit/core.py",
     "semantic_id": "sc_183eb2c975cfe6c3",
-    "start_line": 2153
+    "start_line": 2255
   },
   "aigit/core.py::function::_plain_text_merge": {
     "anchor": "_plain_text_merge",
@@ -1747,12 +1786,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d35d6b8312e47a4f7a12e55c09452ebf4838c759ad2c117b860eee229bdb6b9f",
-    "end_line": 1681,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1762,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "a7746394157a9216",
     "path": "aigit/core.py",
     "semantic_id": "sc_bfdf7cfb11e27d2d",
-    "start_line": 1679
+    "start_line": 1760
   },
   "aigit/core.py::function::_probe_git_lfs": {
     "anchor": "_probe_git_lfs",
@@ -1760,12 +1799,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2c72a2a14573ddb7e84ba5880e9a0cd6ad2f1a773cdfef4929c98ff88f384397",
-    "end_line": 3900,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4019,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cf39d3d81044d603",
     "path": "aigit/core.py",
     "semantic_id": "sc_72f3085324f08589",
-    "start_line": 3890
+    "start_line": 4009
   },
   "aigit/core.py::function::_process_parent_and_args": {
     "anchor": "_process_parent_and_args",
@@ -1773,12 +1812,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c2615decd31a537b33f6e363111ad5c482fca9c83683ec16d1a9761b10ae1af8",
-    "end_line": 1718,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1799,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cdffc3d13c655f7b",
     "path": "aigit/core.py",
     "semantic_id": "sc_75321d62b03ae076",
-    "start_line": 1684
+    "start_line": 1765
   },
   "aigit/core.py::function::_provenance_key": {
     "anchor": "_provenance_key",
@@ -1786,25 +1825,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b0784bc9d1337ea77889854a09d7109801ea31454e269d096f04cc4f4b318e83",
-    "end_line": 1942,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2023,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4375a1ab2044d977",
     "path": "aigit/core.py",
     "semantic_id": "sc_3de67517ed40f7e8",
-    "start_line": 1940
+    "start_line": 2021
   },
   "aigit/core.py::function::_provenance_signature": {
     "anchor": "_provenance_signature",
-    "body_fingerprint": "6778aef318986032",
+    "body_fingerprint": "677aaed308986032",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "6fa3afddb76c59b224d6b452ed6ec6dee9334bd70e5348a679308092b097e901",
-    "end_line": 1952,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "157c2ad318db6037",
+    "content_hash": "bf572e901b124f212d268c6c083c877ccbe40c15563912e84399de3db42baaa8",
+    "end_line": 2043,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "1dfc2ad318db603f",
     "path": "aigit/core.py",
     "semantic_id": "sc_24eb7b9608550e0d",
-    "start_line": 1945
+    "start_line": 2035
   },
   "aigit/core.py::function::_read_gitattributes": {
     "anchor": "_read_gitattributes",
@@ -1812,12 +1851,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0ffcc9037fe7c9146a07d0b3e74f36477134eea1889d1ccab5082989a0426dc8",
-    "end_line": 3907,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4026,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "e7f203d158485032",
     "path": "aigit/core.py",
     "semantic_id": "sc_f109ab6bce4dc917",
-    "start_line": 3903
+    "start_line": 4022
   },
   "aigit/core.py::function::_read_json_file": {
     "anchor": "_read_json_file",
@@ -1825,25 +1864,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a2bb41fbe1e088cdea5906163df70a0de4cd4a77c7feb1b68553ccfc1513c6bd",
-    "end_line": 3186,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3288,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "43f52391f4d4d23a",
     "path": "aigit/core.py",
     "semantic_id": "sc_d503545510f2d0a8",
-    "start_line": 3180
+    "start_line": 3282
   },
   "aigit/core.py::function::_read_jsonl_rows": {
     "anchor": "_read_jsonl_rows",
-    "body_fingerprint": "76bb6117ddd6f338",
+    "body_fingerprint": "56bb6393b5f43e3a",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "2959b50a702b3865ad087f2cf08f64c98ec959a0d13693a189ec5d3c989deeb9",
-    "end_line": 3202,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "76b36317fcd6f330",
+    "content_hash": "8bb067c2d9d0245aa0edbfa3dd1b3dd1c26f731c8b1f24a8ed94ab7ae80acbf8",
+    "end_line": 3314,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "56bb6393b5f4363a",
     "path": "aigit/core.py",
     "semantic_id": "sc_78ee9a919e0c9cfb",
-    "start_line": 3189
+    "start_line": 3291
   },
   "aigit/core.py::function::_read_manifest_from_ref": {
     "anchor": "_read_manifest_from_ref",
@@ -1851,12 +1890,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "8f041bfe1d8689f547a1e3a1c1a7dd8bd621019961839a1342179bd5f0167b27",
-    "end_line": 809,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 890,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3eba7e17b4f7a77f",
     "path": "aigit/core.py",
     "semantic_id": "sc_39879328e6c728f3",
-    "start_line": 801
+    "start_line": 882
   },
   "aigit/core.py::function::_read_service_pid": {
     "anchor": "_read_service_pid",
@@ -1864,12 +1903,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6afae2589cd5dbd99def72fbd3e0172dd89e3bca067239b5c9e06461795240ea",
-    "end_line": 2150,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2252,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "c3f583fbb0c4c68b",
     "path": "aigit/core.py",
     "semantic_id": "sc_d919c87fe7ff4f80",
-    "start_line": 2143
+    "start_line": 2245
   },
   "aigit/core.py::function::_read_text_or_empty": {
     "anchor": "_read_text_or_empty",
@@ -1877,12 +1916,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5802e239978b85ee7f7cc2a60491722897c493a35cc5a7754de6c57a42be4db1",
-    "end_line": 764,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 845,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "c79523d0fc561232",
     "path": "aigit/core.py",
     "semantic_id": "sc_ea226b5ac350544c",
-    "start_line": 763
+    "start_line": 844
   },
   "aigit/core.py::function::_relax_deerflow_workspace_permissions": {
     "anchor": "_relax_deerflow_workspace_permissions",
@@ -1890,12 +1929,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4391d91f5a97825a4d424bfdca9538d756f1f3b0596bfeedf1c3ddc7f1c77815",
-    "end_line": 2345,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2447,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "07a300d0543c5238",
     "path": "aigit/core.py",
     "semantic_id": "sc_c646866a86bc9ac6",
-    "start_line": 2334
+    "start_line": 2436
   },
   "aigit/core.py::function::_renamed_to": {
     "anchor": "_renamed_to",
@@ -1903,12 +1942,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2140f67ff3627f94fa4da09412314823cece5e4879eae267aa0e068dd705b7e7",
-    "end_line": 1608,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1689,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "def978109e94677e",
     "path": "aigit/core.py",
     "semantic_id": "sc_99f2271f54d5b5d4",
-    "start_line": 1594
+    "start_line": 1675
   },
   "aigit/core.py::function::_render_scout_report": {
     "anchor": "_render_scout_report",
@@ -1916,12 +1955,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4d65f638735d554cd1c37ae93cebdb408c9d625e1212dea4303107fba88ed81d",
-    "end_line": 3773,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3892,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "2f3e09066f0d12fb",
     "path": "aigit/core.py",
     "semantic_id": "sc_55685a1c34ec4888",
-    "start_line": 3717
+    "start_line": 3836
   },
   "aigit/core.py::function::_repo_semantic_path": {
     "anchor": "_repo_semantic_path",
@@ -1929,12 +1968,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7dd2f991d81bc95632cf3fc1be0220b2d178b685d07be3fccef944604af3dc46",
-    "end_line": 548,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 611,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "e79563d0f4169010",
     "path": "aigit/core.py",
     "semantic_id": "sc_3659fde1ee566ca7",
-    "start_line": 547
+    "start_line": 610
   },
   "aigit/core.py::function::_run_command_capture": {
     "anchor": "_run_command_capture",
@@ -1942,12 +1981,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "56601079d25bf26f223105332db8f48a075258016ec9c7603c03d731c02016f5",
-    "end_line": 3235,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3347,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "edf527d13ce67756",
     "path": "aigit/core.py",
     "semantic_id": "sc_802e19c9b2056fce",
-    "start_line": 3233
+    "start_line": 3345
   },
   "aigit/core.py::function::_run_git": {
     "anchor": "_run_git",
@@ -1955,12 +1994,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "96e5d63d423648f5d3a92991fe8adaa0a3776f2ba45c300743f4aa21916ae322",
-    "end_line": 798,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 879,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "fd71e7d138f65616",
     "path": "aigit/core.py",
     "semantic_id": "sc_67ae6a14251d8020",
-    "start_line": 796
+    "start_line": 877
   },
   "aigit/core.py::function::_runtime_file": {
     "anchor": "_runtime_file",
@@ -1968,12 +2007,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "117caf4f0c5dea24990d790cbb69d1fbfcbc3a11bfb27799678f241f5278ba24",
-    "end_line": 2132,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2234,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "55f22bfb3c968453",
     "path": "aigit/core.py",
     "semantic_id": "sc_49cd9ac853e09b85",
-    "start_line": 2131
+    "start_line": 2233
   },
   "aigit/core.py::function::_save_chunk_cache": {
     "anchor": "_save_chunk_cache",
@@ -1981,12 +2020,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "714ae770e37e71db50dcb35331948014735a4b6f60e961b553da3307bdf34fd0",
-    "end_line": 697,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 760,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "97f3335044e49617",
     "path": "aigit/core.py",
     "semantic_id": "sc_b197beea468b060a",
-    "start_line": 689
+    "start_line": 752
   },
   "aigit/core.py::function::_scout_summary_json": {
     "anchor": "_scout_summary_json",
@@ -1994,12 +2033,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0a33f26d113063c629fde2e08abd4daf25e1ed2cef96cd53e1865d292066207c",
-    "end_line": 3788,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3907,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ed364b06698d51de",
     "path": "aigit/core.py",
     "semantic_id": "sc_d0ac1fb970550e2e",
-    "start_line": 3776
+    "start_line": 3895
   },
   "aigit/core.py::function::_service_is_healthy": {
     "anchor": "_service_is_healthy",
@@ -2007,12 +2046,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "02ef57570f2be195291bfed6648a54299f25e4405fa4f2cb43dd8d75d07fee95",
-    "end_line": 2140,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2242,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "dbfd38971e4397ba",
     "path": "aigit/core.py",
     "semantic_id": "sc_beed60ce023c5f75",
-    "start_line": 2135
+    "start_line": 2237
   },
   "aigit/core.py::function::_should_skip_repo_sync_path": {
     "anchor": "_should_skip_repo_sync_path",
@@ -2020,12 +2059,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5aefe11fd44ae26acb9f734213c9d0a831ff97f240f13a89fc63eaf2546aa9b8",
-    "end_line": 2286,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2388,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "fc2821d81d58712e",
     "path": "aigit/core.py",
     "semantic_id": "sc_36ec52813d9621f9",
-    "start_line": 2276
+    "start_line": 2378
   },
   "aigit/core.py::function::_simhash": {
     "anchor": "_simhash",
@@ -2033,12 +2072,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "209579eb3fd30bccce31fe0052510c34936a7e3508560cfe7def7a8295fd3240",
-    "end_line": 196,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 198,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "14b9689b9ec9663c",
     "path": "aigit/core.py",
     "semantic_id": "sc_368814abf089c7da",
-    "start_line": 176
+    "start_line": 178
   },
   "aigit/core.py::function::_source_matching": {
     "anchor": "_source_matching",
@@ -2046,12 +2085,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5b276643c2d3b1c5c073d643a940d991e9f970cc1aa1ad909dcb773ce0d638b4",
-    "end_line": 1583,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1664,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "56fd49d9b8d016fb",
     "path": "aigit/core.py",
     "semantic_id": "sc_3d8e7dcc1d2ffb82",
-    "start_line": 1553
+    "start_line": 1634
   },
   "aigit/core.py::function::_span_lines": {
     "anchor": "_span_lines",
@@ -2059,12 +2098,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2984a871e98b3bd4f0d26705e5cab0a965db21e2eceaffeee471719e4a8e10c6",
-    "end_line": 1080,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1161,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d4b6453b9f64f7f7",
     "path": "aigit/core.py",
     "semantic_id": "sc_3cf160724a2fbe26",
-    "start_line": 1076
+    "start_line": 1157
   },
   "aigit/core.py::function::_spawn_detached_python_service": {
     "anchor": "_spawn_detached_python_service",
@@ -2072,12 +2111,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "df24e0f585fda4104597bd694b1def95878b90432ae1ae450d68ab0e37748c78",
-    "end_line": 2189,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2291,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "e7b5016f2876c27b",
     "path": "aigit/core.py",
     "semantic_id": "sc_eec127f5061f31c0",
-    "start_line": 2172
+    "start_line": 2274
   },
   "aigit/core.py::function::_strategy_overrides": {
     "anchor": "_strategy_overrides",
@@ -2085,12 +2124,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "38613c4cb6dd91f36f95bf551d928679133c533364b28c388df1818344060482",
-    "end_line": 1758,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1839,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d5ed4a3b39445fbf",
     "path": "aigit/core.py",
     "semantic_id": "sc_5e4973ccbd200cb4",
-    "start_line": 1741
+    "start_line": 1822
   },
   "aigit/core.py::function::_strip_markdown_list_prefix": {
     "anchor": "_strip_markdown_list_prefix",
@@ -2098,12 +2137,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f02eeff1738c885bb4450d65d2f880aba1d0cba0cc4af7125aed85f1aa1c7330",
-    "end_line": 2501,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2603,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "85b913721d70c3fc",
     "path": "aigit/core.py",
     "semantic_id": "sc_b7a6dd04e55a7eab",
-    "start_line": 2496
+    "start_line": 2598
+  },
+  "aigit/core.py::function::_typescript_code_mask": {
+    "anchor": "_typescript_code_mask",
+    "body_fingerprint": "578b0b269d0c5e3c",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "882b98424cc358986dbed018cc85ae03c33bbea65423ed6dec6da32253917fc9",
+    "end_line": 490,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "578b0b269d4c5e3c",
+    "path": "aigit/core.py",
+    "semantic_id": "sc_1ca1e311ca999582",
+    "start_line": 447
   },
   "aigit/core.py::function::_validate_deerflow_thread_id": {
     "anchor": "_validate_deerflow_thread_id",
@@ -2111,12 +2163,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "67229f6f94cadf42525923432eba17413906fb94efa5aca3b7c187fe9423f69c",
-    "end_line": 2218,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2320,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "dc3c00b332f125cd",
     "path": "aigit/core.py",
     "semantic_id": "sc_de40c15127a651d4",
-    "start_line": 2215
+    "start_line": 2317
+  },
+  "aigit/core.py::function::_validate_provenance_identity": {
+    "anchor": "_validate_provenance_identity",
+    "body_fingerprint": "3dfe6551a5098a18",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "0aa7c33e4670cad62dcdbae001f0dcdcd5d2eb8652d192531acb2b91ef761a63",
+    "end_line": 2032,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "3dfa655325584a1b",
+    "path": "aigit/core.py",
+    "semantic_id": "sc_b13bf869fbad0ed0",
+    "start_line": 2026
   },
   "aigit/core.py::function::_wait_for_service": {
     "anchor": "_wait_for_service",
@@ -2124,12 +2189,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "358d88d754e305ecf75cefd8dda01c42f5229963e303c56dd38ab9d863a9385d",
-    "end_line": 2169,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2271,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d6ba25b01e795926",
     "path": "aigit/core.py",
     "semantic_id": "sc_5fc6430f6c47fdbf",
-    "start_line": 2163
+    "start_line": 2265
   },
   "aigit/core.py::function::_write_deerflow_agent_if_missing": {
     "anchor": "_write_deerflow_agent_if_missing",
@@ -2137,12 +2202,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b2c79d9a6983ac2284f86d86caf966f9aab7168eea4e7946701a388de408164d",
-    "end_line": 2065,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2167,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1bb0b9971ad2ed7f",
     "path": "aigit/core.py",
     "semantic_id": "sc_f92da362eacf5130",
-    "start_line": 2062
+    "start_line": 2164
   },
   "aigit/core.py::function::_write_deerflow_sync_metadata": {
     "anchor": "_write_deerflow_sync_metadata",
@@ -2150,12 +2215,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "cea78d49cd087bc566d8d23eb67191c241294ea4339c85e646a4c221560dd416",
-    "end_line": 2370,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2472,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "df142ae617f1c47d",
     "path": "aigit/core.py",
     "semantic_id": "sc_2ba4b42b2e7b63c0",
-    "start_line": 2348
+    "start_line": 2450
   },
   "aigit/core.py::function::_write_file_if_missing": {
     "anchor": "_write_file_if_missing",
@@ -2163,12 +2228,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "41c8f60ec230adf384572e87ed0c2f9d313437c599da98a403c61c9b09f9477d",
-    "end_line": 2059,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2161,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "f70921d054d69232",
     "path": "aigit/core.py",
     "semantic_id": "sc_b2cc5162e1f78cfe",
-    "start_line": 2056
+    "start_line": 2158
   },
   "aigit/core.py::function::_write_gitattributes": {
     "anchor": "_write_gitattributes",
@@ -2176,12 +2241,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "64b26db0e33b44e4b002a65950cc068384dcaea1ecf94df2eba855b3cf3bbb47",
-    "end_line": 3911,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4030,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5f3223c5115c503a",
     "path": "aigit/core.py",
     "semantic_id": "sc_2fce62a9b2b66c17",
-    "start_line": 3910
+    "start_line": 4029
   },
   "aigit/core.py::function::bootstrap_deerflow_files": {
     "anchor": "bootstrap_deerflow_files",
@@ -2189,12 +2254,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "875ea810eb6c207e1ca5bb5dee750c2b46b8a0628d6896d05d353e1cae7cb04b",
-    "end_line": 2981,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3083,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5dba33a5971e98b4",
     "path": "aigit/core.py",
     "semantic_id": "sc_423f4845a3d3b03c",
-    "start_line": 2604
+    "start_line": 2706
   },
   "aigit/core.py::function::build_epic_objective_bundle": {
     "anchor": "build_epic_objective_bundle",
@@ -2202,12 +2267,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c6c41e021165d633ed9bc64f450c19ca2e6ce7ab97bded082afa3d9cee7c1241",
-    "end_line": 2601,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2703,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "f730094f3cd1461b",
     "path": "aigit/core.py",
     "semantic_id": "sc_1e40bd65f8639c65",
-    "start_line": 2558
+    "start_line": 2660
   },
   "aigit/core.py::function::build_manifest": {
     "anchor": "build_manifest",
@@ -2215,12 +2280,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b56cd0a256056a362d56f70c3a90a1b612d6b4f8eb14061039517b6c52c329a0",
-    "end_line": 735,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 798,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1fdaec1316f46dfe",
     "path": "aigit/core.py",
     "semantic_id": "sc_78f95bff76f9e094",
-    "start_line": 700
+    "start_line": 763
   },
   "aigit/core.py::function::build_parser": {
     "anchor": "build_parser",
@@ -2228,12 +2293,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "99d4c3edfccba5b945217f755fd7aac883a6762ed1f3eee5017c5ce2ce6353cc",
-    "end_line": 4184,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4303,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "f6b2957a03e6f67a",
     "path": "aigit/core.py",
     "semantic_id": "sc_db5f31922552aaeb",
-    "start_line": 3994
+    "start_line": 4113
   },
   "aigit/core.py::function::canonicalize_text": {
     "anchor": "canonicalize_text",
@@ -2241,12 +2306,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1c8c96df4dcffb751281cf95a06bde3df1f9d6a7450444ce3c2613fc39935af9",
-    "end_line": 161,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 163,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "1fba3ba4953e8abc",
     "path": "aigit/core.py",
     "semantic_id": "sc_b2a6c15182f8ed35",
-    "start_line": 158
+    "start_line": 160
   },
   "aigit/core.py::function::cmd_admin_ui": {
     "anchor": "cmd_admin_ui",
@@ -2254,12 +2319,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b3a14ba9d3c441d3f23351f3703903fb06d6257537cd2cf2a191e15555554656",
-    "end_line": 3498,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3610,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0af5313c914a5bbe",
     "path": "aigit/core.py",
     "semantic_id": "sc_417c69deaa7c83e5",
-    "start_line": 3489
+    "start_line": 3601
   },
   "aigit/core.py::function::cmd_chunk": {
     "anchor": "cmd_chunk",
@@ -2267,25 +2332,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "9d1dbf3244c6cf689b2736a500349a5f0e3d27df20e559b095118b67c3a4fe36",
-    "end_line": 793,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 874,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "2f77d9bb1bd4135e",
     "path": "aigit/core.py",
     "semantic_id": "sc_ac13bf46fa21c890",
-    "start_line": 767
+    "start_line": 848
   },
   "aigit/core.py::function::cmd_commit": {
     "anchor": "cmd_commit",
-    "body_fingerprint": "251f5d8b01088a9c",
+    "body_fingerprint": "253f5d9b319a8a9c",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "126d096d073b0a5f8172cfe8b9718f331a3f318a5035cdf8252354bdafd924ad",
-    "end_line": 2053,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "a51d589b110c8a9c",
+    "content_hash": "396d2ae6a9057d584cff62ebd2e6a86d3366e1e292ffacf7c9b94f462157a31d",
+    "end_line": 2155,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "a51f589b118e8a9c",
     "path": "aigit/core.py",
     "semantic_id": "sc_0f3dbf6b2c5cb9fc",
-    "start_line": 2049
+    "start_line": 2150
   },
   "aigit/core.py::function::cmd_deerflow_export_repo": {
     "anchor": "cmd_deerflow_export_repo",
@@ -2293,12 +2358,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1435ccaf4aa262f3d00f194de03fbbc258a4ab2e7d81f5dd0b068ab1d0ba5e3e",
-    "end_line": 3177,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3279,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "9e768a9c36632f7e",
     "path": "aigit/core.py",
     "semantic_id": "sc_80905c820b4f3fa6",
-    "start_line": 3163
+    "start_line": 3265
   },
   "aigit/core.py::function::cmd_deerflow_import_repo": {
     "anchor": "cmd_deerflow_import_repo",
@@ -2306,12 +2371,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b4cf488897e069fb60b3f291c35bd14b80bdc7e93a976d6ae8b7f7ff4977354e",
-    "end_line": 3160,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3262,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "be169a9eb6238ffe",
     "path": "aigit/core.py",
     "semantic_id": "sc_dc338e7037435330",
-    "start_line": 3142
+    "start_line": 3244
   },
   "aigit/core.py::function::cmd_deerflow_workspace_path": {
     "anchor": "cmd_deerflow_workspace_path",
@@ -2319,12 +2384,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5b5c5a4c526cb73e9697658c54d35a4b26efc360ef13085b0b5556d81b65cabb",
-    "end_line": 3139,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3241,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ca72189fb7684fbc",
     "path": "aigit/core.py",
     "semantic_id": "sc_751d4a12caa624a6",
-    "start_line": 3129
+    "start_line": 3231
   },
   "aigit/core.py::function::cmd_diff": {
     "anchor": "cmd_diff",
@@ -2332,12 +2397,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0e6125ffa983f8944319cb8ec920cb55305543b4fbb9716e23039ae5df32a86b",
-    "end_line": 1065,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1146,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0e12889ffa3aaebf",
     "path": "aigit/core.py",
     "semantic_id": "sc_7c1dcd5056d4287f",
-    "start_line": 1028
+    "start_line": 1109
   },
   "aigit/core.py::function::cmd_eval_lineage": {
     "anchor": "cmd_eval_lineage",
@@ -2345,12 +2410,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "dd91968d67dc09fdd132238cb56fa2555abbb799e1df4588441fd7a88f000785",
-    "end_line": 1025,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1106,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3fd55f15936a8f3a",
     "path": "aigit/core.py",
     "semantic_id": "sc_2fee5b86969a380b",
-    "start_line": 1004
+    "start_line": 1085
   },
   "aigit/core.py::function::cmd_improve": {
     "anchor": "cmd_improve",
@@ -2358,12 +2423,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1e7b2c4eaf3cfedee6777d0e5dc9d8bf3d24507b85eb3055b499d17f929d9669",
-    "end_line": 3655,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3774,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5f3b0c1caf4f12fe",
     "path": "aigit/core.py",
     "semantic_id": "sc_c719a6f4e8c45d5c",
-    "start_line": 3602
+    "start_line": 3721
   },
   "aigit/core.py::function::cmd_init_deerflow": {
     "anchor": "cmd_init_deerflow",
@@ -2371,12 +2436,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c019acd0fbe99a716cb63571e670dedfb8e73b99ad7200dacd5949ad258cf552",
-    "end_line": 3027,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3129,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "d7eba9c80f65fb36",
     "path": "aigit/core.py",
     "semantic_id": "sc_5ec6bfa7e7d522f1",
-    "start_line": 2984
+    "start_line": 3086
   },
   "aigit/core.py::function::cmd_install_merge_driver": {
     "anchor": "cmd_install_merge_driver",
@@ -2384,12 +2449,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "68a449a4fb8a549bc92d21ddb6bc752b06b37d587d50646c8753089e76ea679c",
-    "end_line": 1937,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2018,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3e986d8e951406bb",
     "path": "aigit/core.py",
     "semantic_id": "sc_4b799b1c8e49a488",
-    "start_line": 1905
+    "start_line": 1986
   },
   "aigit/core.py::function::cmd_launch_epics": {
     "anchor": "cmd_launch_epics",
@@ -2397,12 +2462,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0959167599288ff03e0b6ecea0f05ae0324f4f30839962e2afa0e75d0382c998",
-    "end_line": 3063,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3165,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5ff2799d9b4f4bb4",
     "path": "aigit/core.py",
     "semantic_id": "sc_0cb83fcaa2398f75",
-    "start_line": 3030
+    "start_line": 3132
   },
   "aigit/core.py::function::cmd_merge": {
     "anchor": "cmd_merge",
@@ -2410,12 +2475,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a57a08f1a08ece4d77567e17333fcaeca66b036d7d0fd9255856c227f288ff94",
-    "end_line": 1312,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1393,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "b63f72579e0fde1e",
     "path": "aigit/core.py",
     "semantic_id": "sc_eb2deb5527a15df5",
-    "start_line": 1284
+    "start_line": 1365
   },
   "aigit/core.py::function::cmd_merge_driver": {
     "anchor": "cmd_merge_driver",
@@ -2423,25 +2488,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "d7928427054dc5d5c4ee31b666b0871118003b53f3ae7807e55409e0cec92f25",
-    "end_line": 1902,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1983,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "6fd123dd894a42ba",
     "path": "aigit/core.py",
     "semantic_id": "sc_0e081820d715fd0c",
-    "start_line": 1875
+    "start_line": 1956
   },
   "aigit/core.py::function::cmd_record_provenance": {
     "anchor": "cmd_record_provenance",
-    "body_fingerprint": "477d6c9d81d81b9b",
+    "body_fingerprint": "077d649f81d80b9b",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "51f38852dd3a6fb54d7228cc7fa4b13c84a5e0a390c78a17c6dfa927c0d5ee3e",
-    "end_line": 1975,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "477d649f80dc439b",
+    "content_hash": "50b570c41a3b4d4130686640b3a7562fbb3b85e123ae1e00bc4be255ff368abc",
+    "end_line": 2067,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "077d649f80dc4b9b",
     "path": "aigit/core.py",
     "semantic_id": "sc_36a8bc1d556f2a2a",
-    "start_line": 1955
+    "start_line": 2046
   },
   "aigit/core.py::function::cmd_setup_storage": {
     "anchor": "cmd_setup_storage",
@@ -2449,12 +2514,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "92496bf7d18d5d3bccf2dd4287138b3fcddcf5075a52a3aa9f406674fd742274",
-    "end_line": 3991,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4110,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0fc9415a11e03a3b",
     "path": "aigit/core.py",
     "semantic_id": "sc_b12cf1f454546bac",
-    "start_line": 3927
+    "start_line": 4046
   },
   "aigit/core.py::function::cmd_subagent_scout": {
     "anchor": "cmd_subagent_scout",
@@ -2462,12 +2527,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1fa1d8e4ca8f163ab60d4d9fd6852fc9d77a9597fb66a9fbe18ad71fc9b51fac",
-    "end_line": 3869,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3988,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "df7478dd87845296",
     "path": "aigit/core.py",
     "semantic_id": "sc_d1635e4e114d71e2",
-    "start_line": 3836
+    "start_line": 3955
   },
   "aigit/core.py::function::cmd_up": {
     "anchor": "cmd_up",
@@ -2475,12 +2540,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "99e5a0d8af007e0916eadcb9ea1dfc6d40b95f9fff22e92103e82a0acbd3dee2",
-    "end_line": 3126,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3228,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5ffb619f9d4f4b9e",
     "path": "aigit/core.py",
     "semantic_id": "sc_260a1e34b8a8141a",
-    "start_line": 3066
+    "start_line": 3168
   },
   "aigit/core.py::function::cmd_validate_ruleset": {
     "anchor": "cmd_validate_ruleset",
@@ -2488,12 +2553,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a11f12a8f68a6b5259a454dd8bb7414c116adbc65bc1fae12edcc34bd0a15e22",
-    "end_line": 607,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 670,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0f7551bfb344c7fe",
     "path": "aigit/core.py",
     "semantic_id": "sc_ad1d15a155f78f61",
-    "start_line": 598
+    "start_line": 661
   },
   "aigit/core.py::function::cmd_verify_provenance": {
     "anchor": "cmd_verify_provenance",
@@ -2501,12 +2566,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b6fe87fe302c38f4b75be25494c5c37307f5ec235f5949926e30744d831c97e6",
-    "end_line": 2046,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2147,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4fbc52bb93ee53b6",
     "path": "aigit/core.py",
     "semantic_id": "sc_c7705af99254c068",
-    "start_line": 2036
+    "start_line": 2137
   },
   "aigit/core.py::function::collect_admin_snapshot": {
     "anchor": "collect_admin_snapshot",
@@ -2514,12 +2579,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a3f2d6f87b96bc544d187c38d0b73769d138f1990c4347c5cdf5e4497fe3729e",
-    "end_line": 3486,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3598,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0fb401778304d26b",
     "path": "aigit/core.py",
     "semantic_id": "sc_75d026917e6fac29",
-    "start_line": 3446
+    "start_line": 3558
   },
   "aigit/core.py::function::collect_epic_queue_status": {
     "anchor": "collect_epic_queue_status",
@@ -2527,12 +2592,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "cfe176e0e30b19ca43054ce9ea4af9cd62842ae5a002ff87a6365f66be2dcd15",
-    "end_line": 3395,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3507,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ff9c211f92957720",
     "path": "aigit/core.py",
     "semantic_id": "sc_28c23661b7073faf",
-    "start_line": 3363
+    "start_line": 3475
   },
   "aigit/core.py::function::collect_epic_specs": {
     "anchor": "collect_epic_specs",
@@ -2540,12 +2605,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "f2af3bc8543265340fc5ec681bc7270edd16e8b1721a47889e18ea6965ba8bb7",
-    "end_line": 2525,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2627,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "b7e44923f8d45278",
     "path": "aigit/core.py",
     "semantic_id": "sc_9a132d54d549f5a4",
-    "start_line": 2504
+    "start_line": 2606
   },
   "aigit/core.py::function::collect_semantic_summary": {
     "anchor": "collect_semantic_summary",
@@ -2553,12 +2618,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b59c5c7af547ef83b8d585eeec68f38458c6f83f92bae0e37b0da880d616852b",
-    "end_line": 3360,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3472,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "05bc219aff20d273",
     "path": "aigit/core.py",
     "semantic_id": "sc_9bf3def77c0716d0",
-    "start_line": 3333
+    "start_line": 3445
   },
   "aigit/core.py::function::compute_semantic_conflicts": {
     "anchor": "compute_semantic_conflicts",
@@ -2566,12 +2631,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1231a0c517495a7c7ed8d4b7b0182c9f11e32e64b8151dfbf00c065186982657",
-    "end_line": 1281,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1362,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4e3a58535db7573f",
     "path": "aigit/core.py",
     "semantic_id": "sc_0c1dd91e0d0e4daa",
-    "start_line": 1222
+    "start_line": 1303
   },
   "aigit/core.py::function::compute_semantic_diff": {
     "anchor": "compute_semantic_diff",
@@ -2579,12 +2644,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e70b715448b060450ad19eabcdcf168acebab1fbc85800032509248458c149b4",
-    "end_line": 885,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 966,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3d32e35fd9c4b63f",
     "path": "aigit/core.py",
     "semantic_id": "sc_a35f6df717d98ff5",
-    "start_line": 867
+    "start_line": 948
   },
   "aigit/core.py::function::deerflow_api_health": {
     "anchor": "deerflow_api_health",
@@ -2592,12 +2657,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "9daed4262ba300f24011dba84b1eb529f6f7a7992fcb7295e96c5c34a523c3da",
-    "end_line": 3285,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3397,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "df6b2a9f1e965e72",
     "path": "aigit/core.py",
     "semantic_id": "sc_02796c8a338f97cd",
-    "start_line": 3262
+    "start_line": 3374
   },
   "aigit/core.py::function::deerflow_live_repo_mount_path": {
     "anchor": "deerflow_live_repo_mount_path",
@@ -2605,12 +2670,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6a9efa79280d10b22938d9a74fffc066333de17d25b4c84571ba05721bdf5d26",
-    "end_line": 155,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 157,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4fb501d130d4525b",
     "path": "aigit/core.py",
     "semantic_id": "sc_0b70ae6faa9d2f50",
-    "start_line": 153
+    "start_line": 155
   },
   "aigit/core.py::function::deerflow_repo_workspace_dir": {
     "anchor": "deerflow_repo_workspace_dir",
@@ -2618,12 +2683,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "031d75c819136646970eb177b47816b077449cf316efd3a79eb46c426e3018ce",
-    "end_line": 2254,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2356,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cd9870d53440472c",
     "path": "aigit/core.py",
     "semantic_id": "sc_e9f4d6c582afd378",
-    "start_line": 2251
+    "start_line": 2353
   },
   "aigit/core.py::function::deerflow_sandbox_repo_path": {
     "anchor": "deerflow_sandbox_repo_path",
@@ -2631,12 +2696,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c99fa79a14809016e6352dbffb871106412130bff6a03dd063fad5b5cf173ca4",
-    "end_line": 2259,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2361,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "8e1a18dd3e644d28",
     "path": "aigit/core.py",
     "semantic_id": "sc_e6a2bc5fb56115fe",
-    "start_line": 2257
+    "start_line": 2359
   },
   "aigit/core.py::function::deerflow_sync_metadata_file": {
     "anchor": "deerflow_sync_metadata_file",
@@ -2644,12 +2709,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6691c85c3a12ba3270bf275dfe062e094db2ed27e7a911c37877877fc4753058",
-    "end_line": 2263,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2365,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ce9221a33cf58c6f",
     "path": "aigit/core.py",
     "semantic_id": "sc_2ecaa09232e18603",
-    "start_line": 2262
+    "start_line": 2364
   },
   "aigit/core.py::function::deerflow_thread_dir": {
     "anchor": "deerflow_thread_dir",
@@ -2657,12 +2722,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "33ffe9a331c06b3e5f3b0d08f8b2d504e74aa43d3190c6863b34ababf7e0df22",
-    "end_line": 2236,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2338,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ce9433b13e35c42d",
     "path": "aigit/core.py",
     "semantic_id": "sc_a420f169953665f7",
-    "start_line": 2235
+    "start_line": 2337
   },
   "aigit/core.py::function::deerflow_thread_outputs_dir": {
     "anchor": "deerflow_thread_outputs_dir",
@@ -2670,12 +2735,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "cec05c99a21327e3b04f1d42756d5abce324393b3b178e4c01b2c3423fc82b62",
-    "end_line": 2248,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2350,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ef943393be74cc25",
     "path": "aigit/core.py",
     "semantic_id": "sc_0bdefc5a45cddfb0",
-    "start_line": 2247
+    "start_line": 2349
   },
   "aigit/core.py::function::deerflow_thread_uploads_dir": {
     "anchor": "deerflow_thread_uploads_dir",
@@ -2683,12 +2748,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "86a8c23bbc99abbbb6af06a5266600abacad0246d8009397765946672459ecc4",
-    "end_line": 2244,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2346,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ae9611933ed0cc6f",
     "path": "aigit/core.py",
     "semantic_id": "sc_eca43206a3613c09",
-    "start_line": 2243
+    "start_line": 2345
   },
   "aigit/core.py::function::deerflow_thread_workspace_dir": {
     "anchor": "deerflow_thread_workspace_dir",
@@ -2696,12 +2761,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "37519e1731792a611f091d37c380c952c66e4086edba7300793734515a1a59fa",
-    "end_line": 2240,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2342,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ee1431933e74cd6d",
     "path": "aigit/core.py",
     "semantic_id": "sc_41a44e31b9d3f13c",
-    "start_line": 2239
+    "start_line": 2341
   },
   "aigit/core.py::function::deerflow_threads_dir": {
     "anchor": "deerflow_threads_dir",
@@ -2709,12 +2774,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "347be6f670e0f40d78ed8f716c39e7b3aa2e9fbdead5530e4d1bceef28431496",
-    "end_line": 2232,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2334,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "c37020c15c179130",
     "path": "aigit/core.py",
     "semantic_id": "sc_a045c57c0f298fd5",
-    "start_line": 2231
+    "start_line": 2333
   },
   "aigit/core.py::function::detect_duplicate_work": {
     "anchor": "detect_duplicate_work",
@@ -2722,12 +2787,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "46de3cb60a4287d909116ab9688fca6424bcd2b5c898f63519b934c52d43d6dc",
-    "end_line": 1219,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1300,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "3ff8491611f6c67a",
     "path": "aigit/core.py",
     "semantic_id": "sc_2359f5d12b149acf",
-    "start_line": 1105
+    "start_line": 1186
   },
   "aigit/core.py::function::ensure_deerflow_runtime_env": {
     "anchor": "ensure_deerflow_runtime_env",
@@ -2735,12 +2800,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "3675bda3530daa4c9118f2eead2c535a348eccfa065f2b0ede004d84ef0decb7",
-    "end_line": 2123,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2225,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "55a0237d1a42722e",
     "path": "aigit/core.py",
     "semantic_id": "sc_bf7bb6e5b33849c4",
-    "start_line": 2111
+    "start_line": 2213
   },
   "aigit/core.py::function::ensure_deerflow_thread_dirs": {
     "anchor": "ensure_deerflow_thread_dirs",
@@ -2748,12 +2813,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "221bc1008d0e59568accf9d08180d28d69f105c7a7a74fce24a7b1a0fe59d150",
-    "end_line": 2273,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2375,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ff3731c274f4907f",
     "path": "aigit/core.py",
     "semantic_id": "sc_1340b8d15711aa9b",
-    "start_line": 2266
+    "start_line": 2368
   },
   "aigit/core.py::function::ensure_semantic_scaffold": {
     "anchor": "ensure_semantic_scaffold",
@@ -2761,12 +2826,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1abb3c1024ad52bb94b9f8f83c7832e93ec750365e0048fcd9f27d93affb3348",
-    "end_line": 671,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 734,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "57a8138595d094b6",
     "path": "aigit/core.py",
     "semantic_id": "sc_1d93e73f62f06f66",
-    "start_line": 658
+    "start_line": 721
   },
   "aigit/core.py::function::evaluate_lineage_fixtures": {
     "anchor": "evaluate_lineage_fixtures",
@@ -2774,12 +2839,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "157ba8b101e4693d31d2f22f9028b4ce516e5fd6864a6e878ef3fea9a936d0d3",
-    "end_line": 1001,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1082,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5ffa648f00f2a73b",
     "path": "aigit/core.py",
     "semantic_id": "sc_4404d30fb2f46201",
-    "start_line": 906
+    "start_line": 987
   },
   "aigit/core.py::function::export_repo_from_deerflow_thread": {
     "anchor": "export_repo_from_deerflow_thread",
@@ -2787,12 +2852,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "56c9a14dd36c7e5a4cf471e92a884c0ccd4b6c5303d9945d35511a7ebbf0b32a",
-    "end_line": 2429,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2531,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ce1601de17b09e6f",
     "path": "aigit/core.py",
     "semantic_id": "sc_1e9d4e43ad2ef2dc",
-    "start_line": 2405
+    "start_line": 2507
   },
   "aigit/core.py::function::get_deerflow_container_logs": {
     "anchor": "get_deerflow_container_logs",
@@ -2800,12 +2865,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "90d37189198c02c7a8ac0e672435ff922ca58b3e2063f3979d7c6bcadddb89ed",
-    "end_line": 3330,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3442,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0de88f993bfcc705",
     "path": "aigit/core.py",
     "semantic_id": "sc_36685ba3425c054c",
-    "start_line": 3321
+    "start_line": 3433
   },
   "aigit/core.py::function::get_deerflow_thread_details": {
     "anchor": "get_deerflow_thread_details",
@@ -2813,12 +2878,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "8f9e2ebf25081a29413e2d7718df3a25f422598b0c1fd87a09c0362ff1005320",
-    "end_line": 3443,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3555,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cfaa83d734f434fe",
     "path": "aigit/core.py",
     "semantic_id": "sc_058a52ab323b69e2",
-    "start_line": 3436
+    "start_line": 3548
   },
   "aigit/core.py::function::git_status_summary": {
     "anchor": "git_status_summary",
@@ -2826,12 +2891,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0a2c7e78e3289cccbcf61f106eae3c25895b1ef2cd15aa4471aff1accc7196f0",
-    "end_line": 3259,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3371,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0fa92c181084de57",
     "path": "aigit/core.py",
     "semantic_id": "sc_cb894d51c0445b40",
-    "start_line": 3238
+    "start_line": 3350
   },
   "aigit/core.py::function::import_repo_to_deerflow_thread": {
     "anchor": "import_repo_to_deerflow_thread",
@@ -2839,12 +2904,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "05b42b8edf475a96dab46de20d6c5ced78a0e4a9c7e2b0ba88d871c3c2b54f05",
-    "end_line": 2402,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2504,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "ee1621de37909e6f",
     "path": "aigit/core.py",
     "semantic_id": "sc_814edf9522fe4952",
-    "start_line": 2373
+    "start_line": 2475
   },
   "aigit/core.py::function::iter_repo_files": {
     "anchor": "iter_repo_files",
@@ -2852,12 +2917,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "bda6c4d810c7c5748147417b2873fcf5814ea2847f35a54f7e5d34cb5bd787d3",
-    "end_line": 655,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 718,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "579103c094801a12",
     "path": "aigit/core.py",
     "semantic_id": "sc_ad15c150c036ab1c",
-    "start_line": 647
+    "start_line": 710
   },
   "aigit/core.py::function::list_deerflow_containers": {
     "anchor": "list_deerflow_containers",
@@ -2865,12 +2930,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0c433b0d25acab73caa1ee98c518a41a4dfef315ad0f7db3fe1e1c507485f094",
-    "end_line": 3318,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3430,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5eb96a1334f4c73b",
     "path": "aigit/core.py",
     "semantic_id": "sc_206cae1472ae6728",
-    "start_line": 3288
+    "start_line": 3400
   },
   "aigit/core.py::function::list_deerflow_threads": {
     "anchor": "list_deerflow_threads",
@@ -2878,12 +2943,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "ae7fa25fa2a4fca73d9c82d889b3fb5e7f59a51a44946364235b63bb55b4659f",
-    "end_line": 3433,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3545,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4fde290717b5edfc",
     "path": "aigit/core.py",
     "semantic_id": "sc_3b980765f1f9d1dd",
-    "start_line": 3398
+    "start_line": 3510
   },
   "aigit/core.py::function::main": {
     "anchor": "main",
@@ -2891,12 +2956,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "637f9187879350cf83535d141681732d53216b64263eeeb9eee18439b35a74e2",
-    "end_line": 4190,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 4309,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "4374129bb0ac4dd8",
     "path": "aigit/core.py",
     "semantic_id": "sc_4dede0984ddd4213",
-    "start_line": 4187
+    "start_line": 4306
   },
   "aigit/core.py::function::merge_semantic_artifact": {
     "anchor": "merge_semantic_artifact",
@@ -2904,12 +2969,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "888c8a9af3146bd0c501162346ea2e4d2107e23d9a771225956a48b11d40055b",
-    "end_line": 1437,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1518,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "7fb23fc73e189ebe",
     "path": "aigit/core.py",
     "semantic_id": "sc_d0f0be8e30616383",
-    "start_line": 1404
+    "start_line": 1485
   },
   "aigit/core.py::function::missing_deerflow_env_keys": {
     "anchor": "missing_deerflow_env_keys",
@@ -2917,12 +2982,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a9a026f742e3efe3e1ce3c3ede4f563fce96d4d840e66b1ad434e834698fa7f7",
-    "end_line": 2128,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2230,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "dfbca93b02604127",
     "path": "aigit/core.py",
     "semantic_id": "sc_e6e3aaac1a428650",
-    "start_line": 2126
+    "start_line": 2228
   },
   "aigit/core.py::function::parse_file": {
     "anchor": "parse_file",
@@ -2930,12 +2995,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7efab2f22073006dee0463c66f0836b175a2bd367f87f9b844298268b09de71a",
-    "end_line": 545,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 608,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "17f31d8a18f63eae",
     "path": "aigit/core.py",
     "semantic_id": "sc_a174f27d2578cfce",
-    "start_line": 507
+    "start_line": 570
   },
   "aigit/core.py::function::parse_json": {
     "anchor": "parse_json",
@@ -2943,12 +3008,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b96c31ba087cec35977fe7436f4f39096896325b247bc5d2d9400ea682dbe208",
-    "end_line": 406,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 408,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "cff463956e108638",
     "path": "aigit/core.py",
     "semantic_id": "sc_e6b8153cfc25f78d",
-    "start_line": 365
+    "start_line": 367
   },
   "aigit/core.py::function::parse_markdown": {
     "anchor": "parse_markdown",
@@ -2956,12 +3021,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c7eeda79b2206b82e9d7b3fc2cb58547060228b9b0497ee9ebfe662afb44efd1",
-    "end_line": 346,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 348,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "27bc65925f3043f6",
     "path": "aigit/core.py",
     "semantic_id": "sc_471062592cc7f064",
-    "start_line": 302
+    "start_line": 304
   },
   "aigit/core.py::function::parse_python": {
     "anchor": "parse_python",
@@ -2969,12 +3034,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1e6b9d1223ac7037f9f046943f8e2cc021eb004a5f00b3d9d386ba76bd6a3ecf",
-    "end_line": 299,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 301,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "aff8fb8eb5b50776",
     "path": "aigit/core.py",
     "semantic_id": "sc_0644bb3ac13ddd8c",
-    "start_line": 252
+    "start_line": 254
   },
   "aigit/core.py::function::parse_text": {
     "anchor": "parse_text",
@@ -2982,38 +3047,38 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "193393c8bd8a7aa4b57fd732fc886ab8aaeda5fee9499ab9b03fd882a009ce64",
-    "end_line": 362,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 364,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "c79673817e300676",
     "path": "aigit/core.py",
     "semantic_id": "sc_347823bcfe3e8b5a",
-    "start_line": 349
+    "start_line": 351
   },
   "aigit/core.py::function::parse_typescript": {
     "anchor": "parse_typescript",
-    "body_fingerprint": "07eda18e5f301ef8",
+    "body_fingerprint": "5fba79841f1c12b4",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "941e9ee03aa69429e8741cd036b89c757e6530d9bca0a5f2ab00eeecfd35b54a",
-    "end_line": 477,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "87ed21865e701e78",
+    "content_hash": "77f6aef781286c7b3cae19ab81b4dcf47a8ac58df59e52d56cb28fd4988972fe",
+    "end_line": 540,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "dfba7984171c1234",
     "path": "aigit/core.py",
     "semantic_id": "sc_9d7d6eda5ee3a2da",
-    "start_line": 444
+    "start_line": 493
   },
   "aigit/core.py::function::parse_yaml": {
     "anchor": "parse_yaml",
-    "body_fingerprint": "56dd7fbccd9046b0",
+    "body_fingerprint": "26fc7594c70c5673",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "b504961500c9e998f448c842803d9679732ccc3553f42d558dfb747f963f3035",
-    "end_line": 435,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "56dd7fbcd5b046b0",
+    "content_hash": "4aee64e42360db8e41464638eb7e6b3596787e084d9aa0570a95611fd4533a78",
+    "end_line": 437,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "26fc7594d70c4677",
     "path": "aigit/core.py",
     "semantic_id": "sc_0fdc58de30a3863d",
-    "start_line": 409
+    "start_line": 411
   },
   "aigit/core.py::function::rebuild_from_merged_source": {
     "anchor": "rebuild_from_merged_source",
@@ -3021,12 +3086,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6145f9b3510a726cdba32ffd885d9769a21d8f46fd4e3285fe2ea29ea5d412c7",
-    "end_line": 1872,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 1953,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "5eb06d5914dc5612",
     "path": "aigit/core.py",
     "semantic_id": "sc_56293caeef8e56c2",
-    "start_line": 1792
+    "start_line": 1873
   },
   "aigit/core.py::function::render_manifest": {
     "anchor": "render_manifest",
@@ -3034,12 +3099,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "a20e46313f3fb968acad5a658d4af96544d74d58e83d40b82fcea5b16df593c1",
-    "end_line": 753,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 816,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "0df87917571c863c",
     "path": "aigit/core.py",
     "semantic_id": "sc_29240584044e1b02",
-    "start_line": 738
+    "start_line": 801
   },
   "aigit/core.py::function::scout_repo": {
     "anchor": "scout_repo",
@@ -3047,25 +3112,25 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "69fc27ea69f1d42285817052aee292ca74e4e27b295d5324e8d51417b3cf0249",
-    "end_line": 3714,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 3833,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "643268df0f949675",
     "path": "aigit/core.py",
     "semantic_id": "sc_5b113d4330a19461",
-    "start_line": 3672
+    "start_line": 3791
   },
   "aigit/core.py::function::serve_api": {
     "anchor": "serve_api",
-    "body_fingerprint": "2f7bab5a6576cf73",
+    "body_fingerprint": "af7bab1a6546cf73",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "5129aab5e340efd258d37311222bea717f3b4e2938eb17516564ebc1fa8f5800",
-    "end_line": 3599,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "2f7bab5a6576cf73",
+    "content_hash": "5a9ed3cdf5709ba81491846d1b94ebaa6d85e26713ac65b3af4cbfa1780837c0",
+    "end_line": 3718,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "af7bab1a6546cf73",
     "path": "aigit/core.py",
     "semantic_id": "sc_b555541820071b71",
-    "start_line": 3519
+    "start_line": 3631
   },
   "aigit/core.py::function::sync_deerflow_harness_files": {
     "anchor": "sync_deerflow_harness_files",
@@ -3073,12 +3138,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1a7ace34e78ef8f8927554e1a9502cdbccce5375ea91368b3c666034b61a7423",
-    "end_line": 2475,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 2577,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "9f8025dd44d2c730",
     "path": "aigit/core.py",
     "semantic_id": "sc_c871152fd394aa89",
-    "start_line": 2432
+    "start_line": 2534
   },
   "aigit/core.py::function::validate_ruleset_file": {
     "anchor": "validate_ruleset_file",
@@ -3086,38 +3151,38 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "240fd53aaed8837d16e2560415503d9d36564f223dc49c1f167b7e66f94a4738",
-    "end_line": 595,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
+    "end_line": 658,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
     "fingerprint": "2fed05db90e5367e",
     "path": "aigit/core.py",
     "semantic_id": "sc_4b58bae770541aeb",
-    "start_line": 579
+    "start_line": 642
   },
   "aigit/core.py::function::verify_provenance": {
     "anchor": "verify_provenance",
-    "body_fingerprint": "3f3c4cdfb0f4339b",
+    "body_fingerprint": "6f3848df24f513fb",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "1e99fe285c57b06228bfd002c401c4cdd8464cc7689b35ff51cf46c9f0b443df",
-    "end_line": 2033,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "3f3c58dfb0f4339b",
+    "content_hash": "cdfeac98ad4cb76adca803b3f7211db1fb96ecbaa876a4e328a93dc1135fddc1",
+    "end_line": 2134,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "6f3848df24f513fb",
     "path": "aigit/core.py",
     "semantic_id": "sc_e2f6e8b70d2e097e",
-    "start_line": 1995
+    "start_line": 2094
   },
   "aigit/core.py::function::write_manifest": {
     "anchor": "write_manifest",
-    "body_fingerprint": "33732b6559db503e",
+    "body_fingerprint": "24fe93b54bdb5e3d",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "9933986ecca84737911db49025d8f8ab2f47d754dd799c9a8ddfd293a9889145",
-    "end_line": 760,
-    "file_hash": "72b474b5e14953b77fb48fdb8fac82c36ae323aa",
-    "fingerprint": "3773236559d1543e",
+    "content_hash": "9de14b2ab4e8386641f709da866007bf295472ff24a77dc3b81a44ee954fdcfa",
+    "end_line": 823,
+    "file_hash": "9b7da7144427200f42b75d36860316d2fce97923",
+    "fingerprint": "0ffe439753f75c35",
     "path": "aigit/core.py",
     "semantic_id": "sc_4521b6be0fb0d0d6",
-    "start_line": 756
+    "start_line": 819
   },
   "docs/BETA_READINESS.md::section::Beta readiness": {
     "anchor": "Beta readiness",
@@ -5641,6 +5706,149 @@
     "semantic_id": "sc_09cb27e224bc2787",
     "start_line": 65
   },
+  "tests/test_api_cache_integrity.py::class::_API": {
+    "anchor": "_API",
+    "body_fingerprint": "19afacc9ef205e7b",
+    "chunk_type": "class",
+    "confidence": "high",
+    "content_hash": "6d1dee3879e9741ac0494675acc44c4072c0dfd99d45027e015446e330516fac",
+    "end_line": 73,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "19aba8cbef205e3b",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_3ebf1b42851e8d7b",
+    "start_line": 50
+  },
+  "tests/test_api_cache_integrity.py::class::_Response": {
+    "anchor": "_Response",
+    "body_fingerprint": "e02e9b0ae6e4ec62",
+    "chunk_type": "class",
+    "confidence": "high",
+    "content_hash": "727b01caad57671d721d57fec2a1cce3c99b2329a1dc3159845c8a5eb3792a78",
+    "end_line": 47,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "e52c9b0ae664f662",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_b7195503656400eb",
+    "start_line": 38
+  },
+  "tests/test_api_cache_integrity.py::function::_replace_preserving_signature": {
+    "anchor": "_replace_preserving_signature",
+    "body_fingerprint": "6525c787dcaecb34",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "aec60cec82c21d207ccfe8b0b613011279868b56b5e176de657730e1ca53c9eb",
+    "end_line": 172,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "61218787dcaecb34",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_355886e697c49a7a",
+    "start_line": 163
+  },
+  "tests/test_api_cache_integrity.py::function::_write_manifest": {
+    "anchor": "_write_manifest",
+    "body_fingerprint": "37b26bb3471c9278",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9d7466014b3baf2bef92aba76138b98cfcd50b9c11072eac9d8322cd81e54f05",
+    "end_line": 35,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "77b363b346549270",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_7754d8c1df14babf",
+    "start_line": 32
+  },
+  "tests/test_api_cache_integrity.py::function::api": {
+    "anchor": "api",
+    "body_fingerprint": "652eb14ae36efe57",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "4e139fb05fa05424c7b065387bbc4a6284090b38b3808511fe31ff5077de6049",
+    "end_line": 128,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "652ab14ad36efe57",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_777948b15fbe1ba8",
+    "start_line": 76
+  },
+  "tests/test_api_cache_integrity.py::function::test_invalid_manifest_returns_structured_json_error": {
+    "anchor": "test_invalid_manifest_returns_structured_json_error",
+    "body_fingerprint": "9f2a2b0103a6077e",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "0e9896a0b00b4ab6bdf2536720170b8944854d7188c0689bbe36dee8db2fea25",
+    "end_line": 223,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "c5a86a010184477e",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_01acb280613758b5",
+    "start_line": 203
+  },
+  "tests/test_api_cache_integrity.py::function::test_matching_etag_does_not_bypass_query_validation": {
+    "anchor": "test_matching_etag_does_not_bypass_query_validation",
+    "body_fingerprint": "37340f1396949a76",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "7bbeaedbeb9a1de9e5a02b296648d4418c9ad55a9e3ba0f4dd79bb14dae86c25",
+    "end_line": 237,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "773c0f1396bc8a76",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_2be933848908aa8d",
+    "start_line": 226
+  },
+  "tests/test_api_cache_integrity.py::function::test_overlapping_cache_publications_never_reuse_etag_for_different_bodies": {
+    "anchor": "test_overlapping_cache_publications_never_reuse_etag_for_different_bodies",
+    "body_fingerprint": "0de86f1fd9aa9a3e",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5a1a0d0b3834731e9d1e27a0caa42e2f87277ca7e99118e5bcb38115346a2524",
+    "end_line": 299,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "0de86f1fd9aa9a3e",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_0caaa6e83b90c924",
+    "start_line": 240
+  },
+  "tests/test_api_cache_integrity.py::function::test_same_size_restored_mtime_does_not_return_false_304": {
+    "anchor": "test_same_size_restored_mtime_does_not_return_false_304",
+    "body_fingerprint": "fbac02130c881f3a",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8b0b2fd2d4b5e8dfc241ab9e5c20df5a5d592bd50c8220597d32cf2dd983f477",
+    "end_line": 200,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "fbac06130c8a5e72",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_ebffaa90d0e50b9c",
+    "start_line": 191
+  },
+  "tests/test_api_cache_integrity.py::function::test_same_size_restored_mtime_returns_current_body_and_etag": {
+    "anchor": "test_same_size_restored_mtime_returns_current_body_and_etag",
+    "body_fingerprint": "fb2c020709841e5a",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "485637b375391ace97684218bd9f360f3dadadc8baa08869685e79aa119b56fd",
+    "end_line": 188,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "fbac02071d8a5e50",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_26330d41e18ec461",
+    "start_line": 175
+  },
+  "tests/test_api_cache_integrity.py::function::test_unchanged_representation_revalidates_at_its_own_uri": {
+    "anchor": "test_unchanged_representation_revalidates_at_its_own_uri",
+    "body_fingerprint": "b72a8f210a841e70",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8061b32a0bb8da8a3def92813698a1fd7dc35678a43dc887d4e26690d2667b40",
+    "end_line": 160,
+    "file_hash": "f9c2e8c2e6850011c88af39378e6deb28f924962",
+    "fingerprint": "b768cf032f885f70",
+    "path": "tests/test_api_cache_integrity.py",
+    "semantic_id": "sc_6306203bbd563438",
+    "start_line": 131
+  },
   "tests/test_api_pagination.py::function::_chunks": {
     "anchor": "_chunks",
     "body_fingerprint": "66f66ad8ae08c63c",
@@ -6753,7 +6961,7 @@
     "confidence": "high",
     "content_hash": "6ccd2362196fd2387cc684ab0b64962ca1d2ec3bbe56f38725daab4810d035f9",
     "end_line": 25,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "8ff8235712c77957",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c69d805d1e949299",
@@ -6766,7 +6974,7 @@
     "confidence": "high",
     "content_hash": "6460d0cba7aac5592f354a7ba390aa8c2d21364c34a534c984980321259d3841",
     "end_line": 151,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7f72a70610647a7a",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_7f1c14ed28afc61d",
@@ -6779,7 +6987,7 @@
     "confidence": "high",
     "content_hash": "d6bd49e6d820ee49d086b660cd482d2dbc25a9d8eadbe7904c18e3b496f06506",
     "end_line": 114,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "fe727b8678fc4e5e",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_366de5b323bf543c",
@@ -6792,7 +7000,7 @@
     "confidence": "high",
     "content_hash": "3b868da128768158ab62eeea7e415beb61d0953787cacf53673495a88fe30c76",
     "end_line": 160,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "4e623b199b744aad",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c08e573d24f0167f",
@@ -6805,7 +7013,7 @@
     "confidence": "high",
     "content_hash": "f1cb12606131f83629efb11b96e39b77570a4c32cc7f7fae27af47aa57991844",
     "end_line": 105,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "bd71f7d00164963f",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_94337a2812e4f985",
@@ -6817,12 +7025,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "32f290bf810e69dfd898495096b855af4f93057911679a2abd8dacd9ab93d3f7",
-    "end_line": 497,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 502,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "f5b8ca8f1124f26c",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_644d08200a6afe59",
-    "start_line": 495
+    "start_line": 500
   },
   "tests/test_merge_driver.py::function::_snapshot": {
     "anchor": "_snapshot",
@@ -6831,7 +7039,7 @@
     "confidence": "high",
     "content_hash": "ba58728053324e2fdd9f55a1596923923ade7fb10ab9bd61a19aa1e2ba9fec97",
     "end_line": 33,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "55f03bc62af7031f",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_707763fdb2bb8f3a",
@@ -6844,7 +7052,7 @@
     "confidence": "high",
     "content_hash": "691dcdfe906255a0b78c436d28efa1407d0c0d22eaceec00d8a04c22746b9fa7",
     "end_line": 129,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7f7f31ba3bff5f1d",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_0bd15962d709a84f",
@@ -6856,12 +7064,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b106a0613787b27c53f176204928b32ebce6088177a36836cb8437349a80ecc4",
-    "end_line": 534,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 539,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "5e72ce9858f44aff",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c926d3c6ec196279",
-    "start_line": 529
+    "start_line": 534
   },
   "tests/test_merge_driver.py::function::test_another_two_head_strategy_declines": {
     "anchor": "test_another_two_head_strategy_declines",
@@ -6870,7 +7078,7 @@
     "confidence": "high",
     "content_hash": "fa11627f7c37c51db137466f7d71335e03f7bf5735d3cc9d3ed35268197436d9",
     "end_line": 303,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "f672718a70604ed6",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_916c2562ab55fe63",
@@ -6882,12 +7090,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "b6e283c0f031eb38e9e85a26de607accdf585f591e1685bd36b56223007ec5d0",
-    "end_line": 521,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 526,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "ff74eb51d2ec4f8e",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_884fbe63d95c89b1",
-    "start_line": 516
+    "start_line": 521
   },
   "tests/test_merge_driver.py::function::test_artifact_paths_are_not_trusted_as_file_names": {
     "anchor": "test_artifact_paths_are_not_trusted_as_file_names",
@@ -6895,12 +7103,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "c7da45d6f6798729229721a0e282a3d5be2dbfac4115b25d1f28ae827891cb0e",
-    "end_line": 526,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 531,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "55fa4221dd4e1a77",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_f8d0e6529bbc9d36",
-    "start_line": 524
+    "start_line": 529
   },
   "tests/test_merge_driver.py::function::test_branch_cut_before_the_routing_still_uses_the_driver": {
     "anchor": "test_branch_cut_before_the_routing_still_uses_the_driver",
@@ -6908,12 +7116,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "5ba5048f99bbe83c83dd8af94fbe0b70f9ed4f55a6b1124689f47423f7f5f751",
-    "end_line": 492,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 497,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "3efe35ab1bff94fd",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_24474aeb7fded25c",
-    "start_line": 472
+    "start_line": 477
   },
   "tests/test_merge_driver.py::function::test_branches_that_adopted_aigit_separately": {
     "anchor": "test_branches_that_adopted_aigit_separately",
@@ -6922,7 +7130,7 @@
     "confidence": "high",
     "content_hash": "2975e7717e59be7c91fe3c6ca0fabf18283857ec3c137a441e1fe7b12a3a447b",
     "end_line": 434,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7c6b37ea1bff96ad",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_f0404388ad91ea0c",
@@ -6935,7 +7143,7 @@
     "confidence": "high",
     "content_hash": "ddd6c1942804165415b4edf9741e868014624d67638b87c6a7661d32abd64aba",
     "end_line": 248,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "5e72739a197c4aae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c4b356cac545a6b8",
@@ -6948,7 +7156,7 @@
     "confidence": "high",
     "content_hash": "db0ae45f98e5f1ac737646d074834b5987b7557bac07d170ea497c891781f575",
     "end_line": 233,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "c6f2d30a107456d6",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_191fd2bf1f3eeacf",
@@ -6961,7 +7169,7 @@
     "confidence": "high",
     "content_hash": "6c312311f47ebe49adc8792ad5fdc37743d1ea4af5177bcfbfba3a71b8faccc7",
     "end_line": 95,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "55b867278e1dd03f",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_34236a53e75c6024",
@@ -6974,7 +7182,7 @@
     "confidence": "high",
     "content_hash": "0c5bf4cdd28f5e03a46aa270b31c019b7bca23ff536ebd0a5ef0c5783a4dc878",
     "end_line": 330,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "6d7834b11f3e802f",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_24b3b6798b37bf9f",
@@ -6987,7 +7195,7 @@
     "confidence": "high",
     "content_hash": "65cd9df593617d0bed73b5f97024c77a213e8c8593b728bd5e02851c3c856e10",
     "end_line": 63,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "642aa5b30b0fd225",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_f2c36cd285abce05",
@@ -7000,7 +7208,7 @@
     "confidence": "high",
     "content_hash": "2d8024d31177c04623e95381c7dba33647ce08a7136bb9c4409add8c78c59cd2",
     "end_line": 199,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7e62739a197c4aae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_6a59f23def50eb13",
@@ -7013,7 +7221,7 @@
     "confidence": "high",
     "content_hash": "e89f57379df00efa0daf416b65d168a35cade9389d2b934d6de7da35a36054d0",
     "end_line": 448,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "6e62729a196c42af",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c7518d5087b9e12c",
@@ -7026,7 +7234,7 @@
     "confidence": "high",
     "content_hash": "e06c948f94dcd9eba1c114fdb3c8986f3f2c7c5a3a56e16fa967424ad6d180e4",
     "end_line": 75,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "64eaef3d1b0fd6ad",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_6b36d237ebc4efbd",
@@ -7039,7 +7247,7 @@
     "confidence": "high",
     "content_hash": "69879decc8f3aa2dafc3f32aab22d6f94c61726f37d03ad32e9c3410898e0ad9",
     "end_line": 53,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "4cfaa3358f1fc62d",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_01af4ba10c2dd75b",
@@ -7052,7 +7260,7 @@
     "confidence": "high",
     "content_hash": "5a1393007d4ed364384e1c693afb3220da4d485979d889cde4a27b6f2210b186",
     "end_line": 274,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "ee63d08e906c0686",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_e02409c4e86595e7",
@@ -7065,7 +7273,7 @@
     "confidence": "high",
     "content_hash": "495ac75a9a49351608d67e13492c4aa8b2434eed6d9af0241f30190bac698743",
     "end_line": 82,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "643a67b4978f46bd",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_2910c36971aabfe1",
@@ -7078,7 +7286,7 @@
     "confidence": "high",
     "content_hash": "14860dfcf982d07badeeeed2a30485fd345ea72a7904f10e176273460111b21a",
     "end_line": 142,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "5e22739f9b2c4aae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_1502597abd36ff16",
@@ -7091,7 +7299,7 @@
     "confidence": "high",
     "content_hash": "41a3547f2041bac4f7ee56d73d1fcb4614d5dea10b1f2fd476c499c2cf69ee81",
     "end_line": 185,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7e62383a9b7c42ae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_606cc2aebc22ad60",
@@ -7104,7 +7312,7 @@
     "confidence": "high",
     "content_hash": "7d61c6ac4cdf6d7133d788af7d955966a013407b2418ef2275b6a6059f4fc1c2",
     "end_line": 170,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "fe62f00e197cd6ae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_69d53e5235d4a7c7",
@@ -7117,7 +7325,7 @@
     "confidence": "high",
     "content_hash": "397c3a2bf65695d66d18dad61b4c3221f7c3563181a48b63fabc9bb2ba3a6658",
     "end_line": 370,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7f722780512c52fd",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_97d9b1e7ce1068b1",
@@ -7129,12 +7337,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "2f9be0b5a6651bf9f6599efd3ca5d77e61e93b7f480cdfbc651c90e2a284de57",
-    "end_line": 469,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 474,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "1ee2738e3a7c0ecc",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_9f3e27422111cd65",
-    "start_line": 458
+    "start_line": 463
   },
   "tests/test_merge_driver.py::function::test_merge_of_a_branch_with_stale_artifacts_is_not_trusted": {
     "anchor": "test_merge_of_a_branch_with_stale_artifacts_is_not_trusted",
@@ -7143,7 +7351,7 @@
     "confidence": "high",
     "content_hash": "b847304eaa07e4423b1f7c402bf79e39441f30af9c8d5649f66d344b4794037f",
     "end_line": 386,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7e6a7bbd1b7c0aae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_38b66fcfaf19821a",
@@ -7155,12 +7363,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "74e5e1105ce104600e87163e2d5332a046b0be5a64e2d31ba52eacbd4363d8db",
-    "end_line": 513,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 518,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7ee2519e19640eaf",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c055fc68c3925852",
-    "start_line": 500
+    "start_line": 505
   },
   "tests/test_merge_driver.py::function::test_merged_source_is_what_git_merges_not_what_merge_file_says": {
     "anchor": "test_merged_source_is_what_git_merges_not_what_merge_file_says",
@@ -7169,7 +7377,7 @@
     "confidence": "high",
     "content_hash": "6395e0633d7da0ce02b31ab922e7713b378bdfe410bc00f2c2acfeded6441181",
     "end_line": 265,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7ea2f185b07816a6",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_c302ef1a7b3067e4",
@@ -7182,7 +7390,7 @@
     "confidence": "high",
     "content_hash": "d09495f4e5987046e0cc3bc713e1ff496d5112eaeaa03c99826ae4030087f21b",
     "end_line": 212,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "5e627bb9196c5aae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_743353bc9d2a5d14",
@@ -7195,7 +7403,7 @@
     "confidence": "high",
     "content_hash": "6b0d38fe68cf23178e7eeda724c60da8c72571af827a8c964370c8864aa2df51",
     "end_line": 222,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "ee23708ab87c16a6",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_98f17fb0b0bffe9e",
@@ -7208,7 +7416,7 @@
     "confidence": "high",
     "content_hash": "17fd77e28df0fb141f83669b3ce8c2c442485007ceffa2cdc5cae1ea09ab6ba8",
     "end_line": 323,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "7e23799e116c1fe6",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_dc5af6168b899c6a",
@@ -7221,7 +7429,7 @@
     "confidence": "high",
     "content_hash": "a73a703f1ce8c26ab943576306592dd7d1f94a631c54048a1a3e1ce9831aa186",
     "end_line": 397,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "5e709231db6c522e",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_4497f334e3aa0688",
@@ -7234,7 +7442,7 @@
     "confidence": "high",
     "content_hash": "2fb1b7360b4bccc7e5bfca18ca655453e99a17b7e0fbb10453292aee43ffb2aa",
     "end_line": 342,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "0e2273a39d6c4ae4",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_be897f4c94e96ba4",
@@ -7247,7 +7455,7 @@
     "confidence": "high",
     "content_hash": "5111d1e982de23c6a116b594c1beafcdc359b14fe7857b97e4c56d9db497b92f",
     "end_line": 357,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "5e6273b91b7c12af",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_ab69d5e1be7334fc",
@@ -7260,7 +7468,7 @@
     "confidence": "high",
     "content_hash": "d33618a2576dc649d994e7d923c93234ba7686a3da61b467ffc60575d121b145",
     "end_line": 410,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "ce7a72171b7c52ae",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_20550a26f51bd159",
@@ -7273,7 +7481,7 @@
     "confidence": "high",
     "content_hash": "fe7ecfecaef1868865c83e36ce1f4e854f537dc479e009ec7b4df86b101b50ee",
     "end_line": 314,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "0ee3910a1068b6ee",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_90743235334ae12f",
@@ -7286,7 +7494,7 @@
     "confidence": "high",
     "content_hash": "b78ffd6132877c3f6ab4bdf893593556eaf4dfc772f9650b09dbbff3d1ec01b1",
     "end_line": 292,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "65e57bca896802ab",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_5fc95e73a1da3300",
@@ -7294,13 +7502,13 @@
   },
   "tests/test_merge_driver.py::function::test_symlinks_are_not_chunked": {
     "anchor": "test_symlinks_are_not_chunked",
-    "body_fingerprint": "7e666f500f1ed6fd",
+    "body_fingerprint": "5eee6c500d76c6ed",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "6ec24d097babc876912170e3d5eedf804bf30defbf638fad004cd222c084136b",
-    "end_line": 455,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
-    "fingerprint": "7e266c100f1ed6fd",
+    "content_hash": "797fe94d91b7df47bf18205cfe55fa87e440ad1233f6b98d0d6052811d82774f",
+    "end_line": 460,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
+    "fingerprint": "7eee6cd00f77c6ef",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_a8b6ffdbc4d74db0",
     "start_line": 451
@@ -7311,12 +7519,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "9ea262148c9461711b7ecceb74d9bc79289ef97cb7193e44558d1b678e53ff3c",
-    "end_line": 543,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "end_line": 548,
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "a5f832831aa7477d",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_4094f5f7b41f60a4",
-    "start_line": 537
+    "start_line": 542
   },
   "tests/test_merge_driver.py::function::test_unknown_artifact_is_refused": {
     "anchor": "test_unknown_artifact_is_refused",
@@ -7325,7 +7533,7 @@
     "confidence": "high",
     "content_hash": "1396dbe32d8f7f8f186353284c8b15986d43ae94dc552a2036ecf7690d6ce80a",
     "end_line": 100,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "55f39692ec69b0c7",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_4e0cf6df5f9fa00d",
@@ -7338,7 +7546,7 @@
     "confidence": "high",
     "content_hash": "aa3fcdedcfddad13e9e1c0a701f5b852ac423837ea518fbee0bf05b3888218cd",
     "end_line": 297,
-    "file_hash": "1cd46add4cdd2e3bb47536297ce8785677c55a95",
+    "file_hash": "0a08a29752d515fb8c7bebb6220c1ca4bafbb5a9",
     "fingerprint": "3e63435a40685ad6",
     "path": "tests/test_merge_driver.py",
     "semantic_id": "sc_df0fa2f2f5850e18",
@@ -7369,6 +7577,422 @@
     "path": "tests/test_packaging.py",
     "semantic_id": "sc_909a2aa81a35870b",
     "start_line": 8
+  },
+  "tests/test_polyglot_change_coverage.py::function::_records": {
+    "anchor": "_records",
+    "body_fingerprint": "37ff43e64d060e1b",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "70dcc606d8778f149b42ce27baad979ee9280b4d6ba51ca765e89310d687054a",
+    "end_line": 13,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "07f8e1864d060c3b",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_014670018352ea65",
+    "start_line": 12
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_atomic_manifest_publication_preserves_permissions": {
+    "anchor": "test_atomic_manifest_publication_preserves_permissions",
+    "body_fingerprint": "ef5d6e601feeb915",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "3f9602faafab56ce159ff0390e5ab77b4a1a7be81282f1fbd64b0d11e0178dea",
+    "end_line": 157,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "ef5926601fe62fd5",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_24ee4882bf5c9436",
+    "start_line": 149
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_failed_manifest_publication_preserves_existing_file": {
+    "anchor": "test_failed_manifest_publication_preserves_existing_file",
+    "body_fingerprint": "ff552722966833d1",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "a3d01eb98b72807611eb366ae03dc31fb7898b7505f7996af8f5fd22834ecd83",
+    "end_line": 146,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "ff572622956813d5",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_ba1a001c84f94f5d",
+    "start_line": 132
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_real_git_diff_conflict_and_incremental_paths": {
+    "anchor": "test_real_git_diff_conflict_and_incremental_paths",
+    "body_fingerprint": "777d454801ce3ed8",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "e1cd42db7ce0183786dbab5e7e76b289c55e0c10b2534d2c10aab0da920b9117",
+    "end_line": 129,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "753d2108014e3ad8",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_807800a838566474",
+    "start_line": 89
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_typescript_body_edits_are_changed": {
+    "anchor": "test_typescript_body_edits_are_changed",
+    "body_fingerprint": "b530c70a80e20325",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "5a712c2cfbf00f6a57b6b46a0656fde6741a63c2e6a7325b14a84bf43ce97176",
+    "end_line": 33,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "5dba73259b1e1834",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_b9d35a7d2b290d69",
+    "start_line": 16
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_typescript_division_preserves_declaration_ids_and_independent_edits": {
+    "anchor": "test_typescript_division_preserves_declaration_ids_and_independent_edits",
+    "body_fingerprint": "173a63240d06083f",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "622ac9fc7c049d6c8ee589b38507759d4ccc2d94fc12b12bd9abeffa880d12e2",
+    "end_line": 64,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "173a73244d06083f",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_77fa70a4bdb81f24",
+    "start_line": 55
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_typescript_ignores_fake_declarations_in_literals_comments_and_nested_code": {
+    "anchor": "test_typescript_ignores_fake_declarations_in_literals_comments_and_nested_code",
+    "body_fingerprint": "5f7a73a4c928183c",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "6532fa3aa353eeb475c87d98b108465ef172163c7a4a5f30f389ddff0fba9729",
+    "end_line": 52,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "5f7a7384cd28183c",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_bc18aa033ad07ef9",
+    "start_line": 45
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_typescript_sections_do_not_mark_adjacent_declaration_changed": {
+    "anchor": "test_typescript_sections_do_not_mark_adjacent_declaration_changed",
+    "body_fingerprint": "9538d321cb08303c",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "bba69fed44cc5cad66cd235adef4d66999ca8fdb6ebb33b451178168be50a724",
+    "end_line": 42,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "d538d321cb08103c",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_18c40de588382ef4",
+    "start_line": 36
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_yaml_sections_are_complete_and_independent": {
+    "anchor": "test_yaml_sections_are_complete_and_independent",
+    "body_fingerprint": "953c73ce8b9abe34",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "3f0010c425f8c1b02a7e5e74ff1adbbc62db92e8ea1df224bb32a825ad88e4e9",
+    "end_line": 86,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "953c73cecb9abe34",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_de0fca58a0de277b",
+    "start_line": 80
+  },
+  "tests/test_polyglot_change_coverage.py::function::test_yaml_value_edits_are_changed": {
+    "anchor": "test_yaml_value_edits_are_changed",
+    "body_fingerprint": "d529e00b81ba7214",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "d1bdc5825fa4a2e350807e675fa3b89fae8253dac28b9386e88f88874056f897",
+    "end_line": 77,
+    "file_hash": "d89d634844fb444530b0e7d6a142f31d69943059",
+    "fingerprint": "5dba33a5971a98b4",
+    "path": "tests/test_polyglot_change_coverage.py",
+    "semantic_id": "sc_86ee4a551ee2b34e",
+    "start_line": 67
+  },
+  "tests/test_provenance_claim_integrity.py::function::_install_claim": {
+    "anchor": "_install_claim",
+    "body_fingerprint": "5ffd63db10dc1ada",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "a1447a8fe8c12231353936ba3e56c9f286ff0f9519ecb10b0dcc0ad14748fcb8",
+    "end_line": 74,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "5ffd21db30f412da",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_4e76b41d8272bd73",
+    "start_line": 45
+  },
+  "tests/test_provenance_claim_integrity.py::function::_signed_row": {
+    "anchor": "_signed_row",
+    "body_fingerprint": "1ef96a97099c925a",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "f3cdf6c16d62e7dbf3bfd4794fd889da2c352418b58fb87aaa77e96334a9d30d",
+    "end_line": 38,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "1ff86a9709dce37b",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_2cca9ea482d47a88",
+    "start_line": 27
+  },
+  "tests/test_provenance_claim_integrity.py::function::_trailer": {
+    "anchor": "_trailer",
+    "body_fingerprint": "0d56cc916218080b",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "19175490d407626b9a7423311502a0493d7953438d0f0f13430eb5ab0f7b3607",
+    "end_line": 42,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "0dfe3ad17a9d0977",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_b0df761621f8e5d9",
+    "start_line": 41
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_cmd_commit_emits_a_verifiable_16_hex_prefix": {
+    "anchor": "test_cmd_commit_emits_a_verifiable_16_hex_prefix",
+    "body_fingerprint": "753c7593028c9a9e",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "e6da0cd3d95a8b3fa615082e4201fb66162279034eb1cd3ca5c9f34145b15e63",
+    "end_line": 114,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "7d3d7593128c9a9e",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_843e8c2e6e66ee31",
+    "start_line": 102
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_complete_jsonl_record_does_not_require_a_final_newline": {
+    "anchor": "test_complete_jsonl_record_does_not_require_a_final_newline",
+    "body_fingerprint": "3de465aa12ecb619",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "fc75e621a17bbd595761aad6f5a5fa49ebace3f3d7f846bb63c2dc75fd684f65",
+    "end_line": 297,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "3de465ba126cb219",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_0689cf115d056d30",
+    "start_line": 294
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_contradictory_identity_is_filtered_before_hash_disambiguation": {
+    "anchor": "test_contradictory_identity_is_filtered_before_hash_disambiguation",
+    "body_fingerprint": "11cbe4fa92dd3356",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "f998f9b5654d3ce25aec213800a6dce184a13d825b20e1793d944ed804ba8430",
+    "end_line": 276,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "31eb64fa92dd3357",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_4daf8f1c6bc0e641",
+    "start_line": 267
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_distinct_full_hashes_matching_one_prefix_are_ambiguous": {
+    "anchor": "test_distinct_full_hashes_matching_one_prefix_are_ambiguous",
+    "body_fingerprint": "77db76d59fdd37c3",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "8ca05253f100e695f1ba0fe005cc16d118bc984c9f4ad97a9d07a1af471c1d32",
+    "end_line": 253,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "7ddb43dc1edd335b",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_274179b229139cba",
+    "start_line": 246
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_duplicate_trailer_fields_are_ambiguous": {
+    "anchor": "test_duplicate_trailer_fields_are_ambiguous",
+    "body_fingerprint": "3db848e96e3d1a87",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "0ee8f3466be8035c2e66f3e137fc95120e414b5dfc4184949b1173f86b3ac94e",
+    "end_line": 199,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "2db848fb6c3c1287",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_5d232a48b114cafe",
+    "start_line": 189
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_later_contradictory_row_cannot_mask_matching_signed_claim": {
+    "anchor": "test_later_contradictory_row_cannot_mask_matching_signed_claim",
+    "body_fingerprint": "1f6bc4e81a2c364e",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "c372adc0c745ad7af455000da7e9bec8106b319a4e6136191aecab7d051382ca",
+    "end_line": 226,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "1f7bc4fa9a1c3657",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_8b6cf989b3d2e2fe",
+    "start_line": 216
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_later_matching_row_cannot_mask_valid_signature": {
+    "anchor": "test_later_matching_row_cannot_mask_valid_signature",
+    "body_fingerprint": "5f6bc7ea12ee321f",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "55defd64815eba46919f6b60615e83ac4e44c82ce8ba83866539df629023a982",
+    "end_line": 243,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "5d6bc6aa10eeb25f",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_a4f7af2695bb9e4e",
+    "start_line": 229
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_log_requires_a_complete_64_hex_prompt_hash": {
+    "anchor": "test_log_requires_a_complete_64_hex_prompt_hash",
+    "body_fingerprint": "5fff033704dd13db",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "4211ffafea0e7a31fc4d5bf3e39a28441546b152be5b17e287c99ecc10059e5e",
+    "end_line": 186,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "1fff1ab00cdd13db",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_4bb4e43e35471f79",
+    "start_line": 169
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_matching_unsigned_claim_remains_valid_without_a_key": {
+    "anchor": "test_matching_unsigned_claim_remains_valid_without_a_key",
+    "body_fingerprint": "1fad4036105d935a",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "220ea6a4839239a073640bf1d2d43d8f47313fecab95b2efe01a989c95ce217f",
+    "end_line": 126,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "1fed0032105d935a",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_2b18de9df6bbab94",
+    "start_line": 117
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_multiple_provenance_trailer_lines_are_ambiguous": {
+    "anchor": "test_multiple_provenance_trailer_lines_are_ambiguous",
+    "body_fingerprint": "41d2f6e0ae3f321d",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "013e946f89fa684e98b7948c32efeb8e33054ba8ea7b7e4d177ca3d845b6c025",
+    "end_line": 213,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "45d6f2e2eebf3115",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_d14ff6c9a3863c9d",
+    "start_line": 202
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_record_provenance_preserves_legacy_hmac_encoding": {
+    "anchor": "test_record_provenance_preserves_legacy_hmac_encoding",
+    "body_fingerprint": "37fd4e9e448c921a",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "14ac69fcbf5ab25b3bfb216ddc9c6cc90716d59ec56684c7ce5c7d4d933ed2d3",
+    "end_line": 137,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "37fd669a549c921a",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_7553dccc630c46eb",
+    "start_line": 129
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_repeated_same_full_hash_is_not_a_prefix_ambiguity": {
+    "anchor": "test_repeated_same_full_hash_is_not_a_prefix_ambiguity",
+    "body_fingerprint": "3b4b24f41a5c3747",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "34153aa56b45fc7d8c85fbe8fcc29b8c46d4b2c6bf079f17c11bad78fc70d338",
+    "end_line": 264,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "3f6974fa1b5c3757",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_caaaa9335f30042b",
+    "start_line": 256
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_signed_log_does_not_authenticate_a_contradictory_trailer": {
+    "anchor": "test_signed_log_does_not_authenticate_a_contradictory_trailer",
+    "body_fingerprint": "7df114b83e2d12db",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "2bb5cbd216063732625293f8e1fcde877e8d21055f70126aaf2818a8b41229bf",
+    "end_line": 145,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "7df194ba3c19125b",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_d9dd08b92ca264cc",
+    "start_line": 140
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_trailer_rejects_missing_strength_or_invalid_hash_syntax": {
+    "anchor": "test_trailer_rejects_missing_strength_or_invalid_hash_syntax",
+    "body_fingerprint": "3df114a82e1d108b",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "0c334b94a37b19ab20039800c3876ea8e66bb10027d9b8295703a13937f66744",
+    "end_line": 166,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "96f93ab8cf7e3393",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_144a622871aacf21",
+    "start_line": 158
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_trailer_requires_every_claim_field": {
+    "anchor": "test_trailer_requires_every_claim_field",
+    "body_fingerprint": "3db1098b741012ad",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "9bc0139acbf9756f3ad067ac721c87453db91dd792e51fe7a64b387e19ded4b6",
+    "end_line": 155,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "3db1089b74109287",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_ee37de4fc466b150",
+    "start_line": 148
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_uppercase_row_hash_keeps_its_original_legacy_signature": {
+    "anchor": "test_uppercase_row_hash_keeps_its_original_legacy_signature",
+    "body_fingerprint": "3f6f263e12dc9257",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "7619fbcfb6c099b0a35abd266a23dc99ceac07e4783a298348a9d7fc548f116b",
+    "end_line": 99,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "3f6f24be12dc935f",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_97a3c841923b6c18",
+    "start_line": 92
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_valid_hex_prompt_prefix_preserves_signed_claim": {
+    "anchor": "test_valid_hex_prompt_prefix_preserves_signed_claim",
+    "body_fingerprint": "3b6920fc1a3c9296",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "b2755155823ca42f03caf19ef4e36adf7ba2cf50e0c79748995a580f816b547f",
+    "end_line": 89,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "7f4934f81e7cb297",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_ecf75f79140e7899",
+    "start_line": 77
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_verifier_rejects_bad_jsonl_even_alongside_a_valid_signed_row": {
+    "anchor": "test_verifier_rejects_bad_jsonl_even_alongside_a_valid_signed_row",
+    "body_fingerprint": "45d22f8a957e2288",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "ad2fbd579a7bebb86e71c6f89d1f6994de96ae2f5bb2d41485a4ca2bda96d8d1",
+    "end_line": 291,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "45f065cb916c66aa",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_06752dca725d0a59",
+    "start_line": 279
+  },
+  "tests/test_provenance_claim_integrity.py::function::test_writers_reject_ambiguous_identities_before_side_effects": {
+    "anchor": "test_writers_reject_ambiguous_identities_before_side_effects",
+    "body_fingerprint": "b7f56eda50ced29c",
+    "chunk_type": "function",
+    "confidence": "high",
+    "content_hash": "a4b8f5376db3342114e423d4bcbee2935771be393bb74b7fa8827e8be913f401",
+    "end_line": 318,
+    "file_hash": "9b316de9d6519a620bf1fd2df7f8f87e8483731c",
+    "fingerprint": "bfe5c67ac49a629f",
+    "path": "tests/test_provenance_claim_integrity.py",
+    "semantic_id": "sc_3f8849e9e085e55e",
+    "start_line": 300
   },
   "tests/test_provenance_signing.py::function::_fake_git": {
     "anchor": "_fake_git",
@@ -7533,7 +8157,7 @@
     "confidence": "high",
     "content_hash": "b0933b294799be64096af96c9c47d8f972a65ace7bb42088d56c508256a11e28",
     "end_line": 36,
-    "file_hash": "2c2348fea97f8fa317323f24c7e0e4ed7579090b",
+    "file_hash": "df31460326437648cc9c4040b791ca1a0adc8256",
     "fingerprint": "1fbaf3a5175e98b4",
     "path": "tests/test_publication_hygiene.py",
     "semantic_id": "sc_79a5e4e1722f1531",
@@ -7541,13 +8165,13 @@
   },
   "tests/test_publication_hygiene.py::function::test_scout_excludes_generated_runtime_and_semantic_state": {
     "anchor": "test_scout_excludes_generated_runtime_and_semantic_state",
-    "body_fingerprint": "7f9e23251b9e54fe",
+    "body_fingerprint": "7f1c23211b9e57fe",
     "chunk_type": "function",
     "confidence": "high",
-    "content_hash": "350fc3449c7d2eef4333c71cac684f29162dfca2e66beaebeeea0ff399cc3465",
+    "content_hash": "04d57e52a5ec9ccd789270771d977929a766ca3e7e305d5a0379ec4d8f64fe74",
     "end_line": 27,
-    "file_hash": "2c2348fea97f8fa317323f24c7e0e4ed7579090b",
-    "fingerprint": "7f9e2321139e54fe",
+    "file_hash": "df31460326437648cc9c4040b791ca1a0adc8256",
+    "fingerprint": "7f9e23211fde57fe",
     "path": "tests/test_publication_hygiene.py",
     "semantic_id": "sc_2f08f8d3ec55900e",
     "start_line": 17
@@ -7559,7 +8183,7 @@
     "confidence": "high",
     "content_hash": "f0c7129883dcece10ef4c2cb5b3fbcdfa0707cbf7e64875227aa151d34abe3a5",
     "end_line": 14,
-    "file_hash": "2c2348fea97f8fa317323f24c7e0e4ed7579090b",
+    "file_hash": "df31460326437648cc9c4040b791ca1a0adc8256",
     "fingerprint": "7d5c32a99f1695bc",
     "path": "tests/test_publication_hygiene.py",
     "semantic_id": "sc_8c77264cda702bd5",
@@ -7571,12 +8195,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "4a45a97cbb0f8a1a4096c38261c7937f5fc2d9b3bfd0bd3e947e512ff5110fe8",
-    "end_line": 145,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 149,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "563831ef8a787835",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_7a88d9a6e05ca154",
-    "start_line": 142
+    "start_line": 146
   },
   "tests/test_resolve_semantic_conflicts.py::function::_resolve": {
     "anchor": "_resolve",
@@ -7584,12 +8208,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "fb70c388c6f14cfb5017b55957d8dcfbfe4a02d0ff64385b6393e435396a7ab6",
-    "end_line": 70,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 74,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "f4d5b1710846eb2f",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_60d1d4679f68a707",
-    "start_line": 68
+    "start_line": 72
   },
   "tests/test_resolve_semantic_conflicts.py::function::_run": {
     "anchor": "_run",
@@ -7597,12 +8221,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "6e6cad72dc06b1d59bd8afced86a3c0429d1d44252882d4b204bb28258aa2919",
-    "end_line": 28,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 32,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "7571e5d10874963f",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_276a77191cf4340c",
-    "start_line": 27
+    "start_line": 31
   },
   "tests/test_resolve_semantic_conflicts.py::function::setup": {
     "anchor": "setup",
@@ -7610,12 +8234,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "7dcbda3231952a73ca73e551a83dd630f083572076d7bc4335f55683ba96b4a3",
-    "end_line": 65,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 69,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "b7f4156710f6547d",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_32186bacfb90e5cb",
-    "start_line": 31
+    "start_line": 35
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_a_refused_push_does_not_stop_the_run": {
     "anchor": "test_a_refused_push_does_not_stop_the_run",
@@ -7623,12 +8247,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "0f3f0f3c01e9e09726a607921dfaa53bf221d589cc253d565f68f3a668195aaa",
-    "end_line": 139,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 143,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "542ca5259a5c9834",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_e35036cb37882af5",
-    "start_line": 127
+    "start_line": 131
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_a_verdict_against_an_older_base_is_not_trusted": {
     "anchor": "test_a_verdict_against_an_older_base_is_not_trusted",
@@ -7636,12 +8260,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "e1088fe0f9510b525d4f58b4d961a3ad36579e39ed30a3d85b7352f582b23543",
-    "end_line": 124,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 128,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "6c20a577d0609227",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_d93c9f5e91d0f14b",
-    "start_line": 116
+    "start_line": 120
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_ci_is_dispatched_when_approval_is_not_allowed": {
     "anchor": "test_ci_is_dispatched_when_approval_is_not_allowed",
@@ -7649,12 +8273,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "1ba9b2f74b0f0541a67a11a6f9adc43727ddfd5f7c500e1bc536eaccbed4fd0e",
-    "end_line": 167,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 171,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "f5ec0430d27692ee",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_cb04184f84a5ee95",
-    "start_line": 160
+    "start_line": 164
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_mergeable_pull_request_is_not_touched": {
     "anchor": "test_mergeable_pull_request_is_not_touched",
@@ -7662,12 +8286,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "566031ebaf4758feca7a5bc88274a3619e160599f42dd23e4116349fb7097af7",
-    "end_line": 113,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 117,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "b4888761d2f4da7e",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_23740ab43e59c20b",
-    "start_line": 104
+    "start_line": 108
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_pending_runs_on_the_pushed_commit_are_approved": {
     "anchor": "test_pending_runs_on_the_pushed_commit_are_approved",
@@ -7675,12 +8299,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "bb4113d25c65836c7d4f96bdf571654c100116c095cef318f76a6a3071d25aec",
-    "end_line": 157,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 161,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "f3a88432927ed6a6",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_8257f845be1c1193",
-    "start_line": 148
+    "start_line": 152
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_semantic_only_conflict_is_resolved_and_pushed": {
     "anchor": "test_semantic_only_conflict_is_resolved_and_pushed",
@@ -7688,12 +8312,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "70e456ba131f79b131b5cbcd966e89e2a992143ca3436a28918f50531efcb8b8",
-    "end_line": 87,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 91,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "3d2c932590ceb234",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_daad7a5bea8cfbf6",
-    "start_line": 73
+    "start_line": 77
   },
   "tests/test_resolve_semantic_conflicts.py::function::test_source_conflict_is_left_for_the_author": {
     "anchor": "test_source_conflict_is_left_for_the_author",
@@ -7701,12 +8325,12 @@
     "chunk_type": "function",
     "confidence": "high",
     "content_hash": "3be29f4150ae7cb12b5fdd3209f74efd26b36ff9abe8b520504fbc39d48003d3",
-    "end_line": 101,
-    "file_hash": "8a17d304b2001926aa24b89ff0e8e42ca9c67e7b",
+    "end_line": 105,
+    "file_hash": "86d19bf17f3776b490625e4540e214a9b37bcf32",
     "fingerprint": "34809761b8c4581c",
     "path": "tests/test_resolve_semantic_conflicts.py",
     "semantic_id": "sc_9213f5a7468e6367",
-    "start_line": 90
+    "start_line": 94
   },
   "tests/test_ruleset_validation.py::function::test_validate_ruleset_rejects_unknown_backend": {
     "anchor": "test_validate_ruleset_rejects_unknown_backend",

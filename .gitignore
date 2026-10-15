@@ -16,6 +16,7 @@ pids
 __pycache__/
 *.pyc
 .pytest_cache/
+.pytest_*/
 .venv/
 aigit.egg-info/
 build/
