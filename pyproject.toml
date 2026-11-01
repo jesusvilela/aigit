@@ -32,7 +32,7 @@ Repository = "https://github.com/jesusvilela/aigit"
 Issues = "https://github.com/jesusvilela/aigit/issues"
 
 [project.optional-dependencies]
-dev = ["pytest>=9.1.1,<10"]
+dev = ["pytest>=9.2.0,<10"]
 # Gradio admin observability UI (`aigit admin-ui`).
 ui = ["gradio>=6.28.0,<7"]
 # The DeerFlow autonomous harness (`aigit up`/`launch-epics`) additionally
